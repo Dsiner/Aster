@@ -11,10 +11,11 @@ import com.d.lib.rxnet.exception.ApiException;
 import com.d.lib.rxnet.listener.AsyncCallBack;
 import com.d.lib.rxnet.listener.SimpleCallBack;
 import com.d.lib.rxnet.util.RxLog;
-import com.d.rxnet.model.MovieTopModelInfo;
+import com.d.rxnet.model.MovieInfo;
 
 import java.util.ArrayList;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
@@ -45,9 +46,9 @@ public class Get {
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
         RxNet.getInstance(appContext).get(API.MovieTop.rtpType, params)
-                .request(new SimpleCallBack<MovieTopModelInfo>() {
+                .request(new SimpleCallBack<MovieInfo>() {
                     @Override
-                    public void onSuccess(MovieTopModelInfo response) {
+                    public void onSuccess(MovieInfo response) {
                         RxLog.d("dsiner_th_onSuccess: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
                         RxLog.d("dsiner_onSuccess: " + response);
                     }
@@ -88,9 +89,9 @@ public class Get {
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
                 .writeTimeout(5 * 1000)
-                .request(new AsyncCallBack<MovieTopModelInfo, String>() {
+                .request(new AsyncCallBack<MovieInfo, String>() {
                     @Override
-                    public String apply(@NonNull MovieTopModelInfo movieTopModelInfo) throws Exception {
+                    public String apply(@NonNull MovieInfo movieTopModelInfo) throws Exception {
                         RxLog.d("dsiner_th_apply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
                         int size = movieTopModelInfo.subjects.size();
                         return "" + size;
@@ -110,24 +111,25 @@ public class Get {
     }
 
     public void testObservable() {
-        RxNet.getInstance(appContext).get("")
-                .observable(Boolean.class)
-                .subscribe(new DisposableObserver<Boolean>() {
-                    @Override
-                    public void onNext(@NonNull Boolean aBoolean) {
+        Observable<Boolean> observable = RxNet.getInstance(appContext).get("")
+                .observable(Boolean.class);
 
-                    }
+        observable.subscribe(new DisposableObserver<Boolean>() {
+            @Override
+            public void onNext(@NonNull Boolean aBoolean) {
 
-                    @Override
-                    public void onError(@NonNull Throwable e) {
+            }
 
-                    }
+            @Override
+            public void onError(@NonNull Throwable e) {
 
-                    @Override
-                    public void onComplete() {
+            }
 
-                    }
-                });
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     public void testRetrofit() {
@@ -141,7 +143,7 @@ public class Get {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<ArrayList<Boolean>>() {
+                .subscribe(new DisposableObserver<ArrayList<Boolean>>() {
                     @Override
                     protected void onStart() {
                         super.onStart();

@@ -10,7 +10,7 @@ import com.d.lib.rxnet.base.Params;
 import com.d.lib.rxnet.exception.ApiException;
 import com.d.lib.rxnet.listener.AsyncCallBack;
 import com.d.lib.rxnet.util.RxLog;
-import com.d.rxnet.model.MovieTopModelInfo;
+import com.d.rxnet.model.MovieInfo;
 
 import java.util.ArrayList;
 
@@ -73,9 +73,9 @@ public class Post {
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
                 .writeTimeout(5 * 1000)
-                .request(new AsyncCallBack<MovieTopModelInfo, String>() {
+                .request(new AsyncCallBack<MovieInfo, String>() {
                     @Override
-                    public String apply(@NonNull MovieTopModelInfo movieTopModelInfo) throws Exception {
+                    public String apply(@NonNull MovieInfo movieTopModelInfo) throws Exception {
                         RxLog.d("dsiner_th_apply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
                         int size = movieTopModelInfo.subjects.size();
                         return "" + size;

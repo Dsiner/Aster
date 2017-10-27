@@ -25,14 +25,13 @@ public class Down {
         dialog = new ProgressDialog(activity);
         dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);// 设置进度条的形式为圆形转动的进度条
         dialog.setMessage("正在下载...");
-        // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
         dialog.setTitle("下载文件");
         dialog.setMax(100);
     }
 
     public void testAll() {
         testIns();
-//        testNew();
+        testNew();
     }
 
     public void testIns() {

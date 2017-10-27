@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by D on 2017/10/26.
  */
-public class MovieTopModelInfo {
+public class MovieInfo {
     public int count;
     public int start;
     public int total;
