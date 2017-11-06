@@ -3,7 +3,6 @@ package com.d.lib.rxnet.base;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.d.lib.rxnet.api.API;
 import com.d.lib.rxnet.listener.ConfigListener;
 import com.d.lib.rxnet.util.SSLUtil;
 
@@ -14,6 +13,7 @@ import java.util.Map;
 import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.Interceptor;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by D on 2017/10/24.
@@ -31,6 +31,9 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
     public ArrayList<Interceptor> interceptors = new ArrayList<>();
     public SSLSocketFactory sslSocketFactory;
 
+    /**
+     * 获取默认配置
+     */
     public synchronized static HttpConfig getDefaultConfig() {
         if (defaultConfig == null) {
             synchronized (HttpConfig.class) {
@@ -50,11 +53,26 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
         return defaultConfig;
     }
 
+    /**
+     * 获取默认配置-拷贝
+     */
+    public static HttpConfig getNewDefaultConfig() {
+        getDefaultConfig();
+        return new HttpConfig()
+                .baseUrl(defaultConfig.baseUrl)
+                .connectTimeout(defaultConfig.connectTimeout)
+                .readTimeout(defaultConfig.readTimeout)
+                .writeTimeout(defaultConfig.writeTimeout)
+                .retryCount(defaultConfig.retryCount)
+                .retryDelayMillis(defaultConfig.retryDelayMillis)
+                .sslSocketFactory(defaultConfig.sslSocketFactory);
+    }
+
     private synchronized static void setDefaultConfig(HttpConfig config) {
         if (config == null) {
             return;
         }
-        config.baseUrl = !TextUtils.isEmpty(config.baseUrl) ? config.baseUrl : API.API_BASE;
+        config.baseUrl = !TextUtils.isEmpty(config.baseUrl) ? config.baseUrl : Config.BASE_URL;
 
         config.connectTimeout = config.connectTimeout != -1 ? config.connectTimeout : Config.CONNECT_TIMEOUT;
         config.readTimeout = config.readTimeout != -1 ? config.readTimeout : Config.READ_TIMEOUT;
@@ -188,6 +206,12 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
         @Override
         public Build retryDelayMillis(long retryDelayMillis) {
             this.retryDelayMillis = retryDelayMillis;
+            return this;
+        }
+
+        public Build setLog(String tag, HttpLoggingInterceptor.Level level) {
+            Config.TAG_LOG = tag;
+            Config.LOG_LEVEL = level;
             return this;
         }
 

@@ -30,6 +30,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static Retrofit retrofit;
 
+    /**
+     * 单例-默认配置
+     */
     public static synchronized Retrofit getInstance(Context context) {
         if (retrofit == null) {
             synchronized (RetrofitClient.class) {
@@ -41,14 +44,31 @@ public class RetrofitClient {
         return retrofit;
     }
 
+    /**
+     * 实例-默认配置
+     */
     public static Retrofit getRetrofitDefault(Context context) {
-        return getRetrofit(context, HttpConfig.getDefaultConfig());
+        return getRetrofit(context, HttpConfig.getDefaultConfig(), true);
     }
 
     /**
-     * interceptors：new HeadersInterceptor(headers), getOkhttpLog()
+     * 实例-自定义配置
      */
     public static Retrofit getRetrofit(Context context, HttpConfig config) {
+        return getRetrofit(context, HttpConfig.getDefaultConfig(), true);
+    }
+
+    /**
+     * 实例-下载配置（LogLevel.NONE）
+     */
+    public static Retrofit getRetrofitDown(Context context, HttpConfig config) {
+        return getRetrofit(context, config, false);
+    }
+
+    /**
+     * 实例-自定义配置
+     */
+    private static Retrofit getRetrofit(Context context, HttpConfig config, boolean log) {
         Retrofit retrofit = new Retrofit.Builder()
                 //设置OKHttpClient,如果不设置会提供一个默认的
                 .client(getOkHttpClient(context,
@@ -57,7 +77,8 @@ public class RetrofitClient {
                         config.readTimeout != -1 ? config.readTimeout : HttpConfig.getDefaultConfig().readTimeout,
                         config.writeTimeout != -1 ? config.writeTimeout : HttpConfig.getDefaultConfig().writeTimeout,
                         config.sslSocketFactory,
-                        config.interceptors))
+                        config.interceptors,
+                        log))
                 //设置baseUrl
                 .baseUrl(!TextUtils.isEmpty(config.baseUrl) ? config.baseUrl : HttpConfig.getDefaultConfig().baseUrl)
                 //设置rx
@@ -74,12 +95,11 @@ public class RetrofitClient {
                                                 long readTimeout,
                                                 long writeTimeout,
                                                 SSLSocketFactory sslSocketFactory,
-                                                ArrayList<Interceptor> interceptors) {
+                                                ArrayList<Interceptor> interceptors, boolean log) {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder()
                 .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
-                .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS)
-                .addInterceptor(getOkhttpLog());
+                .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS);
         if (sslSocketFactory != null) {
             builder.sslSocketFactory(sslSocketFactory);
         }
@@ -90,6 +110,9 @@ public class RetrofitClient {
             for (Interceptor interceptor : interceptors) {
                 builder.addInterceptor(interceptor);
             }
+        }
+        if (log) {
+            builder.addInterceptor(getOkhttpLog());
         }
         return builder.build();
     }
@@ -103,7 +126,7 @@ public class RetrofitClient {
                 RxLog.d(Config.TAG_LOG + s);
             }
         });
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        loggingInterceptor.setLevel(Config.LOG_LEVEL);
         return loggingInterceptor;
     }
 

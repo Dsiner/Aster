@@ -19,7 +19,7 @@ import okhttp3.ResponseBody;
  */
 public abstract class BaseRequest<R extends BaseRequest> extends ConfigListener<R> {
     protected Context context;
-    protected HttpConfig config = new HttpConfig();
+    protected HttpConfig config;
     protected String url;
     protected Observable observable;
     protected Object tag;//请求标签

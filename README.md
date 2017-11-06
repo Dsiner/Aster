@@ -17,7 +17,7 @@ RxNet 是一个基于 `Retrofit2` + `RxJava2` 实现的 `网络请求框架`
 - [x] Put（未测试）
 - [x] Patch（未测试）
 - [x] Delete（未测试）
-- [ ] Download
+- [x] Download
 - [ ] Upload
 
 ## 使用

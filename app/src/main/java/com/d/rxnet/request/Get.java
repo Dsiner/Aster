@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.api.API;
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.Params;
 import com.d.lib.rxnet.exception.ApiException;
 import com.d.lib.rxnet.listener.AsyncCallBack;
 import com.d.lib.rxnet.listener.SimpleCallBack;
 import com.d.lib.rxnet.util.RxLog;
+import com.d.rxnet.api.API;
 import com.d.rxnet.model.MovieInfo;
 
 import java.util.ArrayList;

@@ -16,7 +16,6 @@ import okhttp3.Response;
  */
 public class HeadersInterceptor implements Interceptor {
     private Map<String, String> headers;
-    private String token;
 
     public HeadersInterceptor(Context context, Map<String, String> headers) {
         this.headers = headers;
@@ -26,8 +25,8 @@ public class HeadersInterceptor implements Interceptor {
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request.Builder builder = chain.request().newBuilder();
 
-        // FIXME: @developer 2017/10/24
-        builder.addHeader("token", getToken()).build();
+        // TODO: @developer 2017/10/24
+        addToken(builder);
 
         if (headers != null && headers.size() > 0) {
             Set<String> keys = headers.keySet();
@@ -41,7 +40,7 @@ public class HeadersInterceptor implements Interceptor {
     /**
      * Token maybe dynamical，you shoule override here
      */
-    private String getToken() {
-        return token;
+    private void addToken(Request.Builder builder) {
+        builder.addHeader("token", "").build();
     }
 }

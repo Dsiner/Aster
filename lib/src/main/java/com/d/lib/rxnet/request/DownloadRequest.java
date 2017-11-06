@@ -1,21 +1,38 @@
 package com.d.lib.rxnet.request;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.ApiManager;
+import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.func.ApiRetryFunc;
 import com.d.lib.rxnet.listener.DownloadCallBack;
 import com.d.lib.rxnet.observer.DownloadObserver;
 
+import org.reactivestreams.Publisher;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
+import okhttp3.ResponseBody;
 
 /**
  * Instance
@@ -27,33 +44,106 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
     public DownloadRequest(Context context, String url) {
         this.context = context;
         this.url = url;
+        this.config = HttpConfig.getDefaultConfig();
     }
 
     public DownloadRequest(Context context, String url, Map<String, String> params) {
         this.context = context;
         this.url = url;
         this.params = params;
+        this.config = HttpConfig.getDefaultConfig();
     }
 
     protected void init() {
         if (params == null) {
-            observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).download(url);
+            observable = RetrofitClient.getRetrofitDown(context, HttpConfig.getDefaultConfig())
+                    .create(RetrofitAPI.class).download(url);
         } else {
-            observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).download(url, params);
+            observable = RetrofitClient.getRetrofitDown(context, HttpConfig.getDefaultConfig())
+                    .create(RetrofitAPI.class).download(url, params);
         }
     }
 
-    public void request(String path, String name, DownloadCallBack callback) {
+    public void request(final String path, final String name, final DownloadCallBack callback) {
+        if (TextUtils.isEmpty(path)) {
+            throw new IllegalArgumentException("this path can not be empty!");
+        }
+        if (TextUtils.isEmpty(name)) {
+            throw new IllegalArgumentException("this name can not be empty!");
+        }
+        if (callback == null) {
+            throw new NullPointerException("this callback is null!");
+        }
         init();
-        DisposableObserver disposableObserver = new DownloadObserver(path, name, callback);
+        DisposableObserver disposableObserver = new DownloadObserver(callback);
         if (super.tag != null) {
             ApiManager.get().add(super.tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
+                .toFlowable(BackpressureStrategy.LATEST)
+                .flatMap(new Function<ResponseBody, Publisher<?>>() {
+                    @Override
+                    public Publisher<?> apply(final ResponseBody responseBody) throws Exception {
+                        return Flowable.create(new FlowableOnSubscribe<DownloadModel>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<DownloadModel> subscriber) throws Exception {
+                                File dir = new File(path);
+                                if (!dir.exists()) {
+                                    dir.mkdirs();
+                                }
+                                File file = new File(dir.getPath() + File.separator + name);
+                                saveFile(subscriber, file, responseBody);
+                            }
+                        }, BackpressureStrategy.LATEST);
+                    }
+                })
+                .sample(700, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .toObservable()
                 .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))
                 .subscribe(disposableObserver);
+    }
+
+    private void saveFile(FlowableEmitter<? super DownloadModel> sub, File saveFile, ResponseBody resp) {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            try {
+                int readLen;
+                int downloadSize = 0;
+                byte[] buffer = new byte[8192];
+
+                DownloadModel downModel = new DownloadModel();
+                inputStream = resp.byteStream();
+                outputStream = new FileOutputStream(saveFile);
+
+                long contentLength = resp.contentLength();
+                downModel.totalSize = contentLength;
+                sub.onNext(downModel);
+
+                while ((readLen = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, readLen);
+                    downloadSize += readLen;
+                    downModel.downloadSize = downloadSize;
+                    sub.onNext(downModel);
+                }
+                outputStream.flush();
+                sub.onComplete();
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+                if (resp != null) {
+                    resp.close();
+                }
+            }
+        } catch (IOException e) {
+            sub.onError(e);
+        }
     }
 
     @Override
@@ -101,6 +191,11 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
         return this;
     }
 
+    public static class DownloadModel {
+        public long downloadSize;
+        public long totalSize;
+    }
+
     /**
      * New
      */
@@ -108,18 +203,20 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
 
         public DownloadRequestF(Context context, String url) {
             super(context, url);
+            this.config = HttpConfig.getNewDefaultConfig();
         }
 
         public DownloadRequestF(Context context, String url, Map<String, String> params) {
             super(context, url, params);
+            this.config = HttpConfig.getNewDefaultConfig();
         }
 
         @Override
         protected void init() {
             if (params == null) {
-                observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).download(url);
+                observable = RetrofitClient.getRetrofitDown(context, config).create(RetrofitAPI.class).download(url);
             } else {
-                observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).download(url, params);
+                observable = RetrofitClient.getRetrofitDown(context, config).create(RetrofitAPI.class).download(url, params);
             }
         }
 

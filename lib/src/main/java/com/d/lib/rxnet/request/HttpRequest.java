@@ -3,6 +3,7 @@ package com.d.lib.rxnet.request;
 import android.content.Context;
 
 import com.d.lib.rxnet.base.ApiManager;
+import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.func.ApiFunc;
 import com.d.lib.rxnet.func.ApiRetryFunc;
 import com.d.lib.rxnet.func.MapFunc;
@@ -35,12 +36,14 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
     public HttpRequest(Context context, String url) {
         this.context = context;
         this.url = url;
+        this.config = HttpConfig.getDefaultConfig();
     }
 
     public HttpRequest(Context context, String url, Map<String, String> params) {
         this.context = context;
         this.url = url;
         this.params = params;
+        this.config = HttpConfig.getDefaultConfig();
     }
 
     protected void init() {
@@ -148,12 +151,14 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
         public HttpRequestF(Context context, String url) {
             this.context = context;
             this.url = url;
+            this.config = HttpConfig.getNewDefaultConfig();
         }
 
         public HttpRequestF(Context context, String url, Map<String, String> params) {
             this.context = context;
             this.url = url;
             this.params = params;
+            this.config = HttpConfig.getNewDefaultConfig();
         }
 
         @Override

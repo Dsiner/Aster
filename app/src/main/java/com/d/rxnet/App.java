@@ -3,14 +3,16 @@ package com.d.rxnet;
 import android.app.Application;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.api.API;
 import com.d.lib.rxnet.util.SSLUtil;
+import com.d.rxnet.api.API;
+
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * e.g
  * Created by D on 2017/10/27.
  */
-public class SysApplication extends Application {
+public class App extends Application {
 
     @Override
     public void onCreate() {
@@ -24,6 +26,7 @@ public class SysApplication extends Application {
                 .retryCount(3)
                 .retryDelayMillis(2 * 1000)
                 .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
+                .setLog("RetrofitLog Back = ", HttpLoggingInterceptor.Level.BODY)
                 .build();
     }
 }

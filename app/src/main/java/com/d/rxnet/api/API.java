@@ -1,4 +1,4 @@
-package com.d.lib.rxnet.api;
+package com.d.rxnet.api;
 
 /**
  * API
