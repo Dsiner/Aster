@@ -5,8 +5,10 @@ import com.d.lib.rxnet.exception.ApiException;
 /**
  * Created by D on 2017/10/24.
  */
-public interface UploadCallBack<T> {
-    void onProgresss(int count, int countDone, int position, long progress, long length, boolean done);
+public interface UploadCallBack {
+    void onProgress(long currentLength, long totalLength);
 
     void onError(ApiException e);
+
+    void onComplete();
 }

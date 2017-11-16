@@ -126,6 +126,12 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
     }
 
     @Override
+    protected HR addNetworkInterceptors(Interceptor interceptor) {
+        config.addNetworkInterceptors(interceptor);
+        return (HR) this;
+    }
+
+    @Override
     protected HR sslSocketFactory(SSLSocketFactory sslSocketFactory) {
         config.sslSocketFactory(sslSocketFactory);
         return (HR) this;
@@ -206,6 +212,12 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
         @Override
         public HRF addInterceptor(Interceptor interceptor) {
             config.addInterceptor(interceptor);
+            return (HRF) this;
+        }
+
+        @Override
+        public HRF addNetworkInterceptors(Interceptor interceptor) {
+            config.addNetworkInterceptors(interceptor);
             return (HRF) this;
         }
 

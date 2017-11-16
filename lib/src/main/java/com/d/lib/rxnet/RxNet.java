@@ -15,10 +15,8 @@ import com.d.lib.rxnet.request.PostRequest;
 import com.d.lib.rxnet.request.PutRequest;
 import com.d.lib.rxnet.request.UploadRequest;
 
-import java.util.List;
 import java.util.Map;
 
-import okhttp3.MultipartBody;
 import retrofit2.Retrofit;
 
 /**
@@ -88,8 +86,8 @@ public class RxNet implements RequestListener {
         return new DownloadRequest.DownloadRequestF(appContext, url, params);
     }
 
-    public UploadRequest.UploadRequestF upload(String url, List<MultipartBody.Part> parts) {
-        return new UploadRequest.UploadRequestF(appContext, url, parts);
+    public UploadRequest.UploadRequestF upload(String url) {
+        return new UploadRequest.UploadRequestF(appContext, url);
     }
 
     public static class RxNetIns implements RequestListener {
@@ -145,8 +143,8 @@ public class RxNet implements RequestListener {
             return new DownloadRequest(appContext, url, params);
         }
 
-        public UploadRequest upload(String url, List<MultipartBody.Part> parts) {
-            return new UploadRequest(appContext, url, parts);
+        public UploadRequest upload(String url) {
+            return new UploadRequest(appContext, url);
         }
     }
 }

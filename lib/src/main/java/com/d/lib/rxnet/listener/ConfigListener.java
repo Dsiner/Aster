@@ -23,6 +23,8 @@ public abstract class ConfigListener<R> {
 
     protected abstract R addInterceptor(Interceptor interceptor);
 
+    protected abstract R addNetworkInterceptors(Interceptor interceptor);
+
     protected abstract R sslSocketFactory(SSLSocketFactory sslSocketFactory);
 
     /*************************** Retry ***************************/

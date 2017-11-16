@@ -15,7 +15,6 @@ import com.d.rxnet.model.MovieInfo;
 
 import java.util.ArrayList;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
@@ -41,7 +40,7 @@ public class Get {
         testRetrofit();
     }
 
-    public void testIns() {
+    private void testIns() {
         Params params = new Params(API.MovieTop.rtpType);
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
@@ -49,13 +48,14 @@ public class Get {
                 .request(new SimpleCallBack<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo response) {
-                        RxLog.d("dsiner_th_onSuccess: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
-                        RxLog.d("dsiner_onSuccess: " + response);
+                        RxLog.d("dsiner_th onSuccess: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_request onSuccess: " + response);
                     }
 
                     @Override
                     public void onError(ApiException e) {
-                        RxLog.d("dsiner_onError: ");
+                        RxLog.d("dsiner_th onError: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_request onError");
                     }
                 });
 
@@ -63,24 +63,26 @@ public class Get {
                 .request(new AsyncCallBack<String, String>() {
                     @Override
                     public String apply(@NonNull String info) throws Exception {
-                        RxLog.d("dsiner_th_apply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_th apply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_request apply");
                         return "" + info;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        RxLog.d("dsiner_th_onSuccess: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
-                        RxLog.d("dsiner_onSuccess: " + response);
+                        RxLog.d("dsiner_th onSuccess: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_request onSuccess: " + response);
                     }
 
                     @Override
                     public void onError(ApiException e) {
-                        RxLog.d("dsiner_onError: ");
+                        RxLog.d("dsiner_th onError: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_request onError");
                     }
                 });
     }
 
-    public void testNew() {
+    private void testNew() {
         Params params = new Params(API.MovieTop.rtpType);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
@@ -92,69 +94,66 @@ public class Get {
                 .request(new AsyncCallBack<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo movieTopModelInfo) throws Exception {
-                        RxLog.d("dsiner_th_apply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_th apply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_request apply");
                         int size = movieTopModelInfo.subjects.size();
                         return "" + size;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        RxLog.d("dsiner_th_onSuccess: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
-                        RxLog.d("dsiner_onSuccess: " + response);
+                        RxLog.d("dsiner_th onSuccess: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_request onSuccess: " + response);
                     }
 
                     @Override
                     public void onError(ApiException e) {
-                        RxLog.d("dsiner_onError: ");
+                        RxLog.d("dsiner_th onError: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxLog.d("dsiner_request onError");
                     }
                 });
     }
 
-    public void testObservable() {
-        Observable<Boolean> observable = RxNet.getInstance(appContext).get("")
-                .observable(Boolean.class);
+    private void testObservable() {
+        RxNet.getInstance(appContext).get("")
+                .observable(ResponseBody.class)
+                .subscribe(new DisposableObserver<ResponseBody>() {
+                    @Override
+                    public void onNext(@NonNull ResponseBody response) {
 
-        observable.subscribe(new DisposableObserver<Boolean>() {
-            @Override
-            public void onNext(@NonNull Boolean aBoolean) {
+                    }
 
-            }
+                    @Override
+                    public void onError(@NonNull Throwable e) {
 
-            @Override
-            public void onError(@NonNull Throwable e) {
+                    }
 
-            }
+                    @Override
+                    public void onComplete() {
 
-            @Override
-            public void onComplete() {
-
-            }
-        });
+                    }
+                });
     }
 
-    public void testRetrofit() {
+    private void testRetrofit() {
         RxNet.getRetrofit(appContext).create(RetrofitAPI.class)
                 .get("")
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, ArrayList<Boolean>>() {
                     @Override
                     public ArrayList<Boolean> apply(@NonNull ResponseBody info) throws Exception {
-                        return new ArrayList<Boolean>();
+                        return new ArrayList<>();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<ArrayList<Boolean>>() {
                     @Override
-                    protected void onStart() {
-                        super.onStart();
+                    public void onNext(ArrayList<Boolean> booleans) {
+
                     }
 
                     @Override
-                    public void onNext(@NonNull ArrayList<Boolean> list) {
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
+                    public void onError(Throwable e) {
 
                     }
 

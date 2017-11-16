@@ -18,7 +18,7 @@ public class DownloadObserver extends AbsObserver<DownloadRequest.DownloadModel>
     @Override
     public void onNext(DownloadRequest.DownloadModel t) {
         RxLog.d("dsiner_th_ downloadOnNext: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
-        callBack.onProgresss(t.downloadSize, t.totalSize);
+        callBack.onProgress(t.downloadSize, t.totalSize);
     }
 
     @Override

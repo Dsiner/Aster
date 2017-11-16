@@ -35,7 +35,7 @@ import okhttp3.Interceptor;
 import okhttp3.ResponseBody;
 
 /**
- * Instance
+ * New
  * Created by D on 2017/10/24.
  */
 public class DownloadRequest extends BaseRequest<DownloadRequest> {
@@ -177,6 +177,11 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
     }
 
     @Override
+    protected DownloadRequest addNetworkInterceptors(Interceptor interceptor) {
+        return this;
+    }
+
+    @Override
     protected DownloadRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
         return this;
     }
@@ -260,6 +265,12 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
         @Override
         public DownloadRequestF addInterceptor(Interceptor interceptor) {
             config.addInterceptor(interceptor);
+            return this;
+        }
+
+        @Override
+        public DownloadRequestF addNetworkInterceptors(Interceptor interceptor) {
+            config.addNetworkInterceptors(interceptor);
             return this;
         }
 

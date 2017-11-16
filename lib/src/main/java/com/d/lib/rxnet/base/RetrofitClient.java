@@ -55,7 +55,7 @@ public class RetrofitClient {
      * 实例-自定义配置
      */
     public static Retrofit getRetrofit(Context context, HttpConfig config) {
-        return getRetrofit(context, HttpConfig.getDefaultConfig(), true);
+        return getRetrofit(context, config, true);
     }
 
     /**
@@ -78,6 +78,7 @@ public class RetrofitClient {
                         config.writeTimeout != -1 ? config.writeTimeout : HttpConfig.getDefaultConfig().writeTimeout,
                         config.sslSocketFactory,
                         config.interceptors,
+                        config.networkInterceptors,
                         log))
                 //设置baseUrl
                 .baseUrl(!TextUtils.isEmpty(config.baseUrl) ? config.baseUrl : HttpConfig.getDefaultConfig().baseUrl)
@@ -95,14 +96,18 @@ public class RetrofitClient {
                                                 long readTimeout,
                                                 long writeTimeout,
                                                 SSLSocketFactory sslSocketFactory,
-                                                ArrayList<Interceptor> interceptors, boolean log) {
+                                                ArrayList<Interceptor> interceptors,
+                                                ArrayList<Interceptor> networkInterceptors,
+                                                boolean log) {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder()
                 .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS);
+
         if (sslSocketFactory != null) {
             builder.sslSocketFactory(sslSocketFactory);
         }
+
         if (headers != null && headers.size() > 0) {
             builder.addInterceptor(new HeadersInterceptor(context, headers));
         }
@@ -113,6 +118,12 @@ public class RetrofitClient {
         }
         if (log) {
             builder.addInterceptor(getOkhttpLog());
+        }
+
+        if (networkInterceptors != null && networkInterceptors.size() > 0) {
+            for (Interceptor networkInterceptor : networkInterceptors) {
+                builder.addNetworkInterceptor(networkInterceptor);
+            }
         }
         return builder.build();
     }

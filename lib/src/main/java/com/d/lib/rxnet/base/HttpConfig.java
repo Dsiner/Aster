@@ -29,6 +29,7 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
     public int retryCount = -1;
     public long retryDelayMillis = -1;
     public ArrayList<Interceptor> interceptors = new ArrayList<>();
+    public ArrayList<Interceptor> networkInterceptors = new ArrayList<>();
     public SSLSocketFactory sslSocketFactory;
 
     /**
@@ -126,6 +127,14 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
     }
 
     @Override
+    public HttpConfig addNetworkInterceptors(Interceptor interceptor) {
+        if (this.networkInterceptors != null && interceptor != null) {
+            this.networkInterceptors.add(interceptor);
+        }
+        return this;
+    }
+
+    @Override
     public HttpConfig sslSocketFactory(SSLSocketFactory sslSocketFactory) {
         this.sslSocketFactory = sslSocketFactory;
         return this;
@@ -187,6 +196,14 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
         public Build addInterceptor(Interceptor interceptor) {
             if (this.interceptors != null && interceptor != null) {
                 this.interceptors.add(interceptor);
+            }
+            return this;
+        }
+
+        @Override
+        public Build addNetworkInterceptors(Interceptor interceptor) {
+            if (this.networkInterceptors != null && interceptor != null) {
+                this.networkInterceptors.add(interceptor);
             }
             return this;
         }
