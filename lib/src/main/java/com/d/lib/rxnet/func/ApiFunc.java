@@ -1,6 +1,5 @@
 package com.d.lib.rxnet.func;
 
-import com.d.lib.rxnet.exception.ApiException;
 import com.d.lib.rxnet.util.RxLog;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -39,7 +38,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
                 responseBody.close();
             }
             e.printStackTrace();
-            throw new ApiException(new JsonParseException("JSON PARSE ERROR!"), -1);
+            throw new JsonParseException("JSON PARSE ERROR!");
         }
     }
 }

@@ -52,11 +52,11 @@ public class MyApplication extends Application {
         params.addParam(API.MovieTop.count, "10");
 ```
 
-### Retrofit形式一  `单例` （使用全局配置）
+### Retrofit形式一： 单例（使用全局配置）
 
-#### 链式形式 1    ——（CallBack简洁回调）
+#### 链式形式 1：    ——（CallBack简洁回调）
 ```java
-        //AsyncCallBack回调
+        //1-1：SimpleCallBack回调
         RxNet.getInstance(context).get(url, params)
                 .request(new SimpleCallBack<MovieInfo>() {
                     @Override
@@ -70,19 +70,19 @@ public class MyApplication extends Application {
                     }
                 });
                 
-        //AsyncCallBack回调
+        //1-2：AsyncCallBack回调
         RxNet.getInstance(context).get(url, params)
                 .request(new AsyncCallBack<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
-                        ...请求成功 -->step-1：子线程（做耗时、map转换操作等）
+                        ...请求成功 step-1 -->子线程（耗时、map转换等）
                         int size = info.subjects.size();
                         return "" + size;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        ...请求成功 -->step-2：主线程
+                        ...请求成功 step-2 -->主线程
                     }
 
                     @Override
@@ -92,29 +92,36 @@ public class MyApplication extends Application {
                 });
 ```
 
-#### 链式形式 2    ——（泛型T为特定返回类型，observable调用Retrofit的观察者，而非CallBack接口）
+#### 链式形式 2：    ——（.observable(T)指定泛型T特定返回类型，调用Retrofit的观察者，而非CallBack接口）
 ```java
-        RxNet.getInstance(context).get(url)
+        RxNet.getInstance(context).get(url, params)
                 .observable(MovieInfo.class)
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        return info;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<MovieInfo>() {
                     @Override
                     public void onNext(@NonNull MovieInfo info) {
-
+                        ...
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        ...
                     }
 
                     @Override
                     public void onComplete() {
-
+                        ...
                     }
                 });
 ```
 
-#### 链式形式 3    ——（RxNet.getRetrofit(context)获取Retrofit，完全自定义.create()）
+#### 链式形式 3：    ——（RxNet.getRetrofit(context)获取Retrofit，完全自定义.create()）
 ```java
         RxNet.getRetrofit(context).create(SubAPI.class)
                 .get(url)
@@ -144,7 +151,7 @@ public class MyApplication extends Application {
                 });
 ```
 
-### Retrofit形式二  `新的实例` （支持全新的自定义配置、支持上述3种链式形式）
+### Retrofit形式二：  新的实例（支持全新的自定义配置、支持上述3种链式形式）
 ```java
         new RxNet(context).get(url, params)
                 .baseUrl("https://api.douban.com/v2/movie/")
@@ -171,7 +178,7 @@ public class MyApplication extends Application {
 
 #### `新的实例` 与 `单例` 的使用区别
 - `New`   - 以new实例的形式 `new RxNet(context)` 代替 `RxNet.getInstance(context)`
-- `Config` - 支持自定义配置(仅作用于此次请求)，`.connectTimeout()、.baseUrl()、.headers()等.`
+- `Config` - 自定义配置，支持`.connectTimeout()、.baseUrl()、.headers()等配置，仅作用于此次请求.`
 
 More usage see [Demo](app/src/main/java/com/d/rxnet/MainActivity.java)
 

@@ -19,10 +19,16 @@ public class ApiException extends Exception {
     private final int code;
     private String message;
 
-    public ApiException(Throwable throwable, int code) {
-        super(throwable);
+    public ApiException(int code, String message) {
+        super(message);
         this.code = code;
-        this.message = throwable.getMessage();
+        this.message = message;
+    }
+
+    public ApiException(int code, Throwable cause) {
+        super(cause);
+        this.code = code;
+        this.message = cause.getMessage();
     }
 
     public int getCode() {
@@ -46,7 +52,7 @@ public class ApiException extends Exception {
         ApiException ex;
         if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;
-            ex = new ApiException(e, ApiCode.Request.HTTP_ERROR);
+            ex = new ApiException(ApiCode.Request.HTTP_ERROR, e);
             switch (httpException.code()) {
                 case ApiCode.Http.UNAUTHORIZED:
                 case ApiCode.Http.FORBIDDEN:
@@ -62,23 +68,23 @@ public class ApiException extends Exception {
             }
             return ex;
         } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException) {
-            ex = new ApiException(e, ApiCode.Request.PARSE_ERROR);
+            ex = new ApiException(ApiCode.Request.PARSE_ERROR, e);
             ex.message = "PARSE_ERROR";
             return ex;
         } else if (e instanceof ConnectException) {
-            ex = new ApiException(e, ApiCode.Request.NETWORK_ERROR);
+            ex = new ApiException(ApiCode.Request.NETWORK_ERROR, e);
             ex.message = "NETWORK_ERROR";
             return ex;
         } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
-            ex = new ApiException(e, ApiCode.Request.SSL_ERROR);
+            ex = new ApiException(ApiCode.Request.SSL_ERROR, e);
             ex.message = "SSL_ERROR";
             return ex;
         } else if (e instanceof SocketTimeoutException) {
-            ex = new ApiException(e, ApiCode.Request.TIMEOUT_ERROR);
+            ex = new ApiException(ApiCode.Request.TIMEOUT_ERROR, e);
             ex.message = "TIMEOUT_ERROR";
             return ex;
         } else {
-            ex = new ApiException(e, ApiCode.Request.UNKNOWN);
+            ex = new ApiException(ApiCode.Request.UNKNOWN, e);
             ex.message = "UNKNOWN";
             return ex;
         }

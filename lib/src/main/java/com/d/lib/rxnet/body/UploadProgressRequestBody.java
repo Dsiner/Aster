@@ -89,7 +89,7 @@ public class UploadProgressRequestBody extends RequestBody {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        callback.onError(new ApiException(throwable, -1));
+                        callback.onError(new ApiException(-1, throwable));
                     }
                 });
             }

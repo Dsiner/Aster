@@ -1,7 +1,7 @@
 package com.d.lib.rxnet.observer;
 
 import com.d.lib.rxnet.exception.ApiException;
-import com.d.lib.rxnet.mode.ApiCode;
+import com.d.lib.rxnet.util.RxLog;
 
 import io.reactivex.observers.DisposableObserver;
 
@@ -15,10 +15,11 @@ abstract class AbsObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onError(Throwable e) {
+        RxLog.e(e.getMessage());
         if (e instanceof ApiException) {
             onError((ApiException) e);
         } else {
-            onError(new ApiException(e, ApiCode.Request.UNKNOWN));
+            onError(new ApiException(-1, e));
         }
     }
 

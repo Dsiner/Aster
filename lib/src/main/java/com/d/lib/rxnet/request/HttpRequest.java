@@ -84,7 +84,6 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
         return observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .map(new ApiFunc<T>(clazz))
-                .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis));
     }
 

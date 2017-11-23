@@ -101,6 +101,7 @@ public class Post {
     private void testObservable() {
         RxNet.getInstance(appContext).post("")
                 .observable(ResponseBody.class)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<ResponseBody>() {
                     @Override
                     public void onNext(@NonNull ResponseBody response) {

@@ -1,7 +1,6 @@
 package com.d.lib.rxnet.func;
 
 import com.d.lib.rxnet.base.HttpConfig;
-import com.d.lib.rxnet.exception.ApiException;
 import com.d.lib.rxnet.util.RxLog;
 
 import java.net.ConnectException;
@@ -36,10 +35,10 @@ public class ApiRetryFunc implements Function<Observable<? extends Throwable>, O
                 if (++retryCount <= maxRetries && (throwable instanceof SocketTimeoutException
                         || throwable instanceof ConnectException)) {
                     RxLog.d("get response data error, it will try after " + retryDelayMillis
-                            + " millisecond, retry count " + retryCount);
+                            + " millisecond, retry count " + retryCount + "/" + maxRetries);
                     return Observable.timer(retryDelayMillis, TimeUnit.MILLISECONDS);
                 }
-                return Observable.error(ApiException.handleException(throwable));
+                return Observable.error(throwable);
             }
         });
     }

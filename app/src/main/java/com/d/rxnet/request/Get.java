@@ -115,22 +115,49 @@ public class Get {
     }
 
     private void testObservable() {
-        RxNet.getInstance(appContext).get("")
-                .observable(ResponseBody.class)
-                .subscribe(new DisposableObserver<ResponseBody>() {
+        Params params = new Params(API.MovieTop.rtpType);
+        params.addParam(API.MovieTop.start, "1");
+        params.addParam(API.MovieTop.count, "10");
+        RxNet.getInstance(appContext).get(API.MovieTop.rtpType, params)
+                .observable(MovieInfo.class)
+                .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
-                    public void onNext(@NonNull ResponseBody response) {
-
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        RxLog.d("dsiner_th Observable apply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        return info;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        RxLog.d("dsiner_th apply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        return info;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        RxLog.d("dsiner_th apply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        return info;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<MovieInfo>() {
+                    @Override
+                    public void onNext(@NonNull MovieInfo info) {
+                        RxLog.d("dsiner_th onNext: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        RxLog.d("dsiner_th onError: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
                     }
 
                     @Override
                     public void onComplete() {
-
+                        RxLog.d("dsiner_th onComplete: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
                     }
                 });
     }
