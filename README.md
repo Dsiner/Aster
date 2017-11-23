@@ -1,12 +1,13 @@
 # RxNet for Android
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[ ![Download](https://api.bintray.com/packages/dsiner/maven/rxnet/images/download.svg) ](https://bintray.com/dsiner/maven/rxnet/_latestVersion)
 
 RxNet 是一个基于 `Retrofit2` + `RxJava2` 实现的 `网络请求库`
 
 ## 特点
 -  `1` 条链，完全链式调用 `.func0().func1().func2()...` ， `自适应` 、 `简`
--  `2` 种Retrofit形式（全局配置一致 `单例`： 、完全自定义配置 `新的实例`）
+-  `2` 种Retrofit形式（`单例` 全局配置： 、`新的实例` 完全自定义配置）
 -  `3` 种链式形式，完全扩展
 
 ## 支持列表
@@ -21,6 +22,18 @@ RxNet 是一个基于 `Retrofit2` + `RxJava2` 实现的 `网络请求库`
 - [x] Upload
 
 ## 使用
+Maven:
+```xml
+<dependency>
+  <groupId>com.dsiner.lib</groupId>
+  <artifactId>rxnet</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+or Gradle:
+```groovy
+compile 'com.dsiner.lib:rxnet:1.0.0'
+```
 
 ### 全局配置
 ```xml
@@ -178,7 +191,7 @@ public class MyApplication extends Application {
 
 #### `新的实例` 与 `单例` 的使用区别
 - `New`   - 以new实例的形式 `new RxNet(context)` 代替 `RxNet.getInstance(context)`
-- `Config` - 自定义配置，支持`.connectTimeout()、.baseUrl()、.headers()等配置，仅作用于此次请求.`
+- `Config` - 自定义配置，支持`.connectTimeout()、.baseUrl()、.headers()` 等配置，仅作用于此次请求.
 
 More usage see [Demo](app/src/main/java/com/d/rxnet/MainActivity.java)
 
