@@ -1,14 +1,13 @@
 package com.d.lib.rxnet.listener;
 
-import com.d.lib.rxnet.exception.ApiException;
-
 /**
+ * UploadCallBack
  * Created by D on 2017/10/24.
  */
 public interface UploadCallBack {
     void onProgress(long currentLength, long totalLength);
 
-    void onError(ApiException e);
+    void onError(Throwable e);
 
     void onComplete();
 }

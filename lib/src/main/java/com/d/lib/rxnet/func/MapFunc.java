@@ -1,12 +1,12 @@
 package com.d.lib.rxnet.func;
 
 import com.d.lib.rxnet.listener.AsyncCallBack;
-import com.d.lib.rxnet.util.RxLog;
+import com.d.lib.rxnet.util.RxUtil;
 
 import io.reactivex.functions.Function;
 
 /**
- * T转
+ * Map with AsyncCallBack
  */
 public class MapFunc<T, R> implements Function<T, R> {
     private AsyncCallBack<T, R> callback;
@@ -17,7 +17,7 @@ public class MapFunc<T, R> implements Function<T, R> {
 
     @Override
     public R apply(T responseBody) throws Exception {
-        RxLog.d("dsiner_th_map: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+        RxUtil.printThread("RxNet_theard callback apply: ");
         return callback.apply(responseBody);
     }
 }

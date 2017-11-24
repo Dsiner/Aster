@@ -15,6 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
 /**
+ * BaseRequest
  * Created by D on 2017/10/24.
  */
 public abstract class BaseRequest<R extends BaseRequest> extends ConfigListener<R> {

@@ -5,7 +5,6 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.d.lib.rxnet.util.RxLog;
 import com.d.lib.rxnet.util.RxUtil;
 import com.d.rxnet.request.Download;
 import com.d.rxnet.request.Get;
@@ -18,10 +17,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        RxUtil.printThread("dsiner_theard Main: ");
         super.onCreate(savedInstanceState);
-        RxLog.d("dsiner_th_Main: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
         setContentView(R.layout.activity_main);
+        wipeCache();
         initView();
+    }
+
+    private void wipeCache() {
         new Thread(new Runnable() {
             @Override
             public void run() {

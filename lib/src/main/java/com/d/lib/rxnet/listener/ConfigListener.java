@@ -7,6 +7,7 @@ import javax.net.ssl.SSLSocketFactory;
 import okhttp3.Interceptor;
 
 /**
+ * ConfigListener
  * Created by D on 2017/10/25.
  */
 public abstract class ConfigListener<R> {

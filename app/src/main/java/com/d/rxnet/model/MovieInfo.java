@@ -3,6 +3,7 @@ package com.d.rxnet.model;
 import java.util.List;
 
 /**
+ * 豆瓣电影Model
  * Created by D on 2017/10/26.
  */
 public class MovieInfo {

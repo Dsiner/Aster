@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.exception.ApiException;
 import com.d.lib.rxnet.listener.DownloadCallBack;
 import com.d.lib.rxnet.util.RxLog;
 import com.d.lib.rxnet.util.RxUtil;
@@ -41,7 +40,7 @@ public class Download {
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        RxLog.d("dsiner_th onProgresss: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxUtil.printThread("dsiner_theard onProgresss: ");
                         RxLog.d("dsiner_request onProgresss: -->download: " + currentLength + " total: " + totalLength);
                         if (!dialog.isShowing()) {
                             dialog.setMessage("正在下载...");
@@ -51,15 +50,15 @@ public class Download {
                     }
 
                     @Override
-                    public void onError(ApiException e) {
-                        RxLog.d("dsiner_th onError: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                    public void onError(Throwable e) {
+                        RxUtil.printThread("dsiner_theard onError: ");
                         RxLog.d("dsiner_request onError " + e.getMessage());
                         dialog.dismiss();
                     }
 
                     @Override
                     public void onComplete() {
-                        RxLog.d("dsiner_th onComplete: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxUtil.printThread("dsiner_theard onComplete: ");
                         RxLog.d("dsiner_request onComplete:");
                         dialog.setProgress(100);
                         dialog.setMessage("下载完成");
@@ -79,19 +78,19 @@ public class Download {
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        RxLog.d("dsiner_th onProgresss: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxUtil.printThread("dsiner_theard onProgresss: ");
                         RxLog.d("dsiner_request onProgresss: -->download: " + currentLength + " total: " + totalLength);
                     }
 
                     @Override
-                    public void onError(ApiException e) {
-                        RxLog.d("dsiner_th onError: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                    public void onError(Throwable e) {
+                        RxUtil.printThread("dsiner_theard onError: ");
                         RxLog.d("dsiner_request onError " + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        RxLog.d("dsiner_th onComplete: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxUtil.printThread("dsiner_theard onComplete: ");
                         RxLog.d("dsiner_request onComplete:");
                     }
                 });

@@ -6,7 +6,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * Config
  * Created by D on 2017/10/24.
  */
-public class Config {
+class Config {
     static String TAG_LOG = "RetrofitLog Back = ";
     static HttpLoggingInterceptor.Level LOG_LEVEL = HttpLoggingInterceptor.Level.BODY;
 

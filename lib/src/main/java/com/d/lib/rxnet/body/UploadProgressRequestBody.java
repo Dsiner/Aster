@@ -64,7 +64,7 @@ public class UploadProgressRequestBody extends RequestBody {
         //总字节长度，避免多次调用contentLength()方法
         private long totalLength = 0L;
 
-        public CountingSink(Sink sink) {
+        CountingSink(Sink sink) {
             super(sink);
         }
 

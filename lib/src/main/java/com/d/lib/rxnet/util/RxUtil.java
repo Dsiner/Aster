@@ -5,10 +5,17 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
- * RxUtil
+ * Util
  * Created by D on 2017/10/25.
  */
 public class RxUtil {
+
+    /**
+     * 打印当前代码所在线程信息
+     */
+    public static void printThread(String tag) {
+        RxLog.d(tag + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+    }
 
     /**
      * 获取第一泛型类型 仅限Interface

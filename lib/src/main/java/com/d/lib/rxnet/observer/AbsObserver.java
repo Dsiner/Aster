@@ -6,7 +6,7 @@ import com.d.lib.rxnet.util.RxLog;
 import io.reactivex.observers.DisposableObserver;
 
 /**
- * API统一订阅者
+ * Abs Observer
  */
 abstract class AbsObserver<T> extends DisposableObserver<T> {
 
@@ -15,13 +15,10 @@ abstract class AbsObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onError(Throwable e) {
-        RxLog.e(e.getMessage());
+        //print error log
         if (e instanceof ApiException) {
-            onError((ApiException) e);
-        } else {
-            onError(new ApiException(-1, e));
+            e.printStackTrace();
         }
+        RxLog.e(e.getMessage());
     }
-
-    protected abstract void onError(ApiException e);
 }

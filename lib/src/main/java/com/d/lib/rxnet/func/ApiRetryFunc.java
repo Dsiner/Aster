@@ -2,6 +2,7 @@ package com.d.lib.rxnet.func;
 
 import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.util.RxLog;
+import com.d.lib.rxnet.util.RxUtil;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -12,7 +13,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 
 /**
- * 重试机制
+ * Retry Func
  */
 public class ApiRetryFunc implements Function<Observable<? extends Throwable>, Observable<?>> {
     private final int maxRetries;
@@ -26,12 +27,12 @@ public class ApiRetryFunc implements Function<Observable<? extends Throwable>, O
 
     @Override
     public Observable<?> apply(Observable<? extends Throwable> observable) throws Exception {
-        RxLog.d("dsiner_th_ retryInit: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+        RxUtil.printThread("RxNet_theard retryInit: ");
 
         return observable.flatMap(new Function<Throwable, ObservableSource<?>>() {
             @Override
             public ObservableSource<?> apply(Throwable throwable) throws Exception {
-                RxLog.d("dsiner_th_ retryApply: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                RxUtil.printThread("RxNet_theard retryApply: ");
                 if (++retryCount <= maxRetries && (throwable instanceof SocketTimeoutException
                         || throwable instanceof ConnectException)) {
                     RxLog.d("get response data error, it will try after " + retryDelayMillis

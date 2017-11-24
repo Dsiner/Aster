@@ -13,11 +13,15 @@ import java.net.SocketTimeoutException;
 import retrofit2.HttpException;
 
 /**
- * API异常统一管理
+ * API异常
  */
 public class ApiException extends Exception {
     private final int code;
     private String message;
+
+    public ApiException(String message) {
+        this(-1, message);
+    }
 
     public ApiException(int code, String message) {
         super(message);
@@ -45,7 +49,7 @@ public class ApiException extends Exception {
     }
 
     public String getDisplayMessage() {
-        return message + "(code:" + code + ")";
+        return "code: " + code + " message: " + message;
     }
 
     public static ApiException handleException(Throwable e) {

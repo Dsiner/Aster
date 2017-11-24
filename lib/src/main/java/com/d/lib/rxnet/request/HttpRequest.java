@@ -10,7 +10,7 @@ import com.d.lib.rxnet.func.MapFunc;
 import com.d.lib.rxnet.listener.AsyncCallBack;
 import com.d.lib.rxnet.listener.SimpleCallBack;
 import com.d.lib.rxnet.observer.ApiObserver;
-import com.d.lib.rxnet.observer.SyncApiObserver;
+import com.d.lib.rxnet.observer.AsyncApiObserver;
 import com.d.lib.rxnet.util.RxUtil;
 
 import java.util.Map;
@@ -66,7 +66,7 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
 
     public <T, R> void request(AsyncCallBack<T, R> callback) {
         init();
-        DisposableObserver disposableObserver = new SyncApiObserver(callback);
+        DisposableObserver disposableObserver = new AsyncApiObserver(callback);
         if (super.tag != null) {
             ApiManager.get().add(super.tag, disposableObserver);
         }

@@ -1,12 +1,11 @@
 package com.d.lib.rxnet.listener;
 
-import com.d.lib.rxnet.exception.ApiException;
-
 /**
+ * SimpleCallBack
  * Created by D on 2017/10/24.
  */
-public interface SimpleCallBack<T> {
-    void onSuccess(T response);
+public interface SimpleCallBack<R> {
+    void onSuccess(R response);
 
-    void onError(ApiException e);
+    void onError(Throwable e);
 }

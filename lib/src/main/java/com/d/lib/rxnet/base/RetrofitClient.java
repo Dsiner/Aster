@@ -31,7 +31,7 @@ public class RetrofitClient {
     private static Retrofit retrofit;
 
     /**
-     * 单例-默认配置
+     * Instance - Default Config
      */
     public static synchronized Retrofit getInstance(Context context) {
         if (retrofit == null) {
@@ -45,28 +45,33 @@ public class RetrofitClient {
     }
 
     /**
-     * 实例-默认配置
+     * New - Default Config
      */
     public static Retrofit getRetrofitDefault(Context context) {
         return getRetrofit(context, HttpConfig.getDefaultConfig(), true);
     }
 
     /**
-     * 实例-自定义配置
-     */
-    public static Retrofit getRetrofit(Context context, HttpConfig config) {
-        return getRetrofit(context, config, true);
-    }
-
-    /**
-     * 实例-下载配置（LogLevel.NONE）
+     * New - Download Config（no HttpLoggingInterceptor）
      */
     public static Retrofit getRetrofitDown(Context context, HttpConfig config) {
         return getRetrofit(context, config, false);
     }
 
     /**
-     * 实例-自定义配置
+     * New - Custom Config
+     */
+    public static Retrofit getRetrofit(Context context, HttpConfig config) {
+        return getRetrofit(context, config, true);
+    }
+
+    /**
+     * New - Custom Config
+     *
+     * @param context: context
+     * @param config:  config
+     * @param log:     add HttpLoggingInterceptor?
+     * @return new Retrofit
      */
     private static Retrofit getRetrofit(Context context, HttpConfig config, boolean log) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -167,6 +172,7 @@ public class RetrofitClient {
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
             return sslContext.getSocketFactory();
         } catch (Exception e) {
+            e.printStackTrace();
             RxLog.e("SslContextFactory:" + e.getMessage());
             return null;
         }

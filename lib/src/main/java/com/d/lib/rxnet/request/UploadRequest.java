@@ -38,7 +38,7 @@ import okio.Okio;
 import okio.Source;
 
 /**
- * New
+ * New but Default Config
  * Created by D on 2017/10/24.
  */
 public class UploadRequest extends BaseRequest<UploadRequest> {

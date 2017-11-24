@@ -16,6 +16,7 @@ import okhttp3.Interceptor;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
+ * HttpConfig
  * Created by D on 2017/10/24.
  */
 public class HttpConfig extends ConfigListener<HttpConfig> {

@@ -6,9 +6,9 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.exception.ApiException;
 import com.d.lib.rxnet.listener.UploadCallBack;
 import com.d.lib.rxnet.util.RxLog;
+import com.d.lib.rxnet.util.RxUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,7 +29,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class Upload {
     private String url = "http://www.qq.com/";
-    private String url1 = "http://imtt.dd.qq.com/16891/2F319116B23F8F888198396C38059382.apk?fsname=com.dewmobile.kuaiya_5.2(CN)_200.apk&csr=1bbd";
     private Context appContext;
     private boolean isRunning;
 
@@ -62,7 +61,7 @@ public class Upload {
                 .request(new UploadCallBack() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        RxLog.d("dsiner_th onProgresss: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxUtil.printThread("dsiner_theard onProgresss: ");
                         RxLog.d("dsiner_request onProgresss: -->upload: " + currentLength + " total: " + totalLength);
                         if (!dialog.isShowing()) {
                             dialog.setMessage("正在上传...");
@@ -72,15 +71,15 @@ public class Upload {
                     }
 
                     @Override
-                    public void onError(ApiException e) {
-                        RxLog.d("dsiner_th onError: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                    public void onError(Throwable e) {
+                        RxUtil.printThread("dsiner_theard onError: ");
                         RxLog.d("dsiner_request onError: " + e.getMessage());
                         dialog.dismiss();
                     }
 
                     @Override
                     public void onComplete() {
-                        RxLog.d("dsiner_th onComplete: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxUtil.printThread("dsiner_theard onComplete: ");
                         RxLog.d("dsiner_request onComplete");
                         dialog.setProgress(100);
                         dialog.setMessage("上传完成");
@@ -100,19 +99,19 @@ public class Upload {
                 .request(new UploadCallBack() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        RxLog.d("dsiner_th onProgresss: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxUtil.printThread("dsiner_theard onProgresss: ");
                         RxLog.d("dsiner_request onProgresss: -->upload: " + currentLength + " total: " + totalLength);
                     }
 
                     @Override
-                    public void onError(ApiException e) {
-                        RxLog.d("dsiner_th onError: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                    public void onError(Throwable e) {
+                        RxUtil.printThread("dsiner_theard onError: ");
                         RxLog.d("dsiner_request onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        RxLog.d("dsiner_th onComplete: " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+                        RxUtil.printThread("dsiner_theard onComplete: ");
                         RxLog.d("dsiner_request onComplete");
                     }
                 });
@@ -134,7 +133,7 @@ public class Upload {
                     try {
                         in = appContext.getAssets().open(name);//从assets目录下复制
                         out = new FileOutputStream(file);
-                        int length = -1;
+                        int length;
                         byte[] buf = new byte[1024];
                         while ((length = in.read(buf)) != -1) {
                             out.write(buf, 0, length);
