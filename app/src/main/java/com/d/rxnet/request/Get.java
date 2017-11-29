@@ -1,8 +1,5 @@
 package com.d.rxnet.request;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.d.lib.rxnet.RxNet;
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.Params;
@@ -27,10 +24,8 @@ import okhttp3.ResponseBody;
  * Created by D on 2017/10/26.
  */
 public class Get {
-    private Context appContext;
 
-    public Get(Activity activity) {
-        appContext = activity.getApplicationContext();
+    public Get() {
     }
 
     public void testAll() {
@@ -44,7 +39,7 @@ public class Get {
         Params params = new Params(API.MovieTop.rtpType);
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
-        RxNet.getInstance(appContext).get(API.MovieTop.rtpType, params)
+        RxNet.getInstance().get(API.MovieTop.rtpType, params)
                 .request(new SimpleCallBack<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo response) {
@@ -59,7 +54,7 @@ public class Get {
                     }
                 });
 
-        RxNet.getInstance(appContext).get("https://www.baidu.com", params)
+        RxNet.getInstance().get("https://www.baidu.com", params)
                 .request(new AsyncCallBack<String, String>() {
                     @Override
                     public String apply(@NonNull String info) throws Exception {
@@ -86,7 +81,7 @@ public class Get {
         Params params = new Params(API.MovieTop.rtpType);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
-        new RxNet(appContext).get("top250", params)
+        RxNet.get("top250", params)
                 .baseUrl("https://api.douban.com/v2/movie/")
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
@@ -118,7 +113,7 @@ public class Get {
         Params params = new Params(API.MovieTop.rtpType);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
-        RxNet.getInstance(appContext).get(API.MovieTop.rtpType, params)
+        RxNet.getInstance().get(API.MovieTop.rtpType, params)
                 .observable(MovieInfo.class)
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
@@ -163,7 +158,7 @@ public class Get {
     }
 
     private void testRetrofit() {
-        RxNet.getRetrofit(appContext).create(RetrofitAPI.class)
+        RxNet.getRetrofit().create(RetrofitAPI.class)
                 .get("")
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, ArrayList<Boolean>>() {

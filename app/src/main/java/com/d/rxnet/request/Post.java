@@ -1,8 +1,5 @@
 package com.d.rxnet.request;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.d.lib.rxnet.RxNet;
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.Params;
@@ -26,10 +23,8 @@ import okhttp3.ResponseBody;
  * Created by D on 2017/10/26.
  */
 public class Post {
-    private Context appContext;
 
-    public Post(Activity activity) {
-        appContext = activity.getApplicationContext();
+    public Post() {
     }
 
     public void testAll() {
@@ -43,7 +38,7 @@ public class Post {
         Params params = new Params(API.MovieTop.rtpType);
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
-        RxNet.getInstance(appContext).post(API.MovieTop.rtpType, params)
+        RxNet.getInstance().post(API.MovieTop.rtpType, params)
                 .request(new AsyncCallBack<String, String>() {
                     @Override
                     public String apply(@NonNull String info) throws Exception {
@@ -70,7 +65,7 @@ public class Post {
         Params params = new Params(API.MovieTop.rtpType);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
-        new RxNet(appContext).post("top250", params)
+        RxNet.post("top250", params)
                 .baseUrl("https://api.douban.com/v2/movie/")
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
@@ -99,7 +94,7 @@ public class Post {
     }
 
     private void testObservable() {
-        RxNet.getInstance(appContext).post("")
+        RxNet.getInstance().post("")
                 .observable(ResponseBody.class)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<ResponseBody>() {
@@ -121,7 +116,7 @@ public class Post {
     }
 
     private void testRetrofit() {
-        RxNet.getRetrofit(appContext).create(RetrofitAPI.class)
+        RxNet.getRetrofit().create(RetrofitAPI.class)
                 .post("")
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, ArrayList<Boolean>>() {

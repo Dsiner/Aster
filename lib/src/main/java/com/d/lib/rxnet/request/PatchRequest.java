@@ -1,7 +1,5 @@
 package com.d.lib.rxnet.request;
 
-import android.content.Context;
-
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.RetrofitClient;
 
@@ -13,17 +11,17 @@ import java.util.Map;
  */
 public class PatchRequest extends HttpRequest<PatchRequest> {
 
-    public PatchRequest(Context context, String url) {
-        super(context, url);
+    public PatchRequest(String url) {
+        super(url);
     }
 
-    public PatchRequest(Context context, String url, Map<String, String> params) {
-        super(context, url, params);
+    public PatchRequest(String url, Map<String, String> params) {
+        super(url, params);
     }
 
     @Override
     protected void init() {
-        observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).patch(url, params);
+        observable = RetrofitClient.getInstance().create(RetrofitAPI.class).patch(url, params);
     }
 
     /**
@@ -31,17 +29,17 @@ public class PatchRequest extends HttpRequest<PatchRequest> {
      */
     public static class PatchRequestF extends HttpRequestF<PatchRequestF> {
 
-        public PatchRequestF(Context context, String url) {
-            super(context, url);
+        public PatchRequestF(String url) {
+            super(url);
         }
 
-        public PatchRequestF(Context context, String url, Map<String, String> params) {
-            super(context, url, params);
+        public PatchRequestF(String url, Map<String, String> params) {
+            super(url, params);
         }
 
         @Override
         protected void init() {
-            observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).patch(url, params);
+            observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).patch(url, params);
         }
     }
 }

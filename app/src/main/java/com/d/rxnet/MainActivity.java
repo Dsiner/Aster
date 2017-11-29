@@ -37,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_get).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Get(MainActivity.this).testAll();
+                new Get().testAll();
             }
         });
         findViewById(R.id.btn_post).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Post(MainActivity.this).testAll();
+                new Post().testAll();
             }
         });
         findViewById(R.id.btn_download).setOnClickListener(new View.OnClickListener() {

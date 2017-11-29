@@ -1,6 +1,5 @@
 package com.d.lib.rxnet.base;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.d.lib.rxnet.interceptor.HeadersInterceptor;
@@ -33,11 +32,11 @@ public class RetrofitClient {
     /**
      * Instance - Default Config
      */
-    public static synchronized Retrofit getInstance(Context context) {
+    public static synchronized Retrofit getInstance() {
         if (retrofit == null) {
             synchronized (RetrofitClient.class) {
                 if (retrofit == null) {
-                    retrofit = getRetrofitDefault(context.getApplicationContext());
+                    retrofit = getRetrofitDefault();
                 }
             }
         }
@@ -47,37 +46,35 @@ public class RetrofitClient {
     /**
      * New - Default Config
      */
-    public static Retrofit getRetrofitDefault(Context context) {
-        return getRetrofit(context, HttpConfig.getDefaultConfig(), true);
+    public static Retrofit getRetrofitDefault() {
+        return getRetrofit(HttpConfig.getDefaultConfig(), true);
     }
 
     /**
      * New - Download Config（no HttpLoggingInterceptor）
      */
-    public static Retrofit getRetrofitDown(Context context, HttpConfig config) {
-        return getRetrofit(context, config, false);
+    public static Retrofit getRetrofitDown(HttpConfig config) {
+        return getRetrofit(config, false);
     }
 
     /**
      * New - Custom Config
      */
-    public static Retrofit getRetrofit(Context context, HttpConfig config) {
-        return getRetrofit(context, config, true);
+    public static Retrofit getRetrofit(HttpConfig config) {
+        return getRetrofit(config, true);
     }
 
     /**
      * New - Custom Config
      *
-     * @param context: context
-     * @param config:  config
-     * @param log:     add HttpLoggingInterceptor?
+     * @param config: config
+     * @param log:    add HttpLoggingInterceptor?
      * @return new Retrofit
      */
-    private static Retrofit getRetrofit(Context context, HttpConfig config, boolean log) {
+    private static Retrofit getRetrofit(HttpConfig config, boolean log) {
         Retrofit retrofit = new Retrofit.Builder()
                 //设置OKHttpClient,如果不设置会提供一个默认的
-                .client(getOkHttpClient(context,
-                        config.headers,
+                .client(getOkHttpClient(config.headers,
                         config.connectTimeout != -1 ? config.connectTimeout : HttpConfig.getDefaultConfig().connectTimeout,
                         config.readTimeout != -1 ? config.readTimeout : HttpConfig.getDefaultConfig().readTimeout,
                         config.writeTimeout != -1 ? config.writeTimeout : HttpConfig.getDefaultConfig().writeTimeout,
@@ -95,8 +92,7 @@ public class RetrofitClient {
         return retrofit;
     }
 
-    private static OkHttpClient getOkHttpClient(Context context,
-                                                Map<String, String> headers,
+    private static OkHttpClient getOkHttpClient(Map<String, String> headers,
                                                 long connectTimeout,
                                                 long readTimeout,
                                                 long writeTimeout,
@@ -114,7 +110,7 @@ public class RetrofitClient {
         }
 
         if (headers != null && headers.size() > 0) {
-            builder.addInterceptor(new HeadersInterceptor(context, headers));
+            builder.addInterceptor(new HeadersInterceptor(headers));
         }
         if (interceptors != null && interceptors.size() > 0) {
             for (Interceptor interceptor : interceptors) {

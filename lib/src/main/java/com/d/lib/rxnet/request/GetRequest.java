@@ -1,7 +1,5 @@
 package com.d.lib.rxnet.request;
 
-import android.content.Context;
-
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.RetrofitClient;
 
@@ -13,20 +11,20 @@ import java.util.Map;
  */
 public class GetRequest extends HttpRequest<GetRequest> {
 
-    public GetRequest(Context context, String url) {
-        super(context, url);
+    public GetRequest(String url) {
+        super(url);
     }
 
-    public GetRequest(Context context, String url, Map<String, String> params) {
-        super(context, url, params);
+    public GetRequest(String url, Map<String, String> params) {
+        super(url, params);
     }
 
     @Override
     protected void init() {
         if (params == null) {
-            observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).get(url);
+            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).get(url);
         } else {
-            observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).get(url, params);
+            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).get(url, params);
         }
     }
 
@@ -35,20 +33,20 @@ public class GetRequest extends HttpRequest<GetRequest> {
      */
     public static class GetRequestF extends HttpRequestF<GetRequestF> {
 
-        public GetRequestF(Context context, String url) {
-            super(context, url);
+        public GetRequestF(String url) {
+            super(url);
         }
 
-        public GetRequestF(Context context, String url, Map<String, String> params) {
-            super(context, url, params);
+        public GetRequestF(String url, Map<String, String> params) {
+            super(url, params);
         }
 
         @Override
         protected void init() {
             if (params == null) {
-                observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).get(url);
+                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).get(url);
             } else {
-                observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).get(url, params);
+                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).get(url, params);
             }
         }
     }

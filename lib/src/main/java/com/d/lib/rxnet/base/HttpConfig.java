@@ -1,6 +1,5 @@
 package com.d.lib.rxnet.base;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.d.lib.rxnet.listener.ConfigListener;
@@ -154,10 +153,8 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
     }
 
     public static class Build extends HttpConfig {
-        private Context context;
 
-        public Build(Context context) {
-            this.context = context;
+        public Build() {
         }
 
         @Override

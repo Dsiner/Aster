@@ -1,7 +1,5 @@
 package com.d.lib.rxnet.request;
 
-import android.content.Context;
-
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.RetrofitClient;
 
@@ -13,17 +11,17 @@ import java.util.Map;
  */
 public class DeleteRequest extends HttpRequest<DeleteRequest> {
 
-    public DeleteRequest(Context context, String url) {
-        super(context, url);
+    public DeleteRequest(String url) {
+        super(url);
     }
 
-    public DeleteRequest(Context context, String url, Map<String, String> params) {
-        super(context, url, params);
+    public DeleteRequest(String url, Map<String, String> params) {
+        super(url, params);
     }
 
     @Override
     protected void init() {
-        observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).delete(url, params);
+        observable = RetrofitClient.getInstance().create(RetrofitAPI.class).delete(url, params);
     }
 
     /**
@@ -31,17 +29,17 @@ public class DeleteRequest extends HttpRequest<DeleteRequest> {
      */
     public static class DeleteRequestF extends HttpRequestF<DeleteRequestF> {
 
-        public DeleteRequestF(Context context, String url) {
-            super(context, url);
+        public DeleteRequestF(String url) {
+            super(url);
         }
 
-        public DeleteRequestF(Context context, String url, Map<String, String> params) {
-            super(context, url, params);
+        public DeleteRequestF(String url, Map<String, String> params) {
+            super(url, params);
         }
 
         @Override
         protected void init() {
-            observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).delete(url, params);
+            observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).delete(url, params);
         }
     }
 }

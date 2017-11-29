@@ -2,7 +2,6 @@ package com.d.rxnet.request;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Environment;
 
 import com.d.lib.rxnet.RxNet;
@@ -17,11 +16,9 @@ import java.io.File;
  * Created by D on 2017/10/26.
  */
 public class Download {
-    private Context appContext;
     private ProgressDialog dialog;
 
     public Download(Activity activity) {
-        appContext = activity.getApplicationContext();
         dialog = new ProgressDialog(activity);
         dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         dialog.setMax(100);
@@ -30,12 +27,12 @@ public class Download {
     public void testAll() {
         RxUtil.deleteFile(new File(Environment.getExternalStorageDirectory().getPath() + "/test/"));
         testIns();
-        testNew();
+//        testNew();
     }
 
     private void testIns() {
         String url = "http://imtt.dd.qq.com/16891/4EA3DBDFC3F34E43C1D76CEE67593D67.apk?fsname=com.d.music_1.0.1_2.apk&csr=1bbd";
-        RxNet.getInstance(appContext).download(url)
+        RxNet.getInstance().download(url)
                 .request(Environment.getExternalStorageDirectory().getPath() + "/test/", "" + System.currentTimeMillis() + ".mp3", new DownloadCallBack() {
 
                     @Override
@@ -68,7 +65,7 @@ public class Download {
 
     private void testNew() {
         String url = "http://imtt.dd.qq.com/16891/D44E78C914AA4D70CD4422401A7E7E5C.apk?fsname=com.tencent.mobileqq_7.2.5_744.apk&csr=1bbd";
-        new RxNet(appContext).download(url)
+        RxNet.download(url)
                 .connectTimeout(60 * 1000)
                 .readTimeout(60 * 1000)
                 .writeTimeout(60 * 1000)

@@ -1,7 +1,5 @@
 package com.d.lib.rxnet.request;
 
-import android.content.Context;
-
 import com.d.lib.rxnet.base.ApiManager;
 import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.func.ApiFunc;
@@ -33,14 +31,12 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
     private HttpRequest() {
     }
 
-    public HttpRequest(Context context, String url) {
-        this.context = context;
+    public HttpRequest(String url) {
         this.url = url;
         this.config = HttpConfig.getDefaultConfig();
     }
 
-    public HttpRequest(Context context, String url, Map<String, String> params) {
-        this.context = context;
+    public HttpRequest(String url, Map<String, String> params) {
         this.url = url;
         this.params = params;
         this.config = HttpConfig.getDefaultConfig();
@@ -153,14 +149,12 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
      */
     public static class HttpRequestF<HRF extends HttpRequest> extends HttpRequest<HRF> {
 
-        public HttpRequestF(Context context, String url) {
-            this.context = context;
+        public HttpRequestF(String url) {
             this.url = url;
             this.config = HttpConfig.getNewDefaultConfig();
         }
 
-        public HttpRequestF(Context context, String url, Map<String, String> params) {
-            this.context = context;
+        public HttpRequestF(String url, Map<String, String> params) {
             this.url = url;
             this.params = params;
             this.config = HttpConfig.getNewDefaultConfig();

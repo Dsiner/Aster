@@ -1,7 +1,5 @@
 package com.d.lib.rxnet.request;
 
-import android.content.Context;
-
 import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.func.ApiFunc;
 import com.d.lib.rxnet.func.ApiRetryFunc;
@@ -19,7 +17,6 @@ import okhttp3.ResponseBody;
  * Created by D on 2017/10/24.
  */
 public abstract class BaseRequest<R extends BaseRequest> extends ConfigListener<R> {
-    protected Context context;
     protected HttpConfig config;
     protected String url;
     protected Observable observable;

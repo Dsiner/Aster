@@ -1,6 +1,5 @@
 package com.d.lib.rxnet.interceptor;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
@@ -17,23 +16,23 @@ import okhttp3.Response;
 public class HeadersInterceptor implements Interceptor {
     private Map<String, String> headers;
 
-    public HeadersInterceptor(Context context, Map<String, String> headers) {
+    public HeadersInterceptor(Map<String, String> headers) {
         this.headers = headers;
     }
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request.Builder builder = chain.request().newBuilder();
-
-        // TODO: @developer 2017/10/24
-        addToken(builder);
-
         if (headers != null && headers.size() > 0) {
             Set<String> keys = headers.keySet();
             for (String headerKey : keys) {
                 builder.addHeader(headerKey, headers.get(headerKey)).build();
             }
         }
+
+        // TODO: @developer 2017/10/24
+//        addToken(builder);
+
         return chain.proceed(builder.build());
     }
 

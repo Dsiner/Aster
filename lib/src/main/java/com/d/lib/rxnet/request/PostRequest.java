@@ -1,7 +1,5 @@
 package com.d.lib.rxnet.request;
 
-import android.content.Context;
-
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.mode.MediaTypes;
@@ -26,12 +24,12 @@ public class PostRequest extends HttpRequest<PostRequest> {
     private MediaType mediaType;
     private String content;
 
-    public PostRequest(Context context, String url) {
-        super(context, url);
+    public PostRequest(String url) {
+        super(url);
     }
 
-    public PostRequest(Context context, String url, Map<String, String> params) {
-        super(context, url, params);
+    public PostRequest(String url, Map<String, String> params) {
+        super(url, params);
     }
 
     @Override
@@ -47,22 +45,22 @@ public class PostRequest extends HttpRequest<PostRequest> {
                     }
                 }
             }
-            observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).postForm(url, forms);
+            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).postForm(url, forms);
         }
         if (requestBody != null) {
-            observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).postBody(url, requestBody);
+            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).postBody(url, requestBody);
             return;
         }
         if (content != null && mediaType != null) {
             requestBody = RequestBody.create(mediaType, content);
-            observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).postBody(url, requestBody);
+            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).postBody(url, requestBody);
             return;
         }
         if (params != null && params.size() > 0) {
-            observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).post(url, params);
+            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).post(url, params);
             return;
         }
-        observable = RetrofitClient.getInstance(context).create(RetrofitAPI.class).post(url);
+        observable = RetrofitClient.getInstance().create(RetrofitAPI.class).post(url);
     }
 
     public PostRequest addForm(String formKey, Object formValue) {
@@ -116,12 +114,12 @@ public class PostRequest extends HttpRequest<PostRequest> {
         private MediaType mediaType;
         private String content;
 
-        public PostRequestF(Context context, String url) {
-            super(context, url);
+        public PostRequestF(String url) {
+            super(url);
         }
 
-        public PostRequestF(Context context, String url, Map<String, String> params) {
-            super(context, url, params);
+        public PostRequestF(String url, Map<String, String> params) {
+            super(url, params);
         }
 
         @Override
@@ -137,22 +135,22 @@ public class PostRequest extends HttpRequest<PostRequest> {
                         }
                     }
                 }
-                observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).postForm(url, forms);
+                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).postForm(url, forms);
             }
             if (requestBody != null) {
-                observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).postBody(url, requestBody);
+                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).postBody(url, requestBody);
                 return;
             }
             if (content != null && mediaType != null) {
                 requestBody = RequestBody.create(mediaType, content);
-                observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).postBody(url, requestBody);
+                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).postBody(url, requestBody);
                 return;
             }
             if (params != null && params.size() > 0) {
-                observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).post(url, params);
+                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).post(url, params);
                 return;
             }
-            observable = RetrofitClient.getRetrofit(context, config).create(RetrofitAPI.class).post(url);
+            observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).post(url);
         }
 
         public PostRequestF addForm(String formKey, Object formValue) {

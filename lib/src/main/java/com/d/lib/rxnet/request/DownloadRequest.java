@@ -1,6 +1,5 @@
 package com.d.lib.rxnet.request;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
@@ -41,14 +40,12 @@ import okhttp3.ResponseBody;
 public class DownloadRequest extends BaseRequest<DownloadRequest> {
     protected Map<String, String> params;
 
-    public DownloadRequest(Context context, String url) {
-        this.context = context;
+    public DownloadRequest(String url) {
         this.url = url;
         this.config = HttpConfig.getDefaultConfig();
     }
 
-    public DownloadRequest(Context context, String url, Map<String, String> params) {
-        this.context = context;
+    public DownloadRequest(String url, Map<String, String> params) {
         this.url = url;
         this.params = params;
         this.config = HttpConfig.getDefaultConfig();
@@ -56,10 +53,10 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
 
     protected void init() {
         if (params == null) {
-            observable = RetrofitClient.getRetrofitDown(context, HttpConfig.getDefaultConfig())
+            observable = RetrofitClient.getRetrofitDown(HttpConfig.getDefaultConfig())
                     .create(RetrofitAPI.class).download(url);
         } else {
-            observable = RetrofitClient.getRetrofitDown(context, HttpConfig.getDefaultConfig())
+            observable = RetrofitClient.getRetrofitDown(HttpConfig.getDefaultConfig())
                     .create(RetrofitAPI.class).download(url, params);
         }
     }
@@ -206,22 +203,22 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
      */
     public static class DownloadRequestF extends DownloadRequest {
 
-        public DownloadRequestF(Context context, String url) {
-            super(context, url);
+        public DownloadRequestF(String url) {
+            super(url);
             this.config = HttpConfig.getNewDefaultConfig();
         }
 
-        public DownloadRequestF(Context context, String url, Map<String, String> params) {
-            super(context, url, params);
+        public DownloadRequestF(String url, Map<String, String> params) {
+            super(url, params);
             this.config = HttpConfig.getNewDefaultConfig();
         }
 
         @Override
         protected void init() {
             if (params == null) {
-                observable = RetrofitClient.getRetrofitDown(context, config).create(RetrofitAPI.class).download(url);
+                observable = RetrofitClient.getRetrofitDown(config).create(RetrofitAPI.class).download(url);
             } else {
-                observable = RetrofitClient.getRetrofitDown(context, config).create(RetrofitAPI.class).download(url, params);
+                observable = RetrofitClient.getRetrofitDown(config).create(RetrofitAPI.class).download(url, params);
             }
         }
 

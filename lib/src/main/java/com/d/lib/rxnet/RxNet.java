@@ -1,10 +1,7 @@
 package com.d.lib.rxnet;
 
-import android.content.Context;
-
 import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.base.RetrofitClient;
-import com.d.lib.rxnet.listener.RequestListener;
 import com.d.lib.rxnet.request.DeleteRequest;
 import com.d.lib.rxnet.request.DownloadRequest;
 import com.d.lib.rxnet.request.GetRequest;
@@ -23,128 +20,122 @@ import retrofit2.Retrofit;
  * New
  * Created by D on 2017/10/24.
  */
-public class RxNet implements RequestListener {
-    private Context appContext;
+public class RxNet {
 
-    public static RxNetIns getInstance(Context context) {
-        return new RxNetIns(context);
+    public static RxNetIns getInstance() {
+        return new RxNetIns();
     }
 
-    public static HttpConfig.Build init(Context context) {
-        return new HttpConfig.Build(context.getApplicationContext());
+    public static HttpConfig.Build init() {
+        return new HttpConfig.Build();
     }
 
-    public static Retrofit getRetrofit(Context context) {
-        return RetrofitClient.getInstance(context);
+    public static Retrofit getRetrofit() {
+        return RetrofitClient.getInstance();
     }
 
-    public RxNet(Context context) {
-        this.appContext = context.getApplicationContext();
+    public RxNet() {
     }
 
-    public GetRequest.GetRequestF get(String url) {
-        return new GetRequest.GetRequestF(appContext, url);
+    public static GetRequest.GetRequestF get(String url) {
+        return new GetRequest.GetRequestF(url);
     }
 
-    public GetRequest.GetRequestF get(String url, Map<String, String> params) {
-        return new GetRequest.GetRequestF(appContext, url, params);
+    public static GetRequest.GetRequestF get(String url, Map<String, String> params) {
+        return new GetRequest.GetRequestF(url, params);
     }
 
-    public PostRequest.PostRequestF post(String url) {
-        return new PostRequest.PostRequestF(appContext, url);
+    public static PostRequest.PostRequestF post(String url) {
+        return new PostRequest.PostRequestF(url);
     }
 
-    public PostRequest.PostRequestF post(String url, Map<String, String> params) {
-        return new PostRequest.PostRequestF(appContext, url, params);
+    public static PostRequest.PostRequestF post(String url, Map<String, String> params) {
+        return new PostRequest.PostRequestF(url, params);
     }
 
-    public HeadRequest.HeadRequestF head(String url, Map<String, String> params) {
-        return new HeadRequest.HeadRequestF(appContext, url, params);
+    public static HeadRequest.HeadRequestF head(String url, Map<String, String> params) {
+        return new HeadRequest.HeadRequestF(url, params);
     }
 
-    public OptionRequest.OptionRequestF options(String url, Map<String, String> params) {
-        return new OptionRequest.OptionRequestF(appContext, url, params);
+    public static OptionRequest.OptionRequestF options(String url, Map<String, String> params) {
+        return new OptionRequest.OptionRequestF(url, params);
     }
 
-    public PutRequest.PutRequestF put(String url, Map<String, String> params) {
-        return new PutRequest.PutRequestF(appContext, url, params);
+    public static PutRequest.PutRequestF put(String url, Map<String, String> params) {
+        return new PutRequest.PutRequestF(url, params);
     }
 
-    public PatchRequest.PatchRequestF patch(String url, Map<String, String> params) {
-        return new PatchRequest.PatchRequestF(appContext, url, params);
+    public static PatchRequest.PatchRequestF patch(String url, Map<String, String> params) {
+        return new PatchRequest.PatchRequestF(url, params);
     }
 
-    public DeleteRequest.DeleteRequestF delete(String url, Map<String, String> params) {
-        return new DeleteRequest.DeleteRequestF(appContext, url, params);
+    public static DeleteRequest.DeleteRequestF delete(String url, Map<String, String> params) {
+        return new DeleteRequest.DeleteRequestF(url, params);
     }
 
-    public DownloadRequest.DownloadRequestF download(String url) {
-        return new DownloadRequest.DownloadRequestF(appContext, url);
+    public static DownloadRequest.DownloadRequestF download(String url) {
+        return new DownloadRequest.DownloadRequestF(url);
     }
 
-    public DownloadRequest.DownloadRequestF download(String url, Map<String, String> params) {
-        return new DownloadRequest.DownloadRequestF(appContext, url, params);
+    public static DownloadRequest.DownloadRequestF download(String url, Map<String, String> params) {
+        return new DownloadRequest.DownloadRequestF(url, params);
     }
 
-    public UploadRequest.UploadRequestF upload(String url) {
-        return new UploadRequest.UploadRequestF(appContext, url);
+    public static UploadRequest.UploadRequestF upload(String url) {
+        return new UploadRequest.UploadRequestF(url);
     }
 
-    public static class RxNetIns implements RequestListener {
-        Context appContext;
+    public static class RxNetIns {
 
-        RxNetIns(Context context) {
-            this.appContext = context.getApplicationContext();
+        RxNetIns() {
         }
 
-        @Override
         public GetRequest get(String url) {
-            return new GetRequest(appContext, url);
+            return new GetRequest(url);
         }
 
-        @Override
         public GetRequest get(String url, Map<String, String> params) {
-            return new GetRequest(appContext, url, params);
+            return new GetRequest(url, params);
         }
 
         public PostRequest post(String url) {
-            return new PostRequest(appContext, url);
+            return new PostRequest(url);
         }
 
         public PostRequest post(String url, Map<String, String> params) {
-            return new PostRequest(appContext, url, params);
+            return new PostRequest(url, params);
         }
 
         public HeadRequest head(String url, Map<String, String> params) {
-            return new HeadRequest(appContext, url, params);
+            return new HeadRequest(url, params);
         }
 
         public OptionRequest options(String url, Map<String, String> params) {
-            return new OptionRequest(appContext, url, params);
+            return new OptionRequest(url, params);
         }
 
         public PutRequest put(String url, Map<String, String> params) {
-            return new PutRequest(appContext, url, params);
+            return new PutRequest(url, params);
         }
 
         public PatchRequest patch(String url, Map<String, String> params) {
-            return new PatchRequest(appContext, url, params);
+            return new PatchRequest(url, params);
         }
 
         public DeleteRequest delete(String url, Map<String, String> params) {
-            return new DeleteRequest(appContext, url, params);
+            return new DeleteRequest(url, params);
         }
 
         public DownloadRequest download(String url) {
-            return new DownloadRequest(appContext, url);
+            return new DownloadRequest(url);
         }
 
         public DownloadRequest download(String url, Map<String, String> params) {
-            return new DownloadRequest(appContext, url, params);
+            return new DownloadRequest(url, params);
         }
 
         public UploadRequest upload(String url) {
-            return new UploadRequest(appContext, url);
+            return new UploadRequest(url);
         }
     }
 }

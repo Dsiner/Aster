@@ -1,6 +1,5 @@
 package com.d.lib.rxnet.request;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
@@ -45,8 +44,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
     protected Map<String, String> params = new LinkedHashMap<>();
     protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
 
-    public UploadRequest(Context context, String url) {
-        this.context = context;
+    public UploadRequest(String url) {
         this.url = url;
         this.config = HttpConfig.getNewDefaultConfig();
     }
@@ -63,8 +61,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
             }
         }
         config.addNetworkInterceptors(new UploadProgressInterceptor(callback));
-        observable = RetrofitClient.getRetrofit(context, config)
-                .create(RetrofitAPI.class).upload(url, multipartBodyParts);
+        observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).upload(url, multipartBodyParts);
     }
 
     public void request(final UploadCallBack callback) {
@@ -254,8 +251,8 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
      */
     public static class UploadRequestF extends UploadRequest {
 
-        public UploadRequestF(Context context, String url) {
-            super(context, url);
+        public UploadRequestF(String url) {
+            super(url);
             this.config = HttpConfig.getNewDefaultConfig();
         }
 

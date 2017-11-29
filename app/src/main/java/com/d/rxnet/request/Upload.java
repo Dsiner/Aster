@@ -46,14 +46,14 @@ public class Upload {
             @Override
             public void run() {
                 testIns();
-                testNew();
+//                testNew();
             }
         });
     }
 
     private void testIns() {
         File file = getFile("1.jpg");
-        RxNet.getInstance(appContext).upload(url)
+        RxNet.getInstance().upload(url)
                 .addParam("token", "8888")
                 .addParam("user", "0")
                 .addParam("password", "0")
@@ -89,7 +89,7 @@ public class Upload {
 
     private void testNew() {
         File file = getFile("1.jpg");
-        new RxNet(appContext).upload(url)
+        RxNet.upload(url)
                 .connectTimeout(60 * 1000)
                 .readTimeout(60 * 1000)
                 .writeTimeout(60 * 1000)
