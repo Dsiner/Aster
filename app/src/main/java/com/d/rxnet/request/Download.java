@@ -33,6 +33,7 @@ public class Download {
     private void testIns() {
         String url = "http://imtt.dd.qq.com/16891/4EA3DBDFC3F34E43C1D76CEE67593D67.apk?fsname=com.d.music_1.0.1_2.apk&csr=1bbd";
         RxNet.getInstance().download(url)
+                .tag("downloadIns")
                 .request(Environment.getExternalStorageDirectory().getPath() + "/test/", "" + System.currentTimeMillis() + ".mp3", new DownloadCallBack() {
 
                     @Override
@@ -71,6 +72,7 @@ public class Download {
                 .writeTimeout(60 * 1000)
                 .retryCount(3)
                 .retryDelayMillis(1000)
+                .tag("downloadNew")
                 .request(Environment.getExternalStorageDirectory().getPath() + "/test/", "" + System.currentTimeMillis() + ".mp3", new DownloadCallBack() {
 
                     @Override

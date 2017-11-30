@@ -7,19 +7,16 @@ RxNet 是一个基于 `Retrofit2` + `RxJava2` 实现的 `网络请求库`
 
 ## 特点
 -  `1` 条链，完全链式调用 `.func0().func1().func2()...` ， `自适应` 、 `简`
--  `2` 种Retrofit形式（`单例` 全局配置： 、`新的实例` 完全自定义配置）
+-  `2` 种Retrofit形式（全局配置 `单例` 、完全自定义配置 `新的实例` ）
 -  `3` 种链式形式，完全扩展
 
 ## 支持列表
-- [x] Get
-- [x] Post
-- [x] Head
-- [x] Options
-- [x] Put
-- [x] Patch
-- [x] Delete
-- [x] Download
-- [x] Upload
+- [x] 支持Get、Post、Head、Options、Put、Patch、Delete请求协议
+- [x] 支持文件下载、进度回调
+- [x] 支持文件上传、进度回调
+- [x] 支持添加固定header头、动态header头
+- [x] 支持失败重试机制，可以指定重试次数、重试间隔
+- [x] 支持Tag、取消数据请求，取消订阅
 
 ## 使用
 Maven:
@@ -27,25 +24,35 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>rxnet</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner.lib:rxnet:1.0.0'
+compile 'com.dsiner.lib:rxnet:1.1.0'
+```
+
+### 添加manifest权限
+```xml
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 ```
 
 ### 全局配置
-```xml
+```java
 public class MyApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
         //全局配置
-        RxNet.init(getApplicationContext())
+        RxNet.init()
                 .baseUrl(API.API_BASE)
-                .headers(null)
+                .headers(headers)
                 .connectTimeout(10 * 1000)
                 .readTimeout(10 * 1000)
                 .readTimeout(10 * 1000)
@@ -60,9 +67,9 @@ public class MyApplication extends Application {
 
 ### 请求参数（以Params包装）
 ```java
-        Params params = new Params(API.MovieTop.rtpType);
-        params.addParam(API.MovieTop.start, "0");
-        params.addParam(API.MovieTop.count, "10");
+        Params params = new Params(url);
+        params.addParam("start", "0");
+        params.addParam("count", "10");
 ```
 
 ### Retrofit形式一： 单例（使用全局配置）
@@ -70,7 +77,7 @@ public class MyApplication extends Application {
 #### 链式形式 1：    ——（CallBack简洁回调）
 ```java
         //1-1：SimpleCallBack回调
-        RxNet.getInstance(context).get(url, params)
+        RxNet.getInstance().get(url, params)
                 .request(new SimpleCallBack<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo response) {
@@ -78,13 +85,13 @@ public class MyApplication extends Application {
                     }
 
                     @Override
-                    public void onError(ApiException e) {
+                    public void onError(Throwable e) {
                         ...请求失败 -->主线程
                     }
                 });
                 
         //1-2：AsyncCallBack回调
-        RxNet.getInstance(context).get(url, params)
+        RxNet.getInstance().get(url, params)
                 .request(new AsyncCallBack<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
@@ -99,7 +106,7 @@ public class MyApplication extends Application {
                     }
 
                     @Override
-                    public void onError(ApiException e) {
+                    public void onError(Throwable e) {
                         ...请求失败 -->主线程
                     }
                 });
@@ -107,7 +114,7 @@ public class MyApplication extends Application {
 
 #### 链式形式 2：    ——（.observable(T)指定泛型T特定返回类型，调用Retrofit的观察者，而非CallBack接口）
 ```java
-        RxNet.getInstance(context).get(url, params)
+        RxNet.getInstance().get(url, params)
                 .observable(MovieInfo.class)
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
@@ -134,9 +141,9 @@ public class MyApplication extends Application {
                 });
 ```
 
-#### 链式形式 3：    ——（RxNet.getRetrofit(context)获取Retrofit，完全自定义.create()）
+#### 链式形式 3：    ——（RxNet.getRetrofit()获取Retrofit，完全自定义.create()）
 ```java
-        RxNet.getRetrofit(context).create(SubAPI.class)
+        RxNet.getRetrofit().create(SubAPI.class)
                 .get(url)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, ArrayList<Boolean>>() {
@@ -166,7 +173,7 @@ public class MyApplication extends Application {
 
 ### Retrofit形式二：  新的实例（支持全新的自定义配置、支持上述3种链式形式）
 ```java
-        new RxNet(context).get(url, params)
+        RxNet.get(url, params)
                 .baseUrl("https://api.douban.com/v2/movie/")
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
@@ -183,15 +190,76 @@ public class MyApplication extends Application {
                     }
 
                     @Override
-                    public void onError(ApiException e) {
+                    public void onError(Throwable e) {
                         ...
                     }
                 });
 ```
 
+### 文件下载
+```java
+        RxNet.download(url)
+                .connectTimeout(60 * 1000)
+                .readTimeout(60 * 1000)
+                .writeTimeout(60 * 1000)
+                .retryCount(3)
+                .retryDelayMillis(1000)
+                .tag("download")
+                .request(path, filename, new DownloadCallBack() {
+
+                    @Override
+                    public void onProgress(long currentLength, long totalLength) {
+                        ...-->主线程
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ...-->主线程
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        ...-->主线程
+                    }
+                });
+```
+
+### 文件上传
+```java
+        RxNet.upload(url)
+                .connectTimeout(60 * 1000)
+                .readTimeout(60 * 1000)
+                .writeTimeout(60 * 1000)
+                .retryCount(3)
+                .retryDelayMillis(1000)
+                .addFile("File", file)
+                .tag("upload")
+                .request(new UploadCallBack() {
+                    @Override
+                    public void onProgress(long currentLength, long totalLength) {
+                        ...-->主线程
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ...-->主线程
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        ...-->主线程
+                    }
+                });
+```
+
 #### `新的实例` 与 `单例` 的使用区别
-- `New`   - 以new实例的形式 `new RxNet(context)` 代替 `RxNet.getInstance(context)`
-- `Config` - 自定义配置，支持`.connectTimeout()、.baseUrl()、.headers()` 等配置，仅作用于此次请求.
+- `New`    - 开头 `RxNet` 代替 `RxNet.getInstance()`
+- `Config` - 自定义配置，支持`.connectTimeout()、.baseUrl()、.headers()` 等所有参数配置，仅作用于此次请求.
+
+### 取消订阅
+```java
+        ApiManager.get().cancel(tag);
+```
 
 More usage see [Demo](app/src/main/java/com/d/rxnet/MainActivity.java)
 

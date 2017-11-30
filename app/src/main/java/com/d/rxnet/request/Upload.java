@@ -28,11 +28,10 @@ import io.reactivex.schedulers.Schedulers;
  * Created by D on 2017/11/15.
  */
 public class Upload {
-    private String url = "http://www.qq.com/";
+    private final String url = "http://www.qq.com/";
     private Context appContext;
-    private boolean isRunning;
-
     private ProgressDialog dialog;
+    private boolean isRunning;
 
     public Upload(Activity activity) {
         appContext = activity.getApplicationContext();
@@ -58,6 +57,7 @@ public class Upload {
                 .addParam("user", "0")
                 .addParam("password", "0")
                 .addFile("androidPicFile", file)
+                .tag("uploadIns")
                 .request(new UploadCallBack() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
@@ -96,6 +96,7 @@ public class Upload {
                 .retryCount(3)
                 .retryDelayMillis(1000)
                 .addImageFile("androidPicFile", file)
+                .tag("uploadNew")
                 .request(new UploadCallBack() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {

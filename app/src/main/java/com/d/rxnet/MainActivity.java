@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.d.lib.rxnet.base.ApiManager;
 import com.d.lib.rxnet.util.RxUtil;
 import com.d.rxnet.request.Download;
 import com.d.rxnet.request.Get;
@@ -37,13 +38,13 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_get).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Get().testAll();
+                new Get(MainActivity.this).testAll();
             }
         });
         findViewById(R.id.btn_post).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Post().testAll();
+                new Post(MainActivity.this).testAll();
             }
         });
         findViewById(R.id.btn_download).setOnClickListener(new View.OnClickListener() {
@@ -58,5 +59,11 @@ public class MainActivity extends AppCompatActivity {
                 new Upload(MainActivity.this).testAll();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        ApiManager.get().cancelAll();
+        super.onDestroy();
     }
 }

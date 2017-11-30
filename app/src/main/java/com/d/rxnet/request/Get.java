@@ -1,5 +1,8 @@
 package com.d.rxnet.request;
 
+import android.app.Activity;
+import android.content.Context;
+
 import com.d.lib.rxnet.RxNet;
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.Params;
@@ -24,8 +27,10 @@ import okhttp3.ResponseBody;
  * Created by D on 2017/10/26.
  */
 public class Get {
+    private Context appContext;
 
-    public Get() {
+    public Get(Activity activity) {
+        appContext = activity.getApplicationContext();
     }
 
     public void testAll() {
