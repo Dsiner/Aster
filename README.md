@@ -80,7 +80,7 @@ public class MyApplication extends Application {
         RxNet.getInstance().get(url, params)
                 .request(new SimpleCallBack<MovieInfo>() {
                     @Override
-                    public void onSuccess(MovieInfo response) {
+                    public void onSuccess(MovieInfo info) {
                         ...请求成功 -->主线程
                     }
 
@@ -174,13 +174,13 @@ public class MyApplication extends Application {
 ### Retrofit形式二：  新的实例（支持全新的自定义配置、支持上述3种链式形式）
 ```java
         RxNet.get(url, params)
-                .baseUrl("https://api.douban.com/v2/movie/")
+                .baseUrl(url)
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
                 .writeTimeout(5 * 1000)
                 .request(new AsyncCallBack<MovieInfo, String>() {
                     @Override
-                    public String apply(@NonNull MovieInfo movieTopModelInfo) throws Exception {
+                    public String apply(@NonNull MovieInfo info) throws Exception {
                         ...
                     }
 
@@ -195,6 +195,10 @@ public class MyApplication extends Application {
                     }
                 });
 ```
+
+#### `新的实例` 与 `单例` 的使用区别
+- `New`    - 开头 `RxNet` 代替 `RxNet.getInstance()`
+- `Config` - 自定义配置，支持`.connectTimeout()、.baseUrl()、.headers()` 等所有参数配置，仅作用于此次请求.
 
 ### 文件下载
 ```java
@@ -251,10 +255,6 @@ public class MyApplication extends Application {
                     }
                 });
 ```
-
-#### `新的实例` 与 `单例` 的使用区别
-- `New`    - 开头 `RxNet` 代替 `RxNet.getInstance()`
-- `Config` - 自定义配置，支持`.connectTimeout()、.baseUrl()、.headers()` 等所有参数配置，仅作用于此次请求.
 
 ### 取消订阅
 ```java
