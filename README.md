@@ -55,7 +55,7 @@ public class MyApplication extends Application {
                 .headers(headers)
                 .connectTimeout(10 * 1000)
                 .readTimeout(10 * 1000)
-                .readTimeout(10 * 1000)
+                .writeTimeout(10 * 1000)
                 .retryCount(3)
                 .retryDelayMillis(2 * 1000)
                 .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
@@ -259,6 +259,15 @@ public class MyApplication extends Application {
 ### 取消订阅
 ```java
         ApiManager.get().cancel(tag);
+```
+
+### ProGuard
+If you are using ProGuard you might need to add the following options:
+```java
+# Gson
+# OkHttp3
+# Retrofit
+# RxJava & RxAndroid
 ```
 
 More usage see [Demo](app/src/main/java/com/d/rxnet/MainActivity.java)

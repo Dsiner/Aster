@@ -38,7 +38,7 @@ public class App extends Application {
                 .headers(headers)
                 .connectTimeout(10 * 1000)
                 .readTimeout(10 * 1000)
-                .readTimeout(10 * 1000)
+                .writeTimeout(10 * 1000)
                 .retryCount(3)
                 .retryDelayMillis(2 * 1000)
                 .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
