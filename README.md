@@ -32,16 +32,6 @@ or Gradle:
 compile 'com.dsiner.lib:rxnet:1.1.0'
 ```
 
-### 添加manifest权限
-```xml
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-```
-
 ### 全局配置
 ```java
 public class MyApplication extends Application {
@@ -258,7 +248,7 @@ public class MyApplication extends Application {
 
 ### 取消订阅
 ```java
-        ApiManager.get().cancel(tag);
+        ApiManager.get().cancel("tag");
 ```
 
 ### ProGuard
