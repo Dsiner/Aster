@@ -10,7 +10,7 @@ public interface API {
 
     String ACCESS_TOKEN = "token";
 
-    interface CommenHeader {
+    interface CommonHeader {
         String authorization = "Authorization";
         String userAgent = "User-Agent";
         String rtp = "rtp";
@@ -37,5 +37,3 @@ public interface API {
         String count = "count";
     }
 }
-
-

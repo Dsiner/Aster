@@ -25,8 +25,8 @@ public class App extends Application {
 
     private void initRxNet() {
         Map<String, String> headers = new HashMap<>();
-        headers.put(API.CommenHeader.platform, "Android");
-        headers.put(API.CommenHeader.app_version, "v1.0.0");
+        headers.put(API.CommonHeader.platform, "Android");
+        headers.put(API.CommonHeader.app_version, "v1.0.0");
 
         RxNet.init()
                 .baseUrl(API.API_BASE)
