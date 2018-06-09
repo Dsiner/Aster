@@ -3,24 +3,23 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![API](https://img.shields.io/badge/API-9%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=9)
 [![Download](https://api.bintray.com/packages/dsiner/maven/rxnet/images/download.svg) ](https://bintray.com/dsiner/maven/rxnet/_latestVersion)
-[![Readme](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-brightgreen.svg)](https://github.com/Dsiner/RxNet/blob/master/README-zh.md)
 
-> A network request library based on `Retrofit2` + `Okhttp3` + `RxJava2`
+> 一个基于 `Retrofit2` + `Okhttp3` + `RxJava2` 实现的 `网络请求库`
 
-## Features
-- `1` chain, completely chained `.func0().func1().func2()...`, `Adaptive`, `Jane`
-- `2` Retrofit forms (`Singleton` global configuration, ` New instance ` fully custom configuration)
-- `3` chained form, fully expanded
+## 特点
+-  `1` 条链，完全链式调用 `.func0().func1().func2()...` ， `自适应` 、 `简`
+-  `2` 种Retrofit形式（`单例` 全局配置、`新的实例` 完全自定义配置）
+-  `3` 种链式形式，完全扩展
 
-## Support list
-- [x] Supports Get, Post, Head, Options, Put, Patch, Delete Request Protocol
-- [x] Support file download, progress callback
-- [x] Support file upload, progress callback
-- [x] Support for adding fixed header headers, dynamic header headers
-- [x] Support failure retry mechanism, can specify retry times, retry interval
-- [x] Support Tag, Cancel Data Request, Unsubscribe
+## 支持列表
+- [x] 支持Get、Post、Head、Options、Put、Patch、Delete请求协议
+- [x] 支持文件下载、进度回调
+- [x] 支持文件上传、进度回调
+- [x] 支持添加固定header头、动态header头
+- [x] 支持失败重试机制，可以指定重试次数、重试间隔
+- [x] 支持Tag、取消数据请求，取消订阅
 
-## Use
+## 使用
 Maven:
 ```xml
 <dependency>
@@ -34,14 +33,14 @@ or Gradle:
 compile 'com.dsiner.lib:rxnet:1.1.1'
 ```
 
-### Global configuration
+### 全局配置
 ```java
 public class MyApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //Global configuration
+        //全局配置
         RxNet.init()
                 .baseUrl(API.API_BASE)
                 .headers(headers)
@@ -57,16 +56,16 @@ public class MyApplication extends Application {
 }
 ```
 
-### Request parameters (wrapped in Params)
+### 请求参数（以Params包装）
 ```java
         Params params = new Params(url);
         params.addParam("start", "0");
         params.addParam("count", "10");
 ```
 
-### Retrofit form 1: Singleton (using global configuration)
+### Retrofit形式一: 单例（使用全局配置）
 
-#### Chained form 1-1: CallBack simple callback
+#### 链式形式 1-1: CallBack简洁回调
 ```java
         //1-1-1: SimpleCallBack callback
         RxNet.getInstance().get(url, params)
@@ -107,7 +106,7 @@ public class MyApplication extends Application {
                 });
 ```
 
-#### Chained form 1-2: .observable(T) specifies a generic T-specific return type, calls Retrofit's observer instead of the CallBack interface
+#### 链式形式 1-2: .observable(T)指定泛型T特定返回类型，调用Retrofit的观察者，而非CallBack接口
 ```java
         RxNet.getInstance().get(url, params)
                 .observable(MovieInfo.class)
@@ -136,7 +135,7 @@ public class MyApplication extends Application {
                 });
 ```
 
-#### Chained form 1-3: RxNet.getRetrofit() gets Retrofit, fully customizable .create()
+#### 链式形式 1-3: RxNet.getRetrofit()获取Retrofit，完全自定义.create()
 ```java
         RxNet.getRetrofit().create(SubAPI.class)
                 .get(url)
@@ -166,7 +165,7 @@ public class MyApplication extends Application {
                 });
 ```
 
-### Retrofit form 2: New instance (supports new custom configuration, supports the above three chain forms)
+### Retrofit形式二: 新的实例（支持全新的自定义配置、支持上述3种链式形式）
 ```java
         RxNet.get(url, params)
                 .baseUrl(url)
@@ -191,7 +190,7 @@ public class MyApplication extends Application {
                 });
 ```
 
-### Download
+### 文件下载
 ```java
         RxNet.download(url)
                 .connectTimeout(60 * 1000)
@@ -219,7 +218,7 @@ public class MyApplication extends Application {
                 });
 ```
 
-### Upload
+### 文件上传
 ```java
         RxNet.upload(url)
                 .connectTimeout(60 * 1000)
@@ -247,14 +246,14 @@ public class MyApplication extends Application {
                 });
 ```
 
-### Unsubscribe
+### 取消订阅
 ```java
         ApiManager.get().cancel("upload");
 ```
 
-#### Difference between `New instance` and `Singleton` usage
-- `New`    - Starts with `RxNet` instead of `RxNet.getInstance()`
-- `Config` - Custom configuration, support for all configuration parameters such as `.connectTimeout(), .baseUrl(), .headers()`, only for this request.
+#### `新的实例` 与 `单例` 的使用区别
+- `New`    - 开头 `RxNet` 代替 `RxNet.getInstance()`
+- `Config` - 自定义配置，支持`.connectTimeout()、.baseUrl()、.headers()` 等所有参数配置，仅作用于此次请求.
 
 More usage see [Demo](app/src/main/java/com/d/rxnet/MainActivity.java)
 
