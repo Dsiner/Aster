@@ -1,6 +1,6 @@
 package com.d.lib.rxnet.observer;
 
-import com.d.lib.rxnet.listener.DownloadCallack;
+import com.d.lib.rxnet.listener.DownloadCallback;
 import com.d.lib.rxnet.request.DownloadRequest;
 import com.d.lib.rxnet.utils.Util;
 
@@ -9,9 +9,9 @@ import com.d.lib.rxnet.utils.Util;
  * Created by D on 2017/10/26.
  */
 public class DownloadObserver extends AbsObserver<DownloadRequest.DownloadModel> {
-    private DownloadCallack callback;
+    private DownloadCallback callback;
 
-    public DownloadObserver(DownloadCallack callback) {
+    public DownloadObserver(DownloadCallback callback) {
         this.callback = callback;
     }
 

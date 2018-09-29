@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
 import com.d.lib.rxnet.exception.ApiException;
-import com.d.lib.rxnet.listener.UploadCallack;
+import com.d.lib.rxnet.listener.UploadCallback;
 import com.d.lib.rxnet.utils.ULog;
 
 import java.io.IOException;
@@ -25,10 +25,10 @@ import okio.Sink;
  */
 public class UploadProgressRequestBody extends RequestBody {
     private RequestBody requestBody;
-    private UploadCallack callback;
+    private UploadCallback callback;
     private long lastTime;
 
-    public UploadProgressRequestBody(RequestBody requestBody, UploadCallack callback) {
+    public UploadProgressRequestBody(RequestBody requestBody, UploadCallback callback) {
         if (requestBody == null || callback == null) {
             throw new NullPointerException("This requestBody and callback must not be null.");
         }

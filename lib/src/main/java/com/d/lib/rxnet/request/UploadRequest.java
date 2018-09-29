@@ -9,7 +9,7 @@ import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.body.UploadProgressRequestBody;
 import com.d.lib.rxnet.func.ApiRetryFunc;
 import com.d.lib.rxnet.interceptor.UploadProgressInterceptor;
-import com.d.lib.rxnet.listener.UploadCallack;
+import com.d.lib.rxnet.listener.UploadCallback;
 import com.d.lib.rxnet.mode.MediaTypes;
 import com.d.lib.rxnet.observer.UploadObserver;
 
@@ -49,7 +49,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         this.config = HttpConfig.getNewDefaultConfig();
     }
 
-    protected void init(UploadCallack callback) {
+    protected void init(UploadCallback callback) {
         if (params != null && params.size() > 0) {
             Iterator<Map.Entry<String, String>> entryIterator = params.entrySet().iterator();
             Map.Entry<String, String> entry;
@@ -64,7 +64,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).upload(url, multipartBodyParts);
     }
 
-    public void request(final UploadCallack callback) {
+    public void request(final UploadCallback callback) {
         if (callback == null) {
             throw new NullPointerException("this callback is null!");
         }
@@ -91,7 +91,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         return addFile(key, file, null);
     }
 
-    public UploadRequest addFile(String key, File file, UploadCallack callback) {
+    public UploadRequest addFile(String key, File file, UploadCallback callback) {
         if (key == null || file == null) {
             return this;
         }
@@ -111,7 +111,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         return addImageFile(key, file, null);
     }
 
-    public UploadRequest addImageFile(String key, File file, UploadCallack callback) {
+    public UploadRequest addImageFile(String key, File file, UploadCallback callback) {
         if (key == null || file == null) {
             return this;
         }
@@ -131,7 +131,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         return addBytes(key, bytes, name, null);
     }
 
-    public UploadRequest addBytes(String key, byte[] bytes, String name, UploadCallack callback) {
+    public UploadRequest addBytes(String key, byte[] bytes, String name, UploadCallback callback) {
         if (key == null || bytes == null || name == null) {
             return this;
         }
@@ -151,7 +151,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         return addStream(key, inputStream, name, null);
     }
 
-    public UploadRequest addStream(String key, InputStream inputStream, String name, UploadCallack callback) {
+    public UploadRequest addStream(String key, InputStream inputStream, String name, UploadCallback callback) {
         if (key == null || inputStream == null || name == null) {
             return this;
         }
@@ -270,7 +270,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         }
 
         @Override
-        public UploadRequestF addFile(String key, File file, UploadCallack callback) {
+        public UploadRequestF addFile(String key, File file, UploadCallback callback) {
             if (key == null || file == null) {
                 return this;
             }
@@ -292,7 +292,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         }
 
         @Override
-        public UploadRequestF addImageFile(String key, File file, UploadCallack callback) {
+        public UploadRequestF addImageFile(String key, File file, UploadCallback callback) {
             if (key == null || file == null) {
                 return this;
             }
@@ -314,7 +314,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         }
 
         @Override
-        public UploadRequestF addBytes(String key, byte[] bytes, String name, UploadCallack callback) {
+        public UploadRequestF addBytes(String key, byte[] bytes, String name, UploadCallback callback) {
             if (key == null || bytes == null || name == null) {
                 return this;
             }
@@ -336,7 +336,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         }
 
         @Override
-        public UploadRequestF addStream(String key, InputStream inputStream, String name, UploadCallack callback) {
+        public UploadRequestF addStream(String key, InputStream inputStream, String name, UploadCallback callback) {
             if (key == null || inputStream == null || name == null) {
                 return this;
             }

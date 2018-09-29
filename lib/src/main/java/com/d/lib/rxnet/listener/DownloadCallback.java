@@ -4,7 +4,7 @@ package com.d.lib.rxnet.listener;
  * DownloadCallback
  * Created by D on 2017/10/24.
  */
-public interface DownloadCallack {
+public interface DownloadCallback {
     void onProgress(long currentLength, long totalLength);
 
     void onError(Throwable e);

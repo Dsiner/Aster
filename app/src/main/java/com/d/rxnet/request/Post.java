@@ -6,7 +6,7 @@ import android.content.Context;
 import com.d.lib.rxnet.RxNet;
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.Params;
-import com.d.lib.rxnet.listener.AsyncCallack;
+import com.d.lib.rxnet.listener.AsyncCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.api.API;
@@ -44,7 +44,7 @@ public class Post {
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
         RxNet.getIns().post(API.MovieTop.rtpType, params)
-                .request(new AsyncCallack<String, String>() {
+                .request(new AsyncCallback<String, String>() {
                     @Override
                     public String apply(@NonNull String info) throws Exception {
                         Util.printThread("dsiner_theard apply: ");
@@ -75,7 +75,7 @@ public class Post {
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
                 .writeTimeout(5 * 1000)
-                .request(new AsyncCallack<MovieInfo, String>() {
+                .request(new AsyncCallback<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
                         Util.printThread("dsiner_theard apply: ");

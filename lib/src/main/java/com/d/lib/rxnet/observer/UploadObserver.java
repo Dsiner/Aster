@@ -1,6 +1,6 @@
 package com.d.lib.rxnet.observer;
 
-import com.d.lib.rxnet.listener.UploadCallack;
+import com.d.lib.rxnet.listener.UploadCallback;
 import com.d.lib.rxnet.utils.Util;
 
 /**
@@ -8,9 +8,9 @@ import com.d.lib.rxnet.utils.Util;
  * Created by D on 2017/10/26.
  */
 public class UploadObserver extends AbsObserver<Object> {
-    private UploadCallack callback;
+    private UploadCallback callback;
 
-    public UploadObserver(UploadCallack callback) {
+    public UploadObserver(UploadCallback callback) {
         this.callback = callback;
     }
 

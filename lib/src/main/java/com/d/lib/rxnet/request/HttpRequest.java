@@ -5,8 +5,8 @@ import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.func.ApiFunc;
 import com.d.lib.rxnet.func.ApiRetryFunc;
 import com.d.lib.rxnet.func.MapFunc;
-import com.d.lib.rxnet.listener.AsyncCallack;
-import com.d.lib.rxnet.listener.SimpleCallack;
+import com.d.lib.rxnet.listener.AsyncCallback;
+import com.d.lib.rxnet.listener.SimpleCallback;
 import com.d.lib.rxnet.observer.ApiObserver;
 import com.d.lib.rxnet.observer.AsyncApiObserver;
 import com.d.lib.rxnet.utils.Util;
@@ -46,7 +46,7 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
 
     }
 
-    public <T> void request(SimpleCallack<T> callback) {
+    public <T> void request(SimpleCallback<T> callback) {
         init();
         DisposableObserver disposableObserver = new ApiObserver(callback);
         if (super.tag != null) {
@@ -60,7 +60,7 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
                 .subscribe(disposableObserver);
     }
 
-    public <T, R> void request(AsyncCallack<T, R> callback) {
+    public <T, R> void request(AsyncCallback<T, R> callback) {
         init();
         DisposableObserver disposableObserver = new AsyncApiObserver(callback);
         if (super.tag != null) {

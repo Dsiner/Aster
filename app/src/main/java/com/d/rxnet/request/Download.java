@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.os.Environment;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.listener.DownloadCallack;
+import com.d.lib.rxnet.listener.DownloadCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 
@@ -34,7 +34,7 @@ public class Download {
         String url = "http://imtt.dd.qq.com/16891/4EA3DBDFC3F34E43C1D76CEE67593D67.apk?fsname=com.d.music_1.0.1_2.apk&csr=1bbd";
         RxNet.getIns().download(url)
                 .tag("downloadIns")
-                .request(Environment.getExternalStorageDirectory().getPath() + "/test/", "" + System.currentTimeMillis() + ".mp3", new DownloadCallack() {
+                .request(Environment.getExternalStorageDirectory().getPath() + "/test/", "" + System.currentTimeMillis() + ".mp3", new DownloadCallback() {
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
@@ -73,7 +73,7 @@ public class Download {
                 .retryCount(3)
                 .retryDelayMillis(1000)
                 .tag("downloadNew")
-                .request(Environment.getExternalStorageDirectory().getPath() + "/test/", "" + System.currentTimeMillis() + ".mp3", new DownloadCallack() {
+                .request(Environment.getExternalStorageDirectory().getPath() + "/test/", "" + System.currentTimeMillis() + ".mp3", new DownloadCallback() {
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {

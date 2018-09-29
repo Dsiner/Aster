@@ -7,7 +7,7 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.listener.UploadCallack;
+import com.d.lib.rxnet.listener.UploadCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 
@@ -59,7 +59,7 @@ public class Upload {
                 .addParam("password", "0")
                 .addFile("androidPicFile", file)
                 .tag("uploadIns")
-                .request(new UploadCallack() {
+                .request(new UploadCallback() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
                         Util.printThread("dsiner_theard onProgresss: ");
@@ -98,7 +98,7 @@ public class Upload {
                 .retryDelayMillis(1000)
                 .addImageFile("androidPicFile", file)
                 .tag("uploadNew")
-                .request(new UploadCallack() {
+                .request(new UploadCallback() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
                         Util.printThread("dsiner_theard onProgresss: ");

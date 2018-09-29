@@ -1,6 +1,6 @@
 package com.d.lib.rxnet.func;
 
-import com.d.lib.rxnet.listener.AsyncCallack;
+import com.d.lib.rxnet.listener.AsyncCallback;
 import com.d.lib.rxnet.utils.Util;
 
 import io.reactivex.functions.Function;
@@ -9,9 +9,9 @@ import io.reactivex.functions.Function;
  * Map with AsyncCallback
  */
 public class MapFunc<T, R> implements Function<T, R> {
-    private AsyncCallack<T, R> callback;
+    private AsyncCallback<T, R> callback;
 
-    public MapFunc(AsyncCallack<T, R> callback) {
+    public MapFunc(AsyncCallback<T, R> callback) {
         this.callback = callback;
     }
 

@@ -3,7 +3,7 @@ package com.d.lib.rxnet.interceptor;
 import android.support.annotation.NonNull;
 
 import com.d.lib.rxnet.body.UploadProgressRequestBody;
-import com.d.lib.rxnet.listener.UploadCallack;
+import com.d.lib.rxnet.listener.UploadCallback;
 
 import java.io.IOException;
 
@@ -15,9 +15,9 @@ import okhttp3.Response;
  * Upload progress interception
  */
 public class UploadProgressInterceptor implements Interceptor {
-    private UploadCallack callback;
+    private UploadCallback callback;
 
-    public UploadProgressInterceptor(UploadCallack callback) {
+    public UploadProgressInterceptor(UploadCallback callback) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null.");
         }
