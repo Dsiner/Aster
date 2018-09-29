@@ -7,7 +7,7 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.listener.UploadCallback;
+import com.d.lib.rxnet.callback.UploadCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 

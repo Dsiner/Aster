@@ -2,7 +2,6 @@ package com.d.lib.rxnet.base;
 
 import android.text.TextUtils;
 
-import com.d.lib.rxnet.listener.ConfigListener;
 import com.d.lib.rxnet.utils.SSLUtil;
 import com.d.lib.rxnet.utils.ULog;
 
@@ -19,9 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * HttpConfig
  * Created by D on 2017/10/24.
  */
-public class HttpConfig extends ConfigListener<HttpConfig> {
-    private static HttpConfig defaultConfig;
-
+public class HttpConfig extends IConfig<HttpConfig> {
     public String baseUrl;
     public Map<String, String> headers = new LinkedHashMap<>();
     public long connectTimeout = -1;
@@ -33,41 +30,36 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
     public ArrayList<Interceptor> networkInterceptors = new ArrayList<>();
     public SSLSocketFactory sslSocketFactory;
 
+    private static class Singleton {
+        private static HttpConfig DEFAULT_CONFIG = new HttpConfig()
+                .baseUrl(Config.BASE_URL)
+                .connectTimeout(Config.CONNECT_TIMEOUT)
+                .readTimeout(Config.READ_TIMEOUT)
+                .writeTimeout(Config.WRITE_TIMEOUT)
+                .retryCount(Config.RETRY_COUNT)
+                .retryDelayMillis(Config.RETRY_DELAY_MILLIS)
+                .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null));
+    }
+
     /**
      * Get the default configuration
      */
     public synchronized static HttpConfig getDefaultConfig() {
-        if (defaultConfig == null) {
-            synchronized (HttpConfig.class) {
-                if (defaultConfig == null) {
-                    /*** Default ***/
-                    defaultConfig = new HttpConfig()
-                            .baseUrl(Config.BASE_URL)
-                            .connectTimeout(Config.CONNECT_TIMEOUT)
-                            .readTimeout(Config.READ_TIMEOUT)
-                            .writeTimeout(Config.WRITE_TIMEOUT)
-                            .retryCount(Config.RETRY_COUNT)
-                            .retryDelayMillis(Config.RETRY_DELAY_MILLIS)
-                            .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null));
-                }
-            }
-        }
-        return defaultConfig;
+        return Singleton.DEFAULT_CONFIG;
     }
 
     /**
      * Get the default configuration - copy
      */
     public static HttpConfig getNewDefaultConfig() {
-        getDefaultConfig();
         return new HttpConfig()
-                .baseUrl(defaultConfig.baseUrl)
-                .connectTimeout(defaultConfig.connectTimeout)
-                .readTimeout(defaultConfig.readTimeout)
-                .writeTimeout(defaultConfig.writeTimeout)
-                .retryCount(defaultConfig.retryCount)
-                .retryDelayMillis(defaultConfig.retryDelayMillis)
-                .sslSocketFactory(defaultConfig.sslSocketFactory);
+                .baseUrl(getDefaultConfig().baseUrl)
+                .connectTimeout(getDefaultConfig().connectTimeout)
+                .readTimeout(getDefaultConfig().readTimeout)
+                .writeTimeout(getDefaultConfig().writeTimeout)
+                .retryCount(getDefaultConfig().retryCount)
+                .retryDelayMillis(getDefaultConfig().retryDelayMillis)
+                .sslSocketFactory(getDefaultConfig().sslSocketFactory);
     }
 
     private synchronized static void setDefaultConfig(HttpConfig config) {
@@ -83,7 +75,7 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
         config.retryCount = config.retryCount != -1 ? config.retryCount : Config.RETRY_COUNT;
         config.retryDelayMillis = config.retryDelayMillis != -1 ? config.retryDelayMillis : Config.RETRY_DELAY_MILLIS;
 
-        HttpConfig.defaultConfig = config;
+        Singleton.DEFAULT_CONFIG = config;
     }
 
     @Override
@@ -120,6 +112,12 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
     }
 
     @Override
+    public HttpConfig sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+        this.sslSocketFactory = sslSocketFactory;
+        return this;
+    }
+
+    @Override
     public HttpConfig addInterceptor(Interceptor interceptor) {
         if (this.interceptors != null && interceptor != null) {
             this.interceptors.add(interceptor);
@@ -132,12 +130,6 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
         if (this.networkInterceptors != null && interceptor != null) {
             this.networkInterceptors.add(interceptor);
         }
-        return this;
-    }
-
-    @Override
-    public HttpConfig sslSocketFactory(SSLSocketFactory sslSocketFactory) {
-        this.sslSocketFactory = sslSocketFactory;
         return this;
     }
 
@@ -192,6 +184,12 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
         }
 
         @Override
+        public Build sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+            this.sslSocketFactory = sslSocketFactory;
+            return this;
+        }
+
+        @Override
         public Build addInterceptor(Interceptor interceptor) {
             if (this.interceptors != null && interceptor != null) {
                 this.interceptors.add(interceptor);
@@ -204,12 +202,6 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
             if (this.networkInterceptors != null && interceptor != null) {
                 this.networkInterceptors.add(interceptor);
             }
-            return this;
-        }
-
-        @Override
-        public Build sslSocketFactory(SSLSocketFactory sslSocketFactory) {
-            this.sslSocketFactory = sslSocketFactory;
             return this;
         }
 

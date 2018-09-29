@@ -1,6 +1,6 @@
 package com.d.lib.rxnet.observer;
 
-import com.d.lib.rxnet.listener.SimpleCallback;
+import com.d.lib.rxnet.callback.SimpleCallback;
 
 /**
  * Observer with Sync Callback

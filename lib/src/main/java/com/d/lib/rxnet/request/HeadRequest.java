@@ -5,12 +5,14 @@ import com.d.lib.rxnet.base.RetrofitClient;
 
 import java.util.Map;
 
+import javax.net.ssl.SSLSocketFactory;
+
+import okhttp3.Interceptor;
+
 /**
- * Singleton
  * Created by D on 2017/10/24.
  */
 public class HeadRequest extends HttpRequest<HeadRequest> {
-    protected Map<String, String> params;
 
     public HeadRequest(String url) {
         super(url);
@@ -21,26 +23,76 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
     }
 
     @Override
-    protected void init() {
-        observable = RetrofitClient.getIns().create(RetrofitAPI.class).head(url, params);
+    protected void prepare() {
+        observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).head(url, params);
+    }
+
+    @Override
+    public HeadRequest baseUrl(String baseUrl) {
+        return super.baseUrl(baseUrl);
+    }
+
+    @Override
+    public HeadRequest headers(Map<String, String> headers) {
+        return super.headers(headers);
+    }
+
+    @Override
+    public HeadRequest connectTimeout(long timeout) {
+        return super.connectTimeout(timeout);
+    }
+
+    @Override
+    public HeadRequest readTimeout(long timeout) {
+        return super.readTimeout(timeout);
+    }
+
+    @Override
+    public HeadRequest writeTimeout(long timeout) {
+        return super.writeTimeout(timeout);
+    }
+
+    @Override
+    public HeadRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+        return super.sslSocketFactory(sslSocketFactory);
+    }
+
+    @Override
+    public HeadRequest addInterceptor(Interceptor interceptor) {
+        return super.addInterceptor(interceptor);
+    }
+
+    @Override
+    public HeadRequest addNetworkInterceptors(Interceptor interceptor) {
+        return super.addNetworkInterceptors(interceptor);
+    }
+
+    @Override
+    public HeadRequest retryCount(int retryCount) {
+        return super.retryCount(retryCount);
+    }
+
+    @Override
+    public HeadRequest retryDelayMillis(long retryDelayMillis) {
+        return super.retryDelayMillis(retryDelayMillis);
     }
 
     /**
-     * New instance
+     * Singleton
      */
-    public static class HeadRequestF extends HttpRequestF<HeadRequestF> {
+    public static class Singleton extends HttpRequest.Singleton<Singleton> {
 
-        public HeadRequestF(String url) {
+        public Singleton(String url) {
             super(url);
         }
 
-        public HeadRequestF(String url, Map<String, String> params) {
+        public Singleton(String url, Map<String, String> params) {
             super(url, params);
         }
 
         @Override
-        protected void init() {
-            observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).head(url, params);
+        protected void prepare() {
+            observable = RetrofitClient.getIns().create(RetrofitAPI.class).head(url, params);
         }
     }
 }

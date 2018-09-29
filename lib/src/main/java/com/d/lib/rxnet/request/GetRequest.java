@@ -5,8 +5,11 @@ import com.d.lib.rxnet.base.RetrofitClient;
 
 import java.util.Map;
 
+import javax.net.ssl.SSLSocketFactory;
+
+import okhttp3.Interceptor;
+
 /**
- * Singleton
  * Created by D on 2017/10/24.
  */
 public class GetRequest extends HttpRequest<GetRequest> {
@@ -20,33 +23,83 @@ public class GetRequest extends HttpRequest<GetRequest> {
     }
 
     @Override
-    protected void init() {
+    protected void prepare() {
         if (params == null) {
-            observable = RetrofitClient.getIns().create(RetrofitAPI.class).get(url);
+            observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).get(url);
         } else {
-            observable = RetrofitClient.getIns().create(RetrofitAPI.class).get(url, params);
+            observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).get(url, params);
         }
     }
 
-    /**
-     * New instance
-     */
-    public static class GetRequestF extends HttpRequestF<GetRequestF> {
+    @Override
+    public GetRequest baseUrl(String baseUrl) {
+        return super.baseUrl(baseUrl);
+    }
 
-        public GetRequestF(String url) {
+    @Override
+    public GetRequest headers(Map<String, String> headers) {
+        return super.headers(headers);
+    }
+
+    @Override
+    public GetRequest connectTimeout(long timeout) {
+        return super.connectTimeout(timeout);
+    }
+
+    @Override
+    public GetRequest readTimeout(long timeout) {
+        return super.readTimeout(timeout);
+    }
+
+    @Override
+    public GetRequest writeTimeout(long timeout) {
+        return super.writeTimeout(timeout);
+    }
+
+    @Override
+    public GetRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+        return super.sslSocketFactory(sslSocketFactory);
+    }
+
+    @Override
+    public GetRequest addInterceptor(Interceptor interceptor) {
+        return super.addInterceptor(interceptor);
+    }
+
+    @Override
+    public GetRequest addNetworkInterceptors(Interceptor interceptor) {
+        return super.addNetworkInterceptors(interceptor);
+    }
+
+    @Override
+    public GetRequest retryCount(int retryCount) {
+        return super.retryCount(retryCount);
+    }
+
+    @Override
+    public GetRequest retryDelayMillis(long retryDelayMillis) {
+        return super.retryDelayMillis(retryDelayMillis);
+    }
+
+    /**
+     * Singleton
+     */
+    public static class Singleton extends HttpRequest.Singleton<Singleton> {
+
+        public Singleton(String url) {
             super(url);
         }
 
-        public GetRequestF(String url, Map<String, String> params) {
+        public Singleton(String url, Map<String, String> params) {
             super(url, params);
         }
 
         @Override
-        protected void init() {
+        protected void prepare() {
             if (params == null) {
-                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).get(url);
+                observable = RetrofitClient.getIns().create(RetrofitAPI.class).get(url);
             } else {
-                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).get(url, params);
+                observable = RetrofitClient.getIns().create(RetrofitAPI.class).get(url, params);
             }
         }
     }

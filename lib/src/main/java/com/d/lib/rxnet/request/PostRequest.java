@@ -11,11 +11,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.net.ssl.SSLSocketFactory;
+
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import retrofit2.Retrofit;
 
 /**
- * Singleton
  * Created by D on 2017/10/24.
  */
 public class PostRequest extends HttpRequest<PostRequest> {
@@ -33,7 +36,7 @@ public class PostRequest extends HttpRequest<PostRequest> {
     }
 
     @Override
-    protected void init() {
+    protected void prepare() {
         if (forms != null && forms.size() > 0) {
             if (params != null && params.size() > 0) {
                 Iterator<Map.Entry<String, String>> entryIterator = params.entrySet().iterator();
@@ -45,22 +48,27 @@ public class PostRequest extends HttpRequest<PostRequest> {
                     }
                 }
             }
-            observable = RetrofitClient.getIns().create(RetrofitAPI.class).postForm(url, forms);
+            observable = getRetrofit().create(RetrofitAPI.class).postForm(url, forms);
+            return;
         }
         if (requestBody != null) {
-            observable = RetrofitClient.getIns().create(RetrofitAPI.class).postBody(url, requestBody);
+            observable = getRetrofit().create(RetrofitAPI.class).postBody(url, requestBody);
             return;
         }
         if (content != null && mediaType != null) {
             requestBody = RequestBody.create(mediaType, content);
-            observable = RetrofitClient.getIns().create(RetrofitAPI.class).postBody(url, requestBody);
+            observable = getRetrofit().create(RetrofitAPI.class).postBody(url, requestBody);
             return;
         }
         if (params != null && params.size() > 0) {
-            observable = RetrofitClient.getIns().create(RetrofitAPI.class).post(url, params);
+            observable = getRetrofit().create(RetrofitAPI.class).post(url, params);
             return;
         }
-        observable = RetrofitClient.getIns().create(RetrofitAPI.class).post(url);
+        observable = getRetrofit().create(RetrofitAPI.class).post(url);
+    }
+
+    private Retrofit getRetrofit() {
+        return RetrofitClient.getRetrofit(config);
     }
 
     public PostRequest addForm(String formKey, Object formValue) {
@@ -105,25 +113,75 @@ public class PostRequest extends HttpRequest<PostRequest> {
         return this;
     }
 
+    @Override
+    public PostRequest baseUrl(String baseUrl) {
+        return super.baseUrl(baseUrl);
+    }
+
+    @Override
+    public PostRequest headers(Map<String, String> headers) {
+        return super.headers(headers);
+    }
+
+    @Override
+    public PostRequest connectTimeout(long timeout) {
+        return super.connectTimeout(timeout);
+    }
+
+    @Override
+    public PostRequest readTimeout(long timeout) {
+        return super.readTimeout(timeout);
+    }
+
+    @Override
+    public PostRequest writeTimeout(long timeout) {
+        return super.writeTimeout(timeout);
+    }
+
+    @Override
+    public PostRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+        return super.sslSocketFactory(sslSocketFactory);
+    }
+
+    @Override
+    public PostRequest addInterceptor(Interceptor interceptor) {
+        return super.addInterceptor(interceptor);
+    }
+
+    @Override
+    public PostRequest addNetworkInterceptors(Interceptor interceptor) {
+        return super.addNetworkInterceptors(interceptor);
+    }
+
+    @Override
+    public PostRequest retryCount(int retryCount) {
+        return super.retryCount(retryCount);
+    }
+
+    @Override
+    public PostRequest retryDelayMillis(long retryDelayMillis) {
+        return super.retryDelayMillis(retryDelayMillis);
+    }
+
     /**
-     * New instance
+     * Singleton
      */
-    public static class PostRequestF extends HttpRequestF<PostRequestF> {
+    public static class Singleton extends HttpRequest.Singleton<Singleton> {
         private Map<String, Object> forms = new LinkedHashMap<>();
         private RequestBody requestBody;
         private MediaType mediaType;
         private String content;
 
-        public PostRequestF(String url) {
+        public Singleton(String url) {
             super(url);
         }
 
-        public PostRequestF(String url, Map<String, String> params) {
+        public Singleton(String url, Map<String, String> params) {
             super(url, params);
         }
 
         @Override
-        protected void init() {
+        protected void prepare() {
             if (forms != null && forms.size() > 0) {
                 if (params != null && params.size() > 0) {
                     Iterator<Map.Entry<String, String>> entryIterator = params.entrySet().iterator();
@@ -135,61 +193,66 @@ public class PostRequest extends HttpRequest<PostRequest> {
                         }
                     }
                 }
-                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).postForm(url, forms);
+                observable = getRetrofit().create(RetrofitAPI.class).postForm(url, forms);
+                return;
             }
             if (requestBody != null) {
-                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).postBody(url, requestBody);
+                observable = getRetrofit().create(RetrofitAPI.class).postBody(url, requestBody);
                 return;
             }
             if (content != null && mediaType != null) {
                 requestBody = RequestBody.create(mediaType, content);
-                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).postBody(url, requestBody);
+                observable = getRetrofit().create(RetrofitAPI.class).postBody(url, requestBody);
                 return;
             }
             if (params != null && params.size() > 0) {
-                observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).post(url, params);
+                observable = getRetrofit().create(RetrofitAPI.class).post(url, params);
                 return;
             }
-            observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).post(url);
+            observable = getRetrofit().create(RetrofitAPI.class).post(url);
         }
 
-        public PostRequestF addForm(String formKey, Object formValue) {
+        private Retrofit getRetrofit() {
+            return RetrofitClient.getIns();
+        }
+
+        public Singleton addForm(String formKey, Object formValue) {
             if (formKey != null && formValue != null) {
                 forms.put(formKey, formValue);
             }
             return this;
         }
 
-        public PostRequestF setRequestBody(RequestBody requestBody) {
+        public Singleton setRequestBody(RequestBody requestBody) {
             this.requestBody = requestBody;
             return this;
         }
 
-        public PostRequestF setString(String string) {
+        public Singleton setString(String string) {
             this.content = string;
             this.mediaType = MediaTypes.TEXT_PLAIN_TYPE;
             return this;
         }
 
-        public PostRequestF setString(String string, MediaType mediaType) {
+        public Singleton setString(String string, MediaType mediaType) {
             this.content = string;
             this.mediaType = mediaType;
             return this;
         }
 
-        public PostRequestF setJson(String json) {
+        public Singleton setJson(String json) {
             this.content = json;
             this.mediaType = MediaTypes.APPLICATION_JSON_TYPE;
             return this;
         }
 
-        public PostRequestF setJson(JSONObject jsonObject) {
+        public Singleton setJson(JSONObject jsonObject) {
             this.content = jsonObject.toString();
             this.mediaType = MediaTypes.APPLICATION_JSON_TYPE;
             return this;
         }
 
-        public PostRequestF setJson(JSONArray jsonArray) {
+        public Singleton setJson(JSONArray jsonArray) {
             this.content = jsonArray.toString();
             this.mediaType = MediaTypes.APPLICATION_JSON_TYPE;
             return this;

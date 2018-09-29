@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.os.Environment;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.listener.DownloadCallback;
+import com.d.lib.rxnet.callback.DownloadCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 

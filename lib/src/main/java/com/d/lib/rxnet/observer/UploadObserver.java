@@ -1,6 +1,6 @@
 package com.d.lib.rxnet.observer;
 
-import com.d.lib.rxnet.listener.UploadCallback;
+import com.d.lib.rxnet.callback.UploadCallback;
 import com.d.lib.rxnet.utils.Util;
 
 /**

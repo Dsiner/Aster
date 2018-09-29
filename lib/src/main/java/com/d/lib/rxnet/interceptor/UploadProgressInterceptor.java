@@ -3,7 +3,7 @@ package com.d.lib.rxnet.interceptor;
 import android.support.annotation.NonNull;
 
 import com.d.lib.rxnet.body.UploadProgressRequestBody;
-import com.d.lib.rxnet.listener.UploadCallback;
+import com.d.lib.rxnet.callback.UploadCallback;
 
 import java.io.IOException;
 

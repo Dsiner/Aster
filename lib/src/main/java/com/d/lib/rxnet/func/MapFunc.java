@@ -1,6 +1,6 @@
 package com.d.lib.rxnet.func;
 
-import com.d.lib.rxnet.listener.AsyncCallback;
+import com.d.lib.rxnet.callback.AsyncCallback;
 import com.d.lib.rxnet.utils.Util;
 
 import io.reactivex.functions.Function;

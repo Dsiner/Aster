@@ -3,8 +3,8 @@ package com.d.lib.rxnet.body;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
+import com.d.lib.rxnet.callback.UploadCallback;
 import com.d.lib.rxnet.exception.ApiException;
-import com.d.lib.rxnet.listener.UploadCallback;
 import com.d.lib.rxnet.utils.ULog;
 
 import java.io.IOException;

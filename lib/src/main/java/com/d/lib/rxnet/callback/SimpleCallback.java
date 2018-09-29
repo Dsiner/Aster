@@ -1,4 +1,4 @@
-package com.d.lib.rxnet.listener;
+package com.d.lib.rxnet.callback;
 
 /**
  * SimpleCallback

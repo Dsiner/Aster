@@ -1,6 +1,6 @@
 package com.d.lib.rxnet.observer;
 
-import com.d.lib.rxnet.listener.AsyncCallback;
+import com.d.lib.rxnet.callback.AsyncCallback;
 
 /**
  * Observer with Async Callback

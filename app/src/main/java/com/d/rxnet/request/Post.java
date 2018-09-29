@@ -6,7 +6,7 @@ import android.content.Context;
 import com.d.lib.rxnet.RxNet;
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.Params;
-import com.d.lib.rxnet.listener.AsyncCallback;
+import com.d.lib.rxnet.callback.AsyncCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.api.API;
