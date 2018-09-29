@@ -15,7 +15,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 /**
- * Instance
+ * Singleton
  * Created by D on 2017/10/24.
  */
 public class PostRequest extends HttpRequest<PostRequest> {
@@ -106,7 +106,7 @@ public class PostRequest extends HttpRequest<PostRequest> {
     }
 
     /**
-     * New
+     * New instance
      */
     public static class PostRequestF extends HttpRequestF<PostRequestF> {
         private Map<String, Object> forms = new LinkedHashMap<>();

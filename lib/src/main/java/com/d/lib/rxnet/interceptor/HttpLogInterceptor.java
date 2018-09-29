@@ -22,17 +22,17 @@ import okhttp3.internal.http.HttpHeaders;
 import okio.Buffer;
 
 /**
- * Http日志打印拦截
+ * Http log print interception
  */
 public class HttpLogInterceptor implements Interceptor {
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private volatile Level level = Level.NONE;
 
     public enum Level {
-        NONE,       //不打印log
-        BASIC,      //只打印 请求首行 和 响应首行
-        HEADERS,    //打印请求和响应的所有 Header
-        BODY        //所有数据全部打印
+        NONE,       // Do not print the log
+        BASIC,      // Print only the first line of the request and the first line of the response
+        HEADERS,    // Print all headers for requests and responses
+        BODY        // All data is printed
     }
 
     private void log(String message) {
@@ -58,10 +58,10 @@ public class HttpLogInterceptor implements Interceptor {
             return chain.proceed(request);
         }
 
-        //请求日志拦截
+        // Request log interception
         logForRequest(request, chain.connection());
 
-        //执行请求，计算请求时间
+        // Execute request, calculate request time
         long startNs = System.nanoTime();
         Response response;
         try {
@@ -72,7 +72,7 @@ public class HttpLogInterceptor implements Interceptor {
         }
         long tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs);
 
-        //响应日志拦截
+        // Response log interception
         return logForResponse(response, tookMs);
     }
 

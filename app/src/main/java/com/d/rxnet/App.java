@@ -12,7 +12,7 @@ import java.util.Map;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
- * e.g
+ * App
  * Created by D on 2017/10/27.
  */
 public class App extends Application {
@@ -31,7 +31,7 @@ public class App extends Application {
         RxNet.init()
                 .baseUrl(API.API_BASE)
                 /**
-                 * 添加token等动态请求头方法
+                 * Add a dynamic request header method such as token
                  * 1: Override HeadersInterceptor.intercept()
                  * 2: addInterceptor()
                  */

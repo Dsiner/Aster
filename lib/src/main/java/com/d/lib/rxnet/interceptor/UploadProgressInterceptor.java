@@ -12,14 +12,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * 上传进度拦截
+ * Upload progress interception
  */
 public class UploadProgressInterceptor implements Interceptor {
     private UploadCallBack callback;
 
     public UploadProgressInterceptor(UploadCallBack callback) {
         if (callback == null) {
-            throw new NullPointerException("this callback must not null.");
+            throw new NullPointerException("This callback must not be null.");
         }
         this.callback = callback;
     }

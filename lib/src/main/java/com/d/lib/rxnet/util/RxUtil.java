@@ -11,14 +11,14 @@ import java.lang.reflect.Type;
 public class RxUtil {
 
     /**
-     * 打印当前代码所在线程信息
+     * Print the thread information of the current code
      */
     public static void printThread(String tag) {
-        RxLog.d(tag + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+        RxLog.d(tag + " " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
     }
 
     /**
-     * 获取第一泛型类型 仅限Interface
+     * Get the first generic type, interface only
      */
     public static <T> Class<T> getFirstCls(T t) {
         Type[] types = t.getClass().getGenericInterfaces();
@@ -28,7 +28,7 @@ public class RxUtil {
     }
 
     /**
-     * 删除文件/文件夹
+     * Delete file/folder
      */
     public static void deleteFile(File file) {
         if (file == null) {
@@ -42,7 +42,8 @@ public class RxUtil {
             for (File f : files) {
                 deleteFile(f);
             }
-            file.delete();//如要保留文件夹，只删除文件，请注释这行
+            // If you want to keep the folder, just delete the file, please comment this line
+            file.delete();
         } else if (file.exists()) {
             file.delete();
         }

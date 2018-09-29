@@ -6,7 +6,7 @@ import com.d.lib.rxnet.base.RetrofitClient;
 import java.util.Map;
 
 /**
- * Instance
+ * Singleton
  * Created by D on 2017/10/24.
  */
 public class PutRequest extends HttpRequest<PutRequest> {
@@ -25,7 +25,7 @@ public class PutRequest extends HttpRequest<PutRequest> {
     }
 
     /**
-     * New
+     * New instance
      */
     public static class PutRequestF extends HttpRequestF<PutRequestF> {
 

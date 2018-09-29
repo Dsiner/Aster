@@ -17,7 +17,7 @@ import java.util.Map;
 import retrofit2.Retrofit;
 
 /**
- * New
+ * New instance
  * Created by D on 2017/10/24.
  */
 public class RxNet {
@@ -85,6 +85,9 @@ public class RxNet {
         return new UploadRequest.UploadRequestF(url);
     }
 
+    /**
+     * Singleton
+     */
     public static class RxNetIns {
 
         RxNetIns() {

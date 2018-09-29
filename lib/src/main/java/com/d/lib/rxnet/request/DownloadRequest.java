@@ -34,7 +34,7 @@ import okhttp3.Interceptor;
 import okhttp3.ResponseBody;
 
 /**
- * New but Default Config
+ * New instance but default Config
  * Created by D on 2017/10/24.
  */
 public class DownloadRequest extends BaseRequest<DownloadRequest> {

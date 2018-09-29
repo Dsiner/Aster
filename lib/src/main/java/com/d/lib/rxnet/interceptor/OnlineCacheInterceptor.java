@@ -11,13 +11,13 @@ import okhttp3.Interceptor;
 import okhttp3.Response;
 
 /**
- * 在线缓存拦截
+ * Online cache interception
  */
 public class OnlineCacheInterceptor implements Interceptor {
     private String cacheControlValue;
 
     public OnlineCacheInterceptor() {
-        this(60);////默认最大在线缓存时间（秒）
+        this(60); // Default maximum online cache time (seconds)
     }
 
     public OnlineCacheInterceptor(int cacheControlValue) {

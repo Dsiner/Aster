@@ -35,7 +35,7 @@ public class ApiRetryFunc implements Function<Observable<? extends Throwable>, O
                 RxUtil.printThread("RxNet_theard retryApply: ");
                 if (++retryCount <= maxRetries && (throwable instanceof SocketTimeoutException
                         || throwable instanceof ConnectException)) {
-                    RxLog.d("get response data error, it will try after " + retryDelayMillis
+                    RxLog.d("Get response data error, it will try after " + retryDelayMillis
                             + " millisecond, retry count " + retryCount + "/" + maxRetries);
                     return Observable.timer(retryDelayMillis, TimeUnit.MILLISECONDS);
                 }

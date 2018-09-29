@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * 转换器
+ * Transformer
  */
 public class ApiTransformer {
     public static <T> ObservableTransformer<T, T> norTransformer() {

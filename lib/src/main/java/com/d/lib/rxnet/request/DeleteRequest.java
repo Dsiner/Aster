@@ -6,7 +6,7 @@ import com.d.lib.rxnet.base.RetrofitClient;
 import java.util.Map;
 
 /**
- * Instance
+ * Singleton
  * Created by D on 2017/10/24.
  */
 public class DeleteRequest extends HttpRequest<DeleteRequest> {
@@ -25,7 +25,7 @@ public class DeleteRequest extends HttpRequest<DeleteRequest> {
     }
 
     /**
-     * New
+     * New instance
      */
     public static class DeleteRequestF extends HttpRequestF<DeleteRequestF> {
 

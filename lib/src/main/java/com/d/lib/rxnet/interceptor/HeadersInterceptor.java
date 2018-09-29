@@ -11,7 +11,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * 请求头拦截
+ * Request header interception
  */
 public class HeadersInterceptor implements Interceptor {
     private Map<String, String> headers;
@@ -31,7 +31,7 @@ public class HeadersInterceptor implements Interceptor {
         }
 
         // TODO: @developer 2017/10/24
-//        addToken(builder);
+        // addToken(builder);
 
         return chain.proceed(builder.build());
     }

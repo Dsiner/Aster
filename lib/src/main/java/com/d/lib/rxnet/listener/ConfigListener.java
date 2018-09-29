@@ -15,7 +15,7 @@ public abstract class ConfigListener<R> {
 
     protected abstract R headers(Map<String, String> headers);
 
-    /*************************** OkHttpClient ***************************/
+    /************************** OkHttpClient **************************/
     protected abstract R connectTimeout(long timeout);
 
     protected abstract R readTimeout(long timeout);
@@ -28,7 +28,7 @@ public abstract class ConfigListener<R> {
 
     protected abstract R sslSocketFactory(SSLSocketFactory sslSocketFactory);
 
-    /*************************** Retry ***************************/
+    /************************** Retry **************************/
     protected abstract R retryCount(int retryCount);
 
     protected abstract R retryDelayMillis(long retryDelayMillis);

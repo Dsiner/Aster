@@ -13,7 +13,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * 离线缓存拦截
+ * Offline cache interception
  */
 public class OfflineCacheInterceptor implements Interceptor {
     private Context context;

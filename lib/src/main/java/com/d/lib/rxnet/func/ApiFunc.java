@@ -12,7 +12,7 @@ import io.reactivex.functions.Function;
 import okhttp3.ResponseBody;
 
 /**
- * ResponseBody转T
+ * ResponseBody to T
  */
 public class ApiFunc<T> implements Function<ResponseBody, T> {
     private Type type;

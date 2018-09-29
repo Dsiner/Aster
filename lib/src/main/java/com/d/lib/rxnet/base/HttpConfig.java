@@ -33,13 +33,13 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
     public SSLSocketFactory sslSocketFactory;
 
     /**
-     * 获取默认配置
+     * Get the default configuration
      */
     public synchronized static HttpConfig getDefaultConfig() {
         if (defaultConfig == null) {
             synchronized (HttpConfig.class) {
                 if (defaultConfig == null) {
-                    /*** default ***/
+                    /*** Default ***/
                     defaultConfig = new HttpConfig()
                             .baseUrl(Config.BASE_URL)
                             .connectTimeout(Config.CONNECT_TIMEOUT)
@@ -55,7 +55,7 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
     }
 
     /**
-     * 获取默认配置-拷贝
+     * Get the default configuration - copy
      */
     public static HttpConfig getNewDefaultConfig() {
         getDefaultConfig();

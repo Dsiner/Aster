@@ -11,7 +11,7 @@ public class AsyncApiObserver<T, R> extends AbsObserver<R> {
 
     public AsyncApiObserver(AsyncCallBack<T, R> callback) {
         if (callback == null) {
-            throw new NullPointerException("this callback is null!");
+            throw new NullPointerException("This callback must not be null!");
         }
         this.callback = callback;
     }

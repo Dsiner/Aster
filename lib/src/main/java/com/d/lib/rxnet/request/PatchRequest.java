@@ -6,7 +6,7 @@ import com.d.lib.rxnet.base.RetrofitClient;
 import java.util.Map;
 
 /**
- * Instance
+ * Singleton
  * Created by D on 2017/10/24.
  */
 public class PatchRequest extends HttpRequest<PatchRequest> {
@@ -25,7 +25,7 @@ public class PatchRequest extends HttpRequest<PatchRequest> {
     }
 
     /**
-     * New
+     * New instance
      */
     public static class PatchRequestF extends HttpRequestF<PatchRequestF> {
 

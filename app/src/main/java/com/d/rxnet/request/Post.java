@@ -131,7 +131,7 @@ public class Post {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<ArrayList<Boolean>>() {
+                .subscribe(new DisposableObserver<ArrayList<Boolean>>() {
                     @Override
                     public void onNext(ArrayList<Boolean> booleans) {
 

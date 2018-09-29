@@ -6,7 +6,7 @@ import com.d.lib.rxnet.base.RetrofitClient;
 import java.util.Map;
 
 /**
- * Instance
+ * Singleton
  * Created by D on 2017/10/24.
  */
 public class GetRequest extends HttpRequest<GetRequest> {
@@ -29,7 +29,7 @@ public class GetRequest extends HttpRequest<GetRequest> {
     }
 
     /**
-     * New
+     * New instance
      */
     public static class GetRequestF extends HttpRequestF<GetRequestF> {
 

@@ -30,7 +30,7 @@ public class RetrofitClient {
     private static Retrofit retrofit;
 
     /**
-     * Instance - Default Config
+     * Singleton - Default configuration
      */
     public static synchronized Retrofit getInstance() {
         if (retrofit == null) {
@@ -44,36 +44,36 @@ public class RetrofitClient {
     }
 
     /**
-     * New - Default Config
+     * New instance - Default configuration
      */
     public static Retrofit getRetrofitDefault() {
         return getRetrofit(HttpConfig.getDefaultConfig(), true);
     }
 
     /**
-     * New - Download Config（no HttpLoggingInterceptor）
+     * New instance - Download configuration（No HttpLoggingInterceptor）
      */
     public static Retrofit getRetrofitDown(HttpConfig config) {
         return getRetrofit(config, false);
     }
 
     /**
-     * New - Custom Config
+     * New instance - Custom configuration
      */
     public static Retrofit getRetrofit(HttpConfig config) {
         return getRetrofit(config, true);
     }
 
     /**
-     * New - Custom Config
+     * New instance - Custom configuration
      *
-     * @param config: config
-     * @param log:    add HttpLoggingInterceptor?
-     * @return new Retrofit
+     * @param config Configuration
+     * @param log    Whether to add HttpLoggingInterceptor
+     * @return Retrofit
      */
     private static Retrofit getRetrofit(HttpConfig config, boolean log) {
         Retrofit retrofit = new Retrofit.Builder()
-                //设置OKHttpClient,如果不设置会提供一个默认的
+                // Set OKHttpClient, if not set, a default will be provided
                 .client(getOkHttpClient(config.headers,
                         config.connectTimeout != -1 ? config.connectTimeout : HttpConfig.getDefaultConfig().connectTimeout,
                         config.readTimeout != -1 ? config.readTimeout : HttpConfig.getDefaultConfig().readTimeout,
@@ -82,11 +82,11 @@ public class RetrofitClient {
                         config.interceptors,
                         config.networkInterceptors,
                         log))
-                //设置baseUrl
+                // Set base url
                 .baseUrl(!TextUtils.isEmpty(config.baseUrl) ? config.baseUrl : HttpConfig.getDefaultConfig().baseUrl)
-                //设置rx
+                // Set RxJava2CallAdapterFactory
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                //添加转换器
+                // Add converter
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit;
@@ -134,7 +134,7 @@ public class RetrofitClient {
 
             @Override
             public void log(String s) {
-                //打印retrofit日志
+                // Print retrofit log
                 RxLog.d(Config.TAG_LOG + s);
             }
         });
@@ -145,7 +145,7 @@ public class RetrofitClient {
     private static SSLSocketFactory getSSLSocketFactory() {
         SSLContext sslContext = null;
         try {
-            //取得TrustManagerFactory的X509密钥管理器实例
+            // Get the X509 Key Manager instance of TrustManagerFactory
             final TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
                 @Override
                 public void checkClientTrusted(
@@ -169,7 +169,7 @@ public class RetrofitClient {
             return sslContext.getSocketFactory();
         } catch (Exception e) {
             e.printStackTrace();
-            RxLog.e("SslContextFactory:" + e.getMessage());
+            RxLog.e("SslContextFactory: " + e.getMessage());
             return null;
         }
     }

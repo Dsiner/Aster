@@ -1,5 +1,6 @@
 package com.d.rxnet.request;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -36,7 +37,7 @@ public class Upload {
     public Upload(Activity activity) {
         appContext = activity.getApplicationContext();
         dialog = new ProgressDialog(activity);
-        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);// 设置进度条的形式为圆形转动的进度条
+        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         dialog.setMax(100);
     }
 
@@ -45,7 +46,7 @@ public class Upload {
             @Override
             public void run() {
                 testIns();
-//                testNew();
+                // testNew();
             }
         });
     }
@@ -118,6 +119,7 @@ public class Upload {
                 });
     }
 
+    @SuppressLint("CheckResult")
     private void doTask(final String name, final Runnable runnable) {
         if (isRunning) {
             return;
@@ -132,7 +134,8 @@ public class Upload {
                 boolean success = false;
                 if (!file.exists()) {
                     try {
-                        in = appContext.getAssets().open(name);//从assets目录下复制
+                        // Copy from the assets directory
+                        in = appContext.getAssets().open(name);
                         out = new FileOutputStream(file);
                         int length;
                         byte[] buf = new byte[1024];

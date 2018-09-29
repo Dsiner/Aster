@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 
 /**
- * Instance
+ * Singleton
  * Created by D on 2017/10/24.
  */
 public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
@@ -145,7 +145,7 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
     }
 
     /**
-     * New
+     * New instance
      */
     public static class HttpRequestF<HRF extends HttpRequest> extends HttpRequest<HRF> {
 

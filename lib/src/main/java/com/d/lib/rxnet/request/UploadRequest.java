@@ -247,7 +247,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
     }
 
     /**
-     * New
+     * New instance
      */
     public static class UploadRequestF extends UploadRequest {
 

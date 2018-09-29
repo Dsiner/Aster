@@ -20,10 +20,10 @@ public abstract class BaseRequest<R extends BaseRequest> extends ConfigListener<
     protected HttpConfig config;
     protected String url;
     protected Observable observable;
-    protected Object tag;//请求标签
+    protected Object tag; // Request tag
 
     /**
-     * 设置请求标签
+     * Set request tag
      */
     public R tag(Object tag) {
         this.tag = tag;

@@ -27,7 +27,7 @@ public class Download {
     public void testAll() {
         RxUtil.deleteFile(new File(Environment.getExternalStorageDirectory().getPath() + "/test/"));
         testIns();
-//        testNew();
+        // testNew();
     }
 
     private void testIns() {

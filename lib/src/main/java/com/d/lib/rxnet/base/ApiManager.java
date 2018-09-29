@@ -6,7 +6,7 @@ import java.util.Set;
 import io.reactivex.disposables.Disposable;
 
 /**
- * 请求管理，方便中途取消请求
+ * Request management to facilitate mid-way cancellation of requests
  */
 public class ApiManager {
     private static ApiManager sInstance;
