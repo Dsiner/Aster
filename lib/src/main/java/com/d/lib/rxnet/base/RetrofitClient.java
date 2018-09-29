@@ -3,7 +3,7 @@ package com.d.lib.rxnet.base;
 import android.text.TextUtils;
 
 import com.d.lib.rxnet.interceptor.HeadersInterceptor;
-import com.d.lib.rxnet.util.RxLog;
+import com.d.lib.rxnet.utils.ULog;
 
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
@@ -27,20 +27,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by D on 2017/7/14.
  */
 public class RetrofitClient {
-    private static Retrofit retrofit;
+
+    private static class Singleton {
+        private final static Retrofit INSTANCE = getRetrofitDefault();
+    }
 
     /**
      * Singleton - Default configuration
      */
-    public static synchronized Retrofit getInstance() {
-        if (retrofit == null) {
-            synchronized (RetrofitClient.class) {
-                if (retrofit == null) {
-                    retrofit = getRetrofitDefault();
-                }
-            }
-        }
-        return retrofit;
+    public static synchronized Retrofit getIns() {
+        return Singleton.INSTANCE;
     }
 
     /**
@@ -135,7 +131,7 @@ public class RetrofitClient {
             @Override
             public void log(String s) {
                 // Print retrofit log
-                RxLog.d(Config.TAG_LOG + s);
+                ULog.d(Config.TAG_LOG + s);
             }
         });
         loggingInterceptor.setLevel(Config.LOG_LEVEL);
@@ -169,7 +165,7 @@ public class RetrofitClient {
             return sslContext.getSocketFactory();
         } catch (Exception e) {
             e.printStackTrace();
-            RxLog.e("SslContextFactory: " + e.getMessage());
+            ULog.e("SslContextFactory: " + e.getMessage());
             return null;
         }
     }

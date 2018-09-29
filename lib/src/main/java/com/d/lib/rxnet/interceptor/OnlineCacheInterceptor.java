@@ -3,7 +3,7 @@ package com.d.lib.rxnet.interceptor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.d.lib.rxnet.util.RxLog;
+import com.d.lib.rxnet.utils.ULog;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ public class OnlineCacheInterceptor implements Interceptor {
         String cacheControl = originalResponse.header("Cache-Control");
         if (TextUtils.isEmpty(cacheControl) || cacheControl.contains("no-store") || cacheControl.contains("no-cache") || cacheControl
                 .contains("must-revalidate") || cacheControl.contains("max-age") || cacheControl.contains("max-stale")) {
-            RxLog.d(originalResponse.headers().toString());
+            ULog.d(originalResponse.headers().toString());
             return originalResponse.newBuilder()
                     .header("Cache-Control", "public, " + cacheControlValue)
                     .removeHeader("Pragma")

@@ -7,7 +7,7 @@ import com.d.lib.rxnet.base.ApiManager;
 import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.func.ApiRetryFunc;
-import com.d.lib.rxnet.listener.DownloadCallBack;
+import com.d.lib.rxnet.listener.DownloadCallack;
 import com.d.lib.rxnet.observer.DownloadObserver;
 
 import org.reactivestreams.Publisher;
@@ -34,7 +34,7 @@ import okhttp3.Interceptor;
 import okhttp3.ResponseBody;
 
 /**
- * New instance but default Config
+ * New instance but default configuration
  * Created by D on 2017/10/24.
  */
 public class DownloadRequest extends BaseRequest<DownloadRequest> {
@@ -61,7 +61,7 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
         }
     }
 
-    public void request(final String path, final String name, final DownloadCallBack callback) {
+    public void request(final String path, final String name, final DownloadCallack callback) {
         if (TextUtils.isEmpty(path)) {
             throw new IllegalArgumentException("this path can not be empty!");
         }

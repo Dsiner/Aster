@@ -16,7 +16,7 @@ public class Params extends LinkedHashMap<String, String> {
     }
 
     public void addParam(String key, String value) {
-        // Retrofit2's FeildMap does not allow value to be empty
+        // Retrofit2's FeildMap does not allow value to be null
         put(key, value == null ? "" : value);
     }
 

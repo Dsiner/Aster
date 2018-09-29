@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.d.lib.rxnet.base.ApiManager;
-import com.d.lib.rxnet.util.RxUtil;
+import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.request.Download;
 import com.d.rxnet.request.Get;
 import com.d.rxnet.request.Post;
@@ -18,23 +18,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        RxUtil.printThread("dsiner_theard Main: ");
+        Util.printThread("dsiner_theard Main: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bindView();
         wipeCache();
-        initView();
     }
 
-    private void wipeCache() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                RxUtil.deleteFile(new File(Environment.getExternalStorageDirectory().getPath() + "/test/1.jpg"));
-            }
-        }).run();
-    }
-
-    private void initView() {
+    private void bindView() {
         findViewById(R.id.btn_get).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +50,15 @@ public class MainActivity extends AppCompatActivity {
                 new Upload(MainActivity.this).testAll();
             }
         });
+    }
+
+    private void wipeCache() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Util.deleteFile(new File(Environment.getExternalStorageDirectory().getPath() + "/test/1.jpg"));
+            }
+        }).run();
     }
 
     @Override

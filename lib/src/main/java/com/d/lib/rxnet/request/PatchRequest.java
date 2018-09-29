@@ -21,7 +21,7 @@ public class PatchRequest extends HttpRequest<PatchRequest> {
 
     @Override
     protected void init() {
-        observable = RetrofitClient.getInstance().create(RetrofitAPI.class).patch(url, params);
+        observable = RetrofitClient.getIns().create(RetrofitAPI.class).patch(url, params);
     }
 
     /**

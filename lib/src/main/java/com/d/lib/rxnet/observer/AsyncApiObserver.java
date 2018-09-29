@@ -1,15 +1,15 @@
 package com.d.lib.rxnet.observer;
 
-import com.d.lib.rxnet.listener.AsyncCallBack;
+import com.d.lib.rxnet.listener.AsyncCallack;
 
 /**
- * Observer with Async AsyncCallBack
+ * Observer with Async Callback
  */
 public class AsyncApiObserver<T, R> extends AbsObserver<R> {
     private R data;
-    private AsyncCallBack<T, R> callback;
+    private AsyncCallack<T, R> callback;
 
-    public AsyncApiObserver(AsyncCallBack<T, R> callback) {
+    public AsyncApiObserver(AsyncCallack<T, R> callback) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null!");
         }

@@ -22,7 +22,7 @@ import retrofit2.Retrofit;
  */
 public class RxNet {
 
-    public static RxNetIns getInstance() {
+    public static RxNetIns getIns() {
         return new RxNetIns();
     }
 
@@ -31,7 +31,7 @@ public class RxNet {
     }
 
     public static Retrofit getRetrofit() {
-        return RetrofitClient.getInstance();
+        return RetrofitClient.getIns();
     }
 
     public RxNet() {

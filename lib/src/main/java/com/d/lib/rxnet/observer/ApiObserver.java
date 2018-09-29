@@ -1,15 +1,15 @@
 package com.d.lib.rxnet.observer;
 
-import com.d.lib.rxnet.listener.SimpleCallBack;
+import com.d.lib.rxnet.listener.SimpleCallack;
 
 /**
- * Observer with Sync CallBack
+ * Observer with Sync Callback
  */
 public class ApiObserver<R> extends AbsObserver<R> {
     private R data;
-    private SimpleCallBack<R> callback;
+    private SimpleCallack<R> callback;
 
-    public ApiObserver(SimpleCallBack<R> callback) {
+    public ApiObserver(SimpleCallack<R> callback) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null!");
         }

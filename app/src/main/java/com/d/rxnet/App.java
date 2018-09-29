@@ -3,7 +3,7 @@ package com.d.rxnet;
 import android.app.Application;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.util.SSLUtil;
+import com.d.lib.rxnet.utils.SSLUtil;
 import com.d.rxnet.api.API;
 
 import java.util.HashMap;
@@ -43,6 +43,7 @@ public class App extends Application {
                 .retryDelayMillis(2 * 1000)
                 .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                 .setLog("RetrofitLog Back = ", HttpLoggingInterceptor.Level.BODY)
+                .setDebug(true)
                 .build();
     }
 }

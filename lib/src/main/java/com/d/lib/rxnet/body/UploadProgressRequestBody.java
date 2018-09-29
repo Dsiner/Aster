@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
 import com.d.lib.rxnet.exception.ApiException;
-import com.d.lib.rxnet.listener.UploadCallBack;
-import com.d.lib.rxnet.util.RxLog;
+import com.d.lib.rxnet.listener.UploadCallack;
+import com.d.lib.rxnet.utils.ULog;
 
 import java.io.IOException;
 
@@ -25,10 +25,10 @@ import okio.Sink;
  */
 public class UploadProgressRequestBody extends RequestBody {
     private RequestBody requestBody;
-    private UploadCallBack callback;
+    private UploadCallack callback;
     private long lastTime;
 
-    public UploadProgressRequestBody(RequestBody requestBody, UploadCallBack callback) {
+    public UploadProgressRequestBody(RequestBody requestBody, UploadCallack callback) {
         if (requestBody == null || callback == null) {
             throw new NullPointerException("This requestBody and callback must not be null.");
         }
@@ -85,7 +85,7 @@ public class UploadProgressRequestBody extends RequestBody {
                 Observable.just(currentLength).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        RxLog.d("Upload progress currentLength: " + currentLength + " totalLength: " + totalLength);
+                        ULog.d("Upload progress currentLength: " + currentLength + " totalLength: " + totalLength);
                         callback.onProgress(currentLength, totalLength);
                     }
                 }, new Consumer<Throwable>() {

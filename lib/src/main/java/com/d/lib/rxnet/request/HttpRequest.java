@@ -5,11 +5,11 @@ import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.func.ApiFunc;
 import com.d.lib.rxnet.func.ApiRetryFunc;
 import com.d.lib.rxnet.func.MapFunc;
-import com.d.lib.rxnet.listener.AsyncCallBack;
-import com.d.lib.rxnet.listener.SimpleCallBack;
+import com.d.lib.rxnet.listener.AsyncCallack;
+import com.d.lib.rxnet.listener.SimpleCallack;
 import com.d.lib.rxnet.observer.ApiObserver;
 import com.d.lib.rxnet.observer.AsyncApiObserver;
-import com.d.lib.rxnet.util.RxUtil;
+import com.d.lib.rxnet.utils.Util;
 
 import java.util.Map;
 
@@ -46,7 +46,7 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
 
     }
 
-    public <T> void request(SimpleCallBack<T> callback) {
+    public <T> void request(SimpleCallack<T> callback) {
         init();
         DisposableObserver disposableObserver = new ApiObserver(callback);
         if (super.tag != null) {
@@ -54,13 +54,13 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .map(new ApiFunc<T>(RxUtil.getFirstCls(callback)))
+                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))
                 .subscribe(disposableObserver);
     }
 
-    public <T, R> void request(AsyncCallBack<T, R> callback) {
+    public <T, R> void request(AsyncCallack<T, R> callback) {
         init();
         DisposableObserver disposableObserver = new AsyncApiObserver(callback);
         if (super.tag != null) {
@@ -68,7 +68,7 @@ public class HttpRequest<HR extends HttpRequest> extends BaseRequest<HR> {
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .map(new ApiFunc<T>(RxUtil.getFirstCls(callback)))
+                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
                 .map(new MapFunc<T, R>(callback))
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))

@@ -7,9 +7,9 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.listener.UploadCallBack;
-import com.d.lib.rxnet.util.RxLog;
-import com.d.lib.rxnet.util.RxUtil;
+import com.d.lib.rxnet.listener.UploadCallack;
+import com.d.lib.rxnet.utils.ULog;
+import com.d.lib.rxnet.utils.Util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,17 +53,17 @@ public class Upload {
 
     private void testIns() {
         File file = getFile("1.jpg");
-        RxNet.getInstance().upload(url)
+        RxNet.getIns().upload(url)
                 .addParam("token", "8888")
                 .addParam("user", "0")
                 .addParam("password", "0")
                 .addFile("androidPicFile", file)
                 .tag("uploadIns")
-                .request(new UploadCallBack() {
+                .request(new UploadCallack() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        RxUtil.printThread("dsiner_theard onProgresss: ");
-                        RxLog.d("dsiner_request onProgresss: -->upload: " + currentLength + " total: " + totalLength);
+                        Util.printThread("dsiner_theard onProgresss: ");
+                        ULog.d("dsiner_request onProgresss: -->upload: " + currentLength + " total: " + totalLength);
                         if (!dialog.isShowing()) {
                             dialog.setMessage("正在上传...");
                             dialog.show();
@@ -73,15 +73,15 @@ public class Upload {
 
                     @Override
                     public void onError(Throwable e) {
-                        RxUtil.printThread("dsiner_theard onError: ");
-                        RxLog.d("dsiner_request onError: " + e.getMessage());
+                        Util.printThread("dsiner_theard onError: ");
+                        ULog.d("dsiner_request onError: " + e.getMessage());
                         dialog.dismiss();
                     }
 
                     @Override
                     public void onComplete() {
-                        RxUtil.printThread("dsiner_theard onComplete: ");
-                        RxLog.d("dsiner_request onComplete");
+                        Util.printThread("dsiner_theard onComplete: ");
+                        ULog.d("dsiner_request onComplete");
                         dialog.setProgress(100);
                         dialog.setMessage("上传完成");
                     }
@@ -98,23 +98,23 @@ public class Upload {
                 .retryDelayMillis(1000)
                 .addImageFile("androidPicFile", file)
                 .tag("uploadNew")
-                .request(new UploadCallBack() {
+                .request(new UploadCallack() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        RxUtil.printThread("dsiner_theard onProgresss: ");
-                        RxLog.d("dsiner_request onProgresss: -->upload: " + currentLength + " total: " + totalLength);
+                        Util.printThread("dsiner_theard onProgresss: ");
+                        ULog.d("dsiner_request onProgresss: -->upload: " + currentLength + " total: " + totalLength);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        RxUtil.printThread("dsiner_theard onError: ");
-                        RxLog.d("dsiner_request onError: " + e.getMessage());
+                        Util.printThread("dsiner_theard onError: ");
+                        ULog.d("dsiner_request onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        RxUtil.printThread("dsiner_theard onComplete: ");
-                        RxLog.d("dsiner_request onComplete");
+                        Util.printThread("dsiner_theard onComplete: ");
+                        ULog.d("dsiner_request onComplete");
                     }
                 });
     }

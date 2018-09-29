@@ -1,4 +1,4 @@
-package com.d.lib.rxnet.util;
+package com.d.lib.rxnet.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package com.d.lib.rxnet.util;
+package com.d.lib.rxnet.utils;
 
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
@@ -8,13 +8,13 @@ import java.lang.reflect.Type;
  * Util
  * Created by D on 2017/10/25.
  */
-public class RxUtil {
+public class Util {
 
     /**
      * Print the thread information of the current code
      */
     public static void printThread(String tag) {
-        RxLog.d(tag + " " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+        ULog.d(tag + " " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
     }
 
     /**

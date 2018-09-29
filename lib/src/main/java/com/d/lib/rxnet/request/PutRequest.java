@@ -21,7 +21,7 @@ public class PutRequest extends HttpRequest<PutRequest> {
 
     @Override
     protected void init() {
-        observable = RetrofitClient.getInstance().create(RetrofitAPI.class).put(url, params);
+        observable = RetrofitClient.getIns().create(RetrofitAPI.class).put(url, params);
     }
 
     /**

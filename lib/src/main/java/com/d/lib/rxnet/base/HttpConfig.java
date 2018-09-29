@@ -3,7 +3,8 @@ package com.d.lib.rxnet.base;
 import android.text.TextUtils;
 
 import com.d.lib.rxnet.listener.ConfigListener;
-import com.d.lib.rxnet.util.SSLUtil;
+import com.d.lib.rxnet.utils.SSLUtil;
+import com.d.lib.rxnet.utils.ULog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -227,6 +228,11 @@ public class HttpConfig extends ConfigListener<HttpConfig> {
         public Build setLog(String tag, HttpLoggingInterceptor.Level level) {
             Config.TAG_LOG = tag;
             Config.LOG_LEVEL = level;
+            return this;
+        }
+
+        public Build setDebug(boolean debug) {
+            ULog.setDebug(debug);
             return this;
         }
 

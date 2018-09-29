@@ -21,7 +21,7 @@ public class DeleteRequest extends HttpRequest<DeleteRequest> {
 
     @Override
     protected void init() {
-        observable = RetrofitClient.getInstance().create(RetrofitAPI.class).delete(url, params);
+        observable = RetrofitClient.getIns().create(RetrofitAPI.class).delete(url, params);
     }
 
     /**

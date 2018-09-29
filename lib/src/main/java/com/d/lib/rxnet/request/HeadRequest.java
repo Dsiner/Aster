@@ -22,7 +22,7 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
 
     @Override
     protected void init() {
-        observable = RetrofitClient.getInstance().create(RetrofitAPI.class).head(url, params);
+        observable = RetrofitClient.getIns().create(RetrofitAPI.class).head(url, params);
     }
 
     /**

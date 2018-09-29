@@ -6,10 +6,10 @@ import android.content.Context;
 import com.d.lib.rxnet.RxNet;
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.Params;
-import com.d.lib.rxnet.listener.AsyncCallBack;
-import com.d.lib.rxnet.listener.SimpleCallBack;
-import com.d.lib.rxnet.util.RxLog;
-import com.d.lib.rxnet.util.RxUtil;
+import com.d.lib.rxnet.listener.AsyncCallack;
+import com.d.lib.rxnet.listener.SimpleCallack;
+import com.d.lib.rxnet.utils.ULog;
+import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.api.API;
 import com.d.rxnet.model.MovieInfo;
 
@@ -44,40 +44,40 @@ public class Get {
         Params params = new Params(API.MovieTop.rtpType);
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
-        RxNet.getInstance().get(API.MovieTop.rtpType, params)
-                .request(new SimpleCallBack<MovieInfo>() {
+        RxNet.getIns().get(API.MovieTop.rtpType, params)
+                .request(new SimpleCallack<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo response) {
-                        RxUtil.printThread("dsiner_theard onSuccess: ");
-                        RxLog.d("dsiner_request onSuccess: " + response);
+                        Util.printThread("dsiner_theard onSuccess: ");
+                        ULog.d("dsiner_request onSuccess: " + response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        RxUtil.printThread("dsiner_theard onError: ");
-                        RxLog.d("dsiner_request onError");
+                        Util.printThread("dsiner_theard onError: ");
+                        ULog.d("dsiner_request onError");
                     }
                 });
 
-        RxNet.getInstance().get("https://www.baidu.com", params)
-                .request(new AsyncCallBack<String, String>() {
+        RxNet.getIns().get("https://www.baidu.com", params)
+                .request(new AsyncCallack<String, String>() {
                     @Override
                     public String apply(@NonNull String info) throws Exception {
-                        RxUtil.printThread("dsiner_theard apply: ");
-                        RxLog.d("dsiner_request apply");
+                        Util.printThread("dsiner_theard apply: ");
+                        ULog.d("dsiner_request apply");
                         return "" + info;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        RxUtil.printThread("dsiner_theard onSuccess: ");
-                        RxLog.d("dsiner_request onSuccess: " + response);
+                        Util.printThread("dsiner_theard onSuccess: ");
+                        ULog.d("dsiner_request onSuccess: " + response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        RxUtil.printThread("dsiner_theard onError: ");
-                        RxLog.d("dsiner_request onError");
+                        Util.printThread("dsiner_theard onError: ");
+                        ULog.d("dsiner_request onError");
                     }
                 });
     }
@@ -91,25 +91,25 @@ public class Get {
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
                 .writeTimeout(5 * 1000)
-                .request(new AsyncCallBack<MovieInfo, String>() {
+                .request(new AsyncCallack<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
-                        RxUtil.printThread("dsiner_theard apply: ");
-                        RxLog.d("dsiner_request apply");
+                        Util.printThread("dsiner_theard apply: ");
+                        ULog.d("dsiner_request apply");
                         int size = info.subjects.size();
                         return "" + size;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        RxUtil.printThread("dsiner_theard onSuccess: ");
-                        RxLog.d("dsiner_request onSuccess: " + response);
+                        Util.printThread("dsiner_theard onSuccess: ");
+                        ULog.d("dsiner_request onSuccess: " + response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        RxUtil.printThread("dsiner_theard onError: ");
-                        RxLog.d("dsiner_request onError");
+                        Util.printThread("dsiner_theard onError: ");
+                        ULog.d("dsiner_request onError");
                     }
                 });
     }
@@ -118,12 +118,12 @@ public class Get {
         Params params = new Params(API.MovieTop.rtpType);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
-        RxNet.getInstance().get(API.MovieTop.rtpType, params)
+        RxNet.getIns().get(API.MovieTop.rtpType, params)
                 .observable(MovieInfo.class)
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
                     public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        RxUtil.printThread("dsiner_theard apply: ");
+                        Util.printThread("dsiner_theard apply: ");
                         return info;
                     }
                 })
@@ -131,7 +131,7 @@ public class Get {
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
                     public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        RxUtil.printThread("dsiner_theard apply: ");
+                        Util.printThread("dsiner_theard apply: ");
                         return info;
                     }
                 })
@@ -139,7 +139,7 @@ public class Get {
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
                     public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        RxUtil.printThread("dsiner_theard apply: ");
+                        Util.printThread("dsiner_theard apply: ");
                         return info;
                     }
                 })
@@ -147,17 +147,17 @@ public class Get {
                 .subscribe(new DisposableObserver<MovieInfo>() {
                     @Override
                     public void onNext(@NonNull MovieInfo info) {
-                        RxUtil.printThread("dsiner_theard onNext: ");
+                        Util.printThread("dsiner_theard onNext: ");
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        RxUtil.printThread("dsiner_theard onError: ");
+                        Util.printThread("dsiner_theard onError: ");
                     }
 
                     @Override
                     public void onComplete() {
-                        RxUtil.printThread("dsiner_theard onComplete: ");
+                        Util.printThread("dsiner_theard onComplete: ");
                     }
                 });
     }

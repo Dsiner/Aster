@@ -1,7 +1,7 @@
 package com.d.lib.rxnet.func;
 
 import com.d.lib.rxnet.exception.ApiException;
-import com.d.lib.rxnet.util.RxUtil;
+import com.d.lib.rxnet.utils.Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
@@ -23,7 +23,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
 
     @Override
     public T apply(ResponseBody responseBody) throws Exception {
-        RxUtil.printThread("RxNet_theard gsonFormat: ");
+        Util.printThread("RxNet_theard gsonFormat: ");
         Gson gson = new Gson();
         String json;
         try {

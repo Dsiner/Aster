@@ -1,4 +1,4 @@
-package com.d.lib.rxnet.util;
+package com.d.lib.rxnet.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -189,20 +189,20 @@ public class Network {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo in = connectivity.getActiveNetworkInfo();
-            RxLog.i("getActiveNetworkInfo: " + in);
+            ULog.i("getActiveNetworkInfo: " + in);
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
             if (info != null) {
                 for (int i = 0; i < info.length; i++) {
                     // if (info[i].getType() == ConnectivityManager.TYPE_WIFI) {
-                    RxLog.i("NetworkInfo[" + i + "]isAvailable : " + info[i].isAvailable());
-                    RxLog.i("NetworkInfo[" + i + "]isConnected : " + info[i].isConnected());
-                    RxLog.i("NetworkInfo[" + i + "]isConnectedOrConnecting : " + info[i].isConnectedOrConnecting());
-                    RxLog.i("NetworkInfo[" + i + "]: " + info[i]);
+                    ULog.i("NetworkInfo[" + i + "]isAvailable : " + info[i].isAvailable());
+                    ULog.i("NetworkInfo[" + i + "]isConnected : " + info[i].isConnected());
+                    ULog.i("NetworkInfo[" + i + "]isConnectedOrConnecting : " + info[i].isConnectedOrConnecting());
+                    ULog.i("NetworkInfo[" + i + "]: " + info[i]);
                     // }
                 }
-                RxLog.i("\n");
+                ULog.i("\n");
             } else {
-                RxLog.i("getAllNetworkInfo is null");
+                ULog.i("getAllNetworkInfo is null");
             }
         }
         return false;
@@ -219,7 +219,7 @@ public class Network {
     public static int getConnectedTypeINT(Context context) {
         NetworkInfo net = getConnectivityManager(context).getActiveNetworkInfo();
         if (net != null) {
-            RxLog.i("NetworkInfo: " + net.toString());
+            ULog.i("NetworkInfo: " + net.toString());
             return net.getType();
         }
         return -1;

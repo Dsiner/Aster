@@ -45,22 +45,22 @@ public class PostRequest extends HttpRequest<PostRequest> {
                     }
                 }
             }
-            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).postForm(url, forms);
+            observable = RetrofitClient.getIns().create(RetrofitAPI.class).postForm(url, forms);
         }
         if (requestBody != null) {
-            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).postBody(url, requestBody);
+            observable = RetrofitClient.getIns().create(RetrofitAPI.class).postBody(url, requestBody);
             return;
         }
         if (content != null && mediaType != null) {
             requestBody = RequestBody.create(mediaType, content);
-            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).postBody(url, requestBody);
+            observable = RetrofitClient.getIns().create(RetrofitAPI.class).postBody(url, requestBody);
             return;
         }
         if (params != null && params.size() > 0) {
-            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).post(url, params);
+            observable = RetrofitClient.getIns().create(RetrofitAPI.class).post(url, params);
             return;
         }
-        observable = RetrofitClient.getInstance().create(RetrofitAPI.class).post(url);
+        observable = RetrofitClient.getIns().create(RetrofitAPI.class).post(url);
     }
 
     public PostRequest addForm(String formKey, Object formValue) {

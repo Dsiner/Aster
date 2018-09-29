@@ -21,7 +21,7 @@ public class OptionRequest extends HttpRequest<OptionRequest> {
 
     @Override
     protected void init() {
-        observable = RetrofitClient.getInstance().create(RetrofitAPI.class).options(url, params);
+        observable = RetrofitClient.getIns().create(RetrofitAPI.class).options(url, params);
     }
 
     /**

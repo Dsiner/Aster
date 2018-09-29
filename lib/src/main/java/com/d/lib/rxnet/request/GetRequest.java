@@ -22,9 +22,9 @@ public class GetRequest extends HttpRequest<GetRequest> {
     @Override
     protected void init() {
         if (params == null) {
-            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).get(url);
+            observable = RetrofitClient.getIns().create(RetrofitAPI.class).get(url);
         } else {
-            observable = RetrofitClient.getInstance().create(RetrofitAPI.class).get(url, params);
+            observable = RetrofitClient.getIns().create(RetrofitAPI.class).get(url, params);
         }
     }
 

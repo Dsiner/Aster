@@ -65,11 +65,11 @@ public class MyApplication extends Application {
 
 ### Retrofit形式一: 单例（使用全局配置）
 
-#### 链式形式 1-1: CallBack简洁回调
+#### 链式形式 1-1: Callback简洁回调
 ```java
-        //1-1-1: SimpleCallBack callback
+        //1-1-1: SimpleCallback callback
         RxNet.getInstance().get(url, params)
-                .request(new SimpleCallBack<MovieInfo>() {
+                .request(new SimpleCallback<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo info) {
                         ...do something in main thread
@@ -81,9 +81,9 @@ public class MyApplication extends Application {
                     }
                 });
                 
-        //1-1-2: AsyncCallBack callback
+        //1-1-2: AsyncCallback callback
         RxNet.getInstance().get(url, params)
-                .request(new AsyncCallBack<MovieInfo, String>() {
+                .request(new AsyncCallback<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
                         ...Success step-1 -->
@@ -106,7 +106,7 @@ public class MyApplication extends Application {
                 });
 ```
 
-#### 链式形式 1-2: .observable(T)指定泛型T特定返回类型，调用Retrofit的观察者，而非CallBack接口
+#### 链式形式 1-2: .observable(T)指定泛型T特定返回类型，调用Retrofit的观察者，而非Callback接口
 ```java
         RxNet.getInstance().get(url, params)
                 .observable(MovieInfo.class)
@@ -172,7 +172,7 @@ public class MyApplication extends Application {
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
                 .writeTimeout(5 * 1000)
-                .request(new AsyncCallBack<MovieInfo, String>() {
+                .request(new AsyncCallback<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
                         ...
@@ -199,7 +199,7 @@ public class MyApplication extends Application {
                 .retryCount(3)
                 .retryDelayMillis(1000)
                 .tag("download")
-                .request(path, filename, new DownloadCallBack() {
+                .request(path, filename, new DownloadCallback() {
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
@@ -228,7 +228,7 @@ public class MyApplication extends Application {
                 .retryDelayMillis(1000)
                 .addFile("File", file)
                 .tag("upload")
-                .request(new UploadCallBack() {
+                .request(new UploadCallback() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
                         ...do something in main thread

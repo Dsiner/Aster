@@ -2,7 +2,7 @@ package com.d.lib.rxnet.interceptor;
 
 import android.support.annotation.NonNull;
 
-import com.d.lib.rxnet.util.RxLog;
+import com.d.lib.rxnet.utils.ULog;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -36,7 +36,7 @@ public class HttpLogInterceptor implements Interceptor {
     }
 
     private void log(String message) {
-        RxLog.i(message);
+        ULog.i(message);
     }
 
     public HttpLogInterceptor setLevel(Level level) {
@@ -67,7 +67,7 @@ public class HttpLogInterceptor implements Interceptor {
         try {
             response = chain.proceed(request);
         } catch (Exception e) {
-            RxLog.e("<-- HTTP FAILED: " + e);
+            ULog.e("<-- HTTP FAILED: " + e);
             throw e;
         }
         long tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs);

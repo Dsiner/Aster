@@ -1,10 +1,10 @@
 package com.d.lib.rxnet.listener;
 
 /**
- * DownloadCallBack
+ * UploadCallback
  * Created by D on 2017/10/24.
  */
-public interface DownloadCallBack {
+public interface UploadCallack {
     void onProgress(long currentLength, long totalLength);
 
     void onError(Throwable e);

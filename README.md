@@ -66,11 +66,11 @@ public class MyApplication extends Application {
 
 ### Retrofit form 1: Singleton (using global configuration)
 
-#### Chained form 1-1: CallBack simple callback
+#### Chained form 1-1: Callback simple callback
 ```java
-        //1-1-1: SimpleCallBack callback
+        //1-1-1: SimpleCallback callback
         RxNet.getInstance().get(url, params)
-                .request(new SimpleCallBack<MovieInfo>() {
+                .request(new SimpleCallback<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo info) {
                         ...do something in main thread
@@ -82,9 +82,9 @@ public class MyApplication extends Application {
                     }
                 });
                 
-        //1-1-2: AsyncCallBack callback
+        //1-1-2: AsyncCallback callback
         RxNet.getInstance().get(url, params)
-                .request(new AsyncCallBack<MovieInfo, String>() {
+                .request(new AsyncCallback<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
                         ...Success step-1 -->
@@ -107,7 +107,7 @@ public class MyApplication extends Application {
                 });
 ```
 
-#### Chained form 1-2: .observable(T) specifies a generic T-specific return type, calls Retrofit's observer instead of the CallBack interface
+#### Chained form 1-2: .observable(T) specifies a generic T-specific return type, calls Retrofit's observer instead of the Callback interface
 ```java
         RxNet.getInstance().get(url, params)
                 .observable(MovieInfo.class)
@@ -173,7 +173,7 @@ public class MyApplication extends Application {
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
                 .writeTimeout(5 * 1000)
-                .request(new AsyncCallBack<MovieInfo, String>() {
+                .request(new AsyncCallback<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
                         ...
@@ -200,7 +200,7 @@ public class MyApplication extends Application {
                 .retryCount(3)
                 .retryDelayMillis(1000)
                 .tag("download")
-                .request(path, filename, new DownloadCallBack() {
+                .request(path, filename, new DownloadCallback() {
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
@@ -229,7 +229,7 @@ public class MyApplication extends Application {
                 .retryDelayMillis(1000)
                 .addFile("File", file)
                 .tag("upload")
-                .request(new UploadCallBack() {
+                .request(new UploadCallback() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
                         ...do something in main thread
