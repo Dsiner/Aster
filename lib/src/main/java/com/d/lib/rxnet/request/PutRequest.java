@@ -1,7 +1,6 @@
 package com.d.lib.rxnet.request;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
-import com.d.lib.rxnet.base.RetrofitClient;
 
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class PutRequest extends HttpRequest<PutRequest> {
 
     @Override
     protected void prepare() {
-        observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).put(url, params);
+        observable = getClient().create(RetrofitAPI.class).put(url, params);
     }
 
     @Override
@@ -93,7 +92,7 @@ public class PutRequest extends HttpRequest<PutRequest> {
 
         @Override
         protected void prepare() {
-            observable = RetrofitClient.getIns().create(RetrofitAPI.class).put(url, params);
+            observable = getClient().create(RetrofitAPI.class).put(url, params);
         }
     }
 }

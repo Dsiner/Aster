@@ -1,14 +1,17 @@
 package com.d.rxnet;
 
 import android.app.Application;
+import android.os.Environment;
 
 import com.d.lib.rxnet.RxNet;
+import com.d.lib.rxnet.interceptor.HeadersInterceptor;
 import com.d.lib.rxnet.utils.SSLUtil;
 import com.d.rxnet.api.API;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
@@ -16,6 +19,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * Created by D on 2017/10/27.
  */
 public class App extends Application {
+    public final static String mPath = Environment.getExternalStorageDirectory().getPath() + "/rxnet/test/";
 
     @Override
     public void onCreate() {
@@ -30,12 +34,14 @@ public class App extends Application {
 
         RxNet.init()
                 .baseUrl(API.API_BASE)
-                /**
-                 * Add a dynamic request header method such as token
-                 * 1: Override HeadersInterceptor.intercept()
-                 * 2: addInterceptor()
-                 */
                 .headers(headers)
+                .headers(new HeadersInterceptor.OnHeadInterceptor() {
+                    @Override
+                    public void intercept(Request.Builder builder) {
+                        // Add a dynamic request header such as token
+                        builder.addHeader("token", "008");
+                    }
+                })
                 .connectTimeout(10 * 1000)
                 .readTimeout(10 * 1000)
                 .writeTimeout(10 * 1000)

@@ -21,20 +21,16 @@ import retrofit2.Retrofit;
  */
 public class RxNet {
 
-    private static class Singleton {
-        private final static Instance INSTANCE = new Instance();
+    public static HttpConfig.Builder init() {
+        return new HttpConfig.Builder();
     }
 
-    public static Instance getIns() {
-        return Singleton.INSTANCE;
-    }
-
-    public static HttpConfig.Build init() {
-        return new HttpConfig.Build();
+    public static Singleton getDefault() {
+        return Default.INSTANCE;
     }
 
     public static Retrofit getRetrofit() {
-        return RetrofitClient.getIns();
+        return RetrofitClient.getDefault();
     }
 
     private RxNet() {
@@ -88,60 +84,98 @@ public class RxNet {
         return new UploadRequest(url);
     }
 
+    private static class Default {
+        private final static Singleton INSTANCE = new Singleton() {
+
+            @Override
+            public GetRequest.Singleton get(String url) {
+                return new GetRequest.Singleton(url);
+            }
+
+            @Override
+            public GetRequest.Singleton get(String url, Map<String, String> params) {
+                return new GetRequest.Singleton(url, params);
+            }
+
+            @Override
+            public PostRequest.Singleton post(String url) {
+                return new PostRequest.Singleton(url);
+            }
+
+            @Override
+            public PostRequest.Singleton post(String url, Map<String, String> params) {
+                return new PostRequest.Singleton(url, params);
+            }
+
+            @Override
+            public HeadRequest.Singleton head(String url, Map<String, String> params) {
+                return new HeadRequest.Singleton(url, params);
+            }
+
+            @Override
+            public OptionRequest.Singleton options(String url, Map<String, String> params) {
+                return new OptionRequest.Singleton(url, params);
+            }
+
+            @Override
+            public PutRequest.Singleton put(String url, Map<String, String> params) {
+                return new PutRequest.Singleton(url, params);
+            }
+
+            @Override
+            public PatchRequest.Singleton patch(String url, Map<String, String> params) {
+                return new PatchRequest.Singleton(url, params);
+            }
+
+            @Override
+            public DeleteRequest.Singleton delete(String url, Map<String, String> params) {
+                return new DeleteRequest.Singleton(url, params);
+            }
+
+            @Override
+            public DownloadRequest.Singleton download(String url) {
+                return new DownloadRequest.Singleton(url);
+            }
+
+            @Override
+            public DownloadRequest.Singleton download(String url, Map<String, String> params) {
+                return new DownloadRequest.Singleton(url, params);
+            }
+
+            @Override
+            public UploadRequest.Singleton upload(String url) {
+                return new UploadRequest.Singleton(url);
+            }
+        };
+    }
+
     /**
      * Singleton
      */
-    public static class Instance {
+    public static abstract class Singleton {
 
-        Instance() {
-        }
+        public abstract GetRequest.Singleton get(String url);
 
-        public GetRequest.Singleton get(String url) {
-            return new GetRequest.Singleton(url);
-        }
+        public abstract GetRequest.Singleton get(String url, Map<String, String> params);
 
-        public GetRequest.Singleton get(String url, Map<String, String> params) {
-            return new GetRequest.Singleton(url, params);
-        }
+        public abstract PostRequest.Singleton post(String url);
 
-        public PostRequest.Singleton post(String url) {
-            return new PostRequest.Singleton(url);
-        }
+        public abstract PostRequest.Singleton post(String url, Map<String, String> params);
 
-        public PostRequest.Singleton post(String url, Map<String, String> params) {
-            return new PostRequest.Singleton(url, params);
-        }
+        public abstract HeadRequest.Singleton head(String url, Map<String, String> params);
 
-        public HeadRequest.Singleton head(String url, Map<String, String> params) {
-            return new HeadRequest.Singleton(url, params);
-        }
+        public abstract OptionRequest.Singleton options(String url, Map<String, String> params);
 
-        public OptionRequest.Singleton options(String url, Map<String, String> params) {
-            return new OptionRequest.Singleton(url, params);
-        }
+        public abstract PutRequest.Singleton put(String url, Map<String, String> params);
 
-        public PutRequest.Singleton put(String url, Map<String, String> params) {
-            return new PutRequest.Singleton(url, params);
-        }
+        public abstract PatchRequest.Singleton patch(String url, Map<String, String> params);
 
-        public PatchRequest.Singleton patch(String url, Map<String, String> params) {
-            return new PatchRequest.Singleton(url, params);
-        }
+        public abstract DeleteRequest.Singleton delete(String url, Map<String, String> params);
 
-        public DeleteRequest.Singleton delete(String url, Map<String, String> params) {
-            return new DeleteRequest.Singleton(url, params);
-        }
+        public abstract DownloadRequest.Singleton download(String url);
 
-        public DownloadRequest.Singleton download(String url) {
-            return new DownloadRequest.Singleton(url);
-        }
+        public abstract DownloadRequest.Singleton download(String url, Map<String, String> params);
 
-        public DownloadRequest.Singleton download(String url, Map<String, String> params) {
-            return new DownloadRequest.Singleton(url, params);
-        }
-
-        public UploadRequest.Singleton upload(String url) {
-            return new UploadRequest.Singleton(url);
-        }
+        public abstract UploadRequest.Singleton upload(String url);
     }
 }

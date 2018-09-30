@@ -28,36 +28,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitClient {
 
-    private static class Singleton {
-        private final static Retrofit INSTANCE = getRetrofitDefault();
+    private static class Default {
+        private final static Retrofit INSTANCE = getRetrofit(HttpConfig.getDefault(), true);
+    }
+
+    private static class Transfer {
+        private final static Retrofit INSTANCE = getRetrofit(HttpConfig.getDefault(), false);
     }
 
     /**
      * Singleton - Default configuration
      */
-    public static synchronized Retrofit getIns() {
-        return Singleton.INSTANCE;
+    public static Retrofit getDefault() {
+        return Default.INSTANCE;
     }
 
     /**
-     * New instance - Default configuration
+     * Singleton - Default Transfer configuration
      */
-    public static Retrofit getRetrofitDefault() {
-        return getRetrofit(HttpConfig.getDefaultConfig(), true);
-    }
-
-    /**
-     * New instance - Download configuration（No HttpLoggingInterceptor）
-     */
-    public static Retrofit getRetrofitDown(HttpConfig config) {
-        return getRetrofit(config, false);
-    }
-
-    /**
-     * New instance - Custom configuration
-     */
-    public static Retrofit getRetrofit(HttpConfig config) {
-        return getRetrofit(config, true);
+    public static Retrofit getTransfer() {
+        return Transfer.INSTANCE;
     }
 
     /**
@@ -67,19 +57,20 @@ public class RetrofitClient {
      * @param log    Whether to add HttpLoggingInterceptor
      * @return Retrofit
      */
-    private static Retrofit getRetrofit(HttpConfig config, boolean log) {
+    public static Retrofit getRetrofit(HttpConfig config, boolean log) {
         Retrofit retrofit = new Retrofit.Builder()
                 // Set OKHttpClient, if not set, a default will be provided
                 .client(getOkHttpClient(config.headers,
-                        config.connectTimeout != -1 ? config.connectTimeout : HttpConfig.getDefaultConfig().connectTimeout,
-                        config.readTimeout != -1 ? config.readTimeout : HttpConfig.getDefaultConfig().readTimeout,
-                        config.writeTimeout != -1 ? config.writeTimeout : HttpConfig.getDefaultConfig().writeTimeout,
+                        config.onHeadInterceptor,
+                        config.connectTimeout != -1 ? config.connectTimeout : HttpConfig.getDefault().connectTimeout,
+                        config.readTimeout != -1 ? config.readTimeout : HttpConfig.getDefault().readTimeout,
+                        config.writeTimeout != -1 ? config.writeTimeout : HttpConfig.getDefault().writeTimeout,
                         config.sslSocketFactory,
                         config.interceptors,
                         config.networkInterceptors,
                         log))
                 // Set base url
-                .baseUrl(!TextUtils.isEmpty(config.baseUrl) ? config.baseUrl : HttpConfig.getDefaultConfig().baseUrl)
+                .baseUrl(!TextUtils.isEmpty(config.baseUrl) ? config.baseUrl : HttpConfig.getDefault().baseUrl)
                 // Set RxJava2CallAdapterFactory
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 // Add converter
@@ -89,6 +80,7 @@ public class RetrofitClient {
     }
 
     private static OkHttpClient getOkHttpClient(Map<String, String> headers,
+                                                HeadersInterceptor.OnHeadInterceptor onHeadInterceptor,
                                                 long connectTimeout,
                                                 long readTimeout,
                                                 long writeTimeout,
@@ -105,8 +97,8 @@ public class RetrofitClient {
             builder.sslSocketFactory(sslSocketFactory);
         }
 
-        if (headers != null && headers.size() > 0) {
-            builder.addInterceptor(new HeadersInterceptor(headers));
+        if (headers != null && headers.size() > 0 || onHeadInterceptor != null) {
+            builder.addInterceptor(new HeadersInterceptor(headers).setOnHeadInterceptor(onHeadInterceptor));
         }
         if (interceptors != null && interceptors.size() > 0) {
             for (Interceptor interceptor : interceptors) {

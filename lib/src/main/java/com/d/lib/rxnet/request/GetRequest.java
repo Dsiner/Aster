@@ -1,7 +1,6 @@
 package com.d.lib.rxnet.request;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
-import com.d.lib.rxnet.base.RetrofitClient;
 
 import java.util.Map;
 
@@ -25,9 +24,9 @@ public class GetRequest extends HttpRequest<GetRequest> {
     @Override
     protected void prepare() {
         if (params == null) {
-            observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).get(url);
+            observable = getClient().create(RetrofitAPI.class).get(url);
         } else {
-            observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).get(url, params);
+            observable = getClient().create(RetrofitAPI.class).get(url, params);
         }
     }
 
@@ -97,9 +96,9 @@ public class GetRequest extends HttpRequest<GetRequest> {
         @Override
         protected void prepare() {
             if (params == null) {
-                observable = RetrofitClient.getIns().create(RetrofitAPI.class).get(url);
+                observable = getClient().create(RetrofitAPI.class).get(url);
             } else {
-                observable = RetrofitClient.getIns().create(RetrofitAPI.class).get(url, params);
+                observable = getClient().create(RetrofitAPI.class).get(url, params);
             }
         }
     }

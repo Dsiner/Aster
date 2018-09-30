@@ -9,6 +9,7 @@ import com.d.lib.rxnet.base.IRequest;
 import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.callback.DownloadCallback;
 import com.d.lib.rxnet.func.ApiRetryFunc;
+import com.d.lib.rxnet.interceptor.HeadersInterceptor;
 import com.d.lib.rxnet.observer.DownloadObserver;
 
 import org.reactivestreams.Publisher;
@@ -34,6 +35,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
 
 /**
  * Created by D on 2017/10/24.
@@ -42,21 +44,29 @@ public class DownloadRequest extends IRequest<DownloadRequest> {
     protected Map<String, String> params;
 
     public DownloadRequest(String url) {
-        this.url = url;
-        this.config = HttpConfig.getNewDefaultConfig();
+        this(null, url, null);
     }
 
     public DownloadRequest(String url, Map<String, String> params) {
+        this(null, url, params);
+    }
+
+    public DownloadRequest(HttpConfig config, String url, Map<String, String> params) {
         this.url = url;
         this.params = params;
-        this.config = HttpConfig.getNewDefaultConfig();
+        this.config = config != null ? config : HttpConfig.getNewDefault();
+    }
+
+    @Override
+    protected Retrofit getClient() {
+        return RetrofitClient.getRetrofit(config, false);
     }
 
     private void prepare() {
         if (params == null) {
-            observable = RetrofitClient.getRetrofitDown(config).create(RetrofitAPI.class).download(url);
+            observable = getClient().create(RetrofitAPI.class).download(url);
         } else {
-            observable = RetrofitClient.getRetrofitDown(config).create(RetrofitAPI.class).download(url, params);
+            observable = getClient().create(RetrofitAPI.class).download(url, params);
         }
     }
 
@@ -162,6 +172,11 @@ public class DownloadRequest extends IRequest<DownloadRequest> {
     }
 
     @Override
+    public DownloadRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+        return super.headers(onHeadInterceptor);
+    }
+
+    @Override
     public DownloadRequest connectTimeout(long timeout) {
         return super.connectTimeout(timeout);
     }
@@ -209,25 +224,29 @@ public class DownloadRequest extends IRequest<DownloadRequest> {
     /**
      * Singleton
      */
-    public static class Singleton extends IRequest<DownloadRequest> {
+    public static class Singleton extends IRequest<Singleton> {
         protected Map<String, String> params;
 
         public Singleton(String url) {
-            this.url = url;
+            this(url, null);
         }
 
         public Singleton(String url, Map<String, String> params) {
             this.url = url;
             this.params = params;
+            this.config = config != null ? config : HttpConfig.getNewDefault();
+        }
+
+        @Override
+        protected Retrofit getClient() {
+            return RetrofitClient.getTransfer();
         }
 
         private void prepare() {
             if (params == null) {
-                observable = RetrofitClient.getRetrofitDown(HttpConfig.getDefaultConfig())
-                        .create(RetrofitAPI.class).download(url);
+                observable = getClient().create(RetrofitAPI.class).download(url);
             } else {
-                observable = RetrofitClient.getRetrofitDown(HttpConfig.getDefaultConfig())
-                        .create(RetrofitAPI.class).download(url, params);
+                observable = getClient().create(RetrofitAPI.class).download(url, params);
             }
         }
 

@@ -14,7 +14,7 @@ public class Util {
      * Print the thread information of the current code
      */
     public static void printThread(String tag) {
-        ULog.d(tag + " " + Thread.currentThread().getId() + "--NAME--" + Thread.currentThread().getName());
+        ULog.d(tag + " current thread--> id: " + Thread.currentThread().getId() + " name: " + Thread.currentThread().getName());
     }
 
     /**

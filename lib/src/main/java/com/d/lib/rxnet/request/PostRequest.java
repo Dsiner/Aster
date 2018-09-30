@@ -1,7 +1,6 @@
 package com.d.lib.rxnet.request;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
-import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.mode.MediaTypes;
 
 import org.json.JSONArray;
@@ -16,7 +15,6 @@ import javax.net.ssl.SSLSocketFactory;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Retrofit;
 
 /**
  * Created by D on 2017/10/24.
@@ -48,27 +46,23 @@ public class PostRequest extends HttpRequest<PostRequest> {
                     }
                 }
             }
-            observable = getRetrofit().create(RetrofitAPI.class).postForm(url, forms);
+            observable = getClient().create(RetrofitAPI.class).postForm(url, forms);
             return;
         }
         if (requestBody != null) {
-            observable = getRetrofit().create(RetrofitAPI.class).postBody(url, requestBody);
+            observable = getClient().create(RetrofitAPI.class).postBody(url, requestBody);
             return;
         }
         if (content != null && mediaType != null) {
             requestBody = RequestBody.create(mediaType, content);
-            observable = getRetrofit().create(RetrofitAPI.class).postBody(url, requestBody);
+            observable = getClient().create(RetrofitAPI.class).postBody(url, requestBody);
             return;
         }
         if (params != null && params.size() > 0) {
-            observable = getRetrofit().create(RetrofitAPI.class).post(url, params);
+            observable = getClient().create(RetrofitAPI.class).post(url, params);
             return;
         }
-        observable = getRetrofit().create(RetrofitAPI.class).post(url);
-    }
-
-    private Retrofit getRetrofit() {
-        return RetrofitClient.getRetrofit(config);
+        observable = getClient().create(RetrofitAPI.class).post(url);
     }
 
     public PostRequest addForm(String formKey, Object formValue) {
@@ -193,27 +187,23 @@ public class PostRequest extends HttpRequest<PostRequest> {
                         }
                     }
                 }
-                observable = getRetrofit().create(RetrofitAPI.class).postForm(url, forms);
+                observable = getClient().create(RetrofitAPI.class).postForm(url, forms);
                 return;
             }
             if (requestBody != null) {
-                observable = getRetrofit().create(RetrofitAPI.class).postBody(url, requestBody);
+                observable = getClient().create(RetrofitAPI.class).postBody(url, requestBody);
                 return;
             }
             if (content != null && mediaType != null) {
                 requestBody = RequestBody.create(mediaType, content);
-                observable = getRetrofit().create(RetrofitAPI.class).postBody(url, requestBody);
+                observable = getClient().create(RetrofitAPI.class).postBody(url, requestBody);
                 return;
             }
             if (params != null && params.size() > 0) {
-                observable = getRetrofit().create(RetrofitAPI.class).post(url, params);
+                observable = getClient().create(RetrofitAPI.class).post(url, params);
                 return;
             }
-            observable = getRetrofit().create(RetrofitAPI.class).post(url);
-        }
-
-        private Retrofit getRetrofit() {
-            return RetrofitClient.getIns();
+            observable = getClient().create(RetrofitAPI.class).post(url);
         }
 
         public Singleton addForm(String formKey, Object formValue) {

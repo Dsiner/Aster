@@ -3,11 +3,13 @@ package com.d.lib.rxnet.request;
 import com.d.lib.rxnet.base.ApiManager;
 import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.base.IRequest;
+import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.callback.AsyncCallback;
 import com.d.lib.rxnet.callback.SimpleCallback;
 import com.d.lib.rxnet.func.ApiFunc;
 import com.d.lib.rxnet.func.ApiRetryFunc;
 import com.d.lib.rxnet.func.MapFunc;
+import com.d.lib.rxnet.interceptor.HeadersInterceptor;
 import com.d.lib.rxnet.observer.ApiObserver;
 import com.d.lib.rxnet.observer.AsyncApiObserver;
 import com.d.lib.rxnet.utils.Util;
@@ -21,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
+import retrofit2.Retrofit;
 
 /**
  * Created by D on 2017/10/24.
@@ -32,23 +35,34 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
     }
 
     public HttpRequest(String url) {
-        this.url = url;
-        this.config = HttpConfig.getNewDefaultConfig();
+        this(url, null);
     }
 
     public HttpRequest(String url, Map<String, String> params) {
-        this.url = url;
-        this.params = params;
-        this.config = HttpConfig.getNewDefaultConfig();
+        this(null, url, params);
     }
 
+    public HttpRequest(HttpConfig config, String url, Map<String, String> params) {
+        this.url = url;
+        this.params = params;
+        this.config = config != null ? config : HttpConfig.getNewDefault();
+    }
+
+    @Override
+    protected Retrofit getClient() {
+        return RetrofitClient.getRetrofit(config, true);
+    }
+
+    /**
+     * Initialize Observable, etc.
+     */
     protected abstract void prepare();
 
     public <T> void request(SimpleCallback<T> callback) {
         prepare();
         DisposableObserver disposableObserver = new ApiObserver(callback);
-        if (super.tag != null) {
-            ApiManager.get().add(super.tag, disposableObserver);
+        if (tag != null) {
+            ApiManager.get().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -61,8 +75,8 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
     public <T, R> void request(AsyncCallback<T, R> callback) {
         prepare();
         DisposableObserver disposableObserver = new AsyncApiObserver(callback);
-        if (super.tag != null) {
-            ApiManager.get().add(super.tag, disposableObserver);
+        if (tag != null) {
+            ApiManager.get().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -90,6 +104,12 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
     @Override
     public HR headers(Map<String, String> headers) {
         config.headers(headers);
+        return (HR) this;
+    }
+
+    @Override
+    public HR headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+        config.headers(onHeadInterceptor);
         return (HR) this;
     }
 
@@ -151,23 +171,34 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
         }
 
         public Singleton(String url) {
-            this.url = url;
-            this.config = HttpConfig.getDefaultConfig();
+            this(null, url, null);
         }
 
         public Singleton(String url, Map<String, String> params) {
-            this.url = url;
-            this.params = params;
-            this.config = HttpConfig.getDefaultConfig();
+            this(null, url, params);
         }
 
+        public Singleton(HttpConfig config, String url, Map<String, String> params) {
+            this.url = url;
+            this.params = params;
+            this.config = config != null ? config : HttpConfig.getDefault();
+        }
+
+        @Override
+        protected Retrofit getClient() {
+            return RetrofitClient.getDefault();
+        }
+
+        /**
+         * Initialize Observable, etc.
+         */
         protected abstract void prepare();
 
         public <T> void request(SimpleCallback<T> callback) {
             prepare();
             DisposableObserver disposableObserver = new ApiObserver(callback);
-            if (super.tag != null) {
-                ApiManager.get().add(super.tag, disposableObserver);
+            if (tag != null) {
+                ApiManager.get().add(tag, disposableObserver);
             }
             observable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
@@ -180,8 +211,8 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
         public <T, R> void request(AsyncCallback<T, R> callback) {
             prepare();
             DisposableObserver disposableObserver = new AsyncApiObserver(callback);
-            if (super.tag != null) {
-                ApiManager.get().add(super.tag, disposableObserver);
+            if (tag != null) {
+                ApiManager.get().add(tag, disposableObserver);
             }
             observable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())

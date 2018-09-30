@@ -1,5 +1,7 @@
 package com.d.lib.rxnet.base;
 
+import com.d.lib.rxnet.interceptor.HeadersInterceptor;
+
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
@@ -14,6 +16,8 @@ public abstract class IConfig<R> {
     protected abstract R baseUrl(String baseUrl);
 
     protected abstract R headers(Map<String, String> headers);
+
+    protected abstract R headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor);
 
     /************************** OkHttp client **************************/
     protected abstract R connectTimeout(long timeout);

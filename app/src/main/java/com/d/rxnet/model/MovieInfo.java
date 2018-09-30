@@ -1,9 +1,11 @@
 package com.d.rxnet.model;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 /**
- * 豆瓣电影Model
+ * 豆瓣电影
  * Created by D on 2017/10/26.
  */
 public class MovieInfo {
@@ -12,6 +14,11 @@ public class MovieInfo {
     public int total;
     public String title;
     public List<SubjectsBean> subjects;
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
 
     public static class SubjectsBean {
         public RatingBean rating;

@@ -20,7 +20,7 @@ public class ApiTransformer {
                         .subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .retryWhen(new ApiRetryFunc(HttpConfig.getDefaultConfig().retryCount, HttpConfig.getDefaultConfig().retryDelayMillis));
+                        .retryWhen(new ApiRetryFunc(HttpConfig.getDefault().retryCount, HttpConfig.getDefault().retryDelayMillis));
             }
         };
     }

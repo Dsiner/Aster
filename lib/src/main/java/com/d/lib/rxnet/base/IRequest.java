@@ -2,6 +2,7 @@ package com.d.lib.rxnet.base;
 
 import com.d.lib.rxnet.func.ApiFunc;
 import com.d.lib.rxnet.func.ApiRetryFunc;
+import com.d.lib.rxnet.interceptor.HeadersInterceptor;
 
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
 
 /**
  * IRequest
@@ -26,11 +28,25 @@ public abstract class IRequest<R extends IRequest> extends IConfig<R> {
     protected Object tag; // Request tag
 
     /**
+     * Get the Client
+     *
+     * @return Retrofit
+     */
+    protected abstract Retrofit getClient();
+
+    /**
      * Set request tag
      */
     public R tag(Object tag) {
         this.tag = tag;
         return (R) this;
+    }
+
+    /**
+     * Get request tag
+     */
+    public Object getTag() {
+        return tag;
     }
 
     @Override
@@ -42,6 +58,12 @@ public abstract class IRequest<R extends IRequest> extends IConfig<R> {
     @Override
     protected R headers(Map<String, String> headers) {
         config.headers(headers);
+        return (R) this;
+    }
+
+    @Override
+    protected R headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+        config.headers(onHeadInterceptor);
         return (R) this;
     }
 

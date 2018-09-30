@@ -1,12 +1,10 @@
-package com.d.rxnet.request;
-
-import android.app.Activity;
-import android.content.Context;
+package com.d.rxnet.activity;
 
 import com.d.lib.rxnet.RxNet;
 import com.d.lib.rxnet.api.RetrofitAPI;
 import com.d.lib.rxnet.base.Params;
 import com.d.lib.rxnet.callback.AsyncCallback;
+import com.d.lib.rxnet.callback.SimpleCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.api.API;
@@ -22,40 +20,37 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
 /**
- * Request Test --> Post
+ * Request --> Get
  * Created by D on 2017/10/26.
  */
-public class Post {
-    private Context appContext;
+public class Get extends Request {
 
-    public Post(Activity activity) {
-        appContext = activity.getApplicationContext();
+    @Override
+    protected void init() {
+        mUrl = API.MovieTop.rtpType;
+        etUrl.setText(mUrl);
+        etUrl.setSelection(etUrl.getText().toString().length());
     }
 
-    public void testAll() {
+    @Override
+    protected void request() {
         testIns();
-        testNew();
-        testObservable();
-        testRetrofit();
+        // testNew();
+        // testObservable();
+        // testRetrofit();
     }
 
     private void testIns() {
-        Params params = new Params(API.MovieTop.rtpType);
+        Params params = new Params(mUrl);
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
-        RxNet.getIns().post(API.MovieTop.rtpType, params)
-                .request(new AsyncCallback<String, String>() {
+        RxNet.getDefault().get(API.MovieTop.rtpType, params)
+                .request(new SimpleCallback<MovieInfo>() {
                     @Override
-                    public String apply(@NonNull String info) throws Exception {
-                        Util.printThread("dsiner_theard apply: ");
-                        ULog.d("dsiner_request apply");
-                        return "" + info;
-                    }
-
-                    @Override
-                    public void onSuccess(String response) {
+                    public void onSuccess(MovieInfo response) {
                         Util.printThread("dsiner_theard onSuccess: ");
                         ULog.d("dsiner_request onSuccess: " + response);
+                        formatPrinting(response.toString());
                     }
 
                     @Override
@@ -67,10 +62,10 @@ public class Post {
     }
 
     private void testNew() {
-        Params params = new Params(API.MovieTop.rtpType);
+        Params params = new Params(mUrl);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
-        RxNet.post("top250", params)
+        RxNet.get("top250", params)
                 .baseUrl("https://api.douban.com/v2/movie/")
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
@@ -99,30 +94,56 @@ public class Post {
     }
 
     private void testObservable() {
-        RxNet.getIns().post("")
-                .observable(ResponseBody.class)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ResponseBody>() {
+        Params params = new Params(mUrl);
+        params.addParam(API.MovieTop.start, "1");
+        params.addParam(API.MovieTop.count, "10");
+        RxNet.getDefault().get(API.MovieTop.rtpType, params)
+                .observable(MovieInfo.class)
+                .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
-                    public void onNext(@NonNull ResponseBody response) {
-
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        Util.printThread("dsiner_theard apply: ");
+                        return info;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        Util.printThread("dsiner_theard apply: ");
+                        return info;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        Util.printThread("dsiner_theard apply: ");
+                        return info;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<MovieInfo>() {
+                    @Override
+                    public void onNext(@NonNull MovieInfo info) {
+                        Util.printThread("dsiner_theard onNext: ");
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        Util.printThread("dsiner_theard onError: ");
                     }
 
                     @Override
                     public void onComplete() {
-
+                        Util.printThread("dsiner_theard onComplete: ");
                     }
                 });
     }
 
     private void testRetrofit() {
         RxNet.getRetrofit().create(RetrofitAPI.class)
-                .post("")
+                .get(mUrl)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, ArrayList<Boolean>>() {
                     @Override

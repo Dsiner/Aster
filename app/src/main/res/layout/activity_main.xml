@@ -30,7 +30,8 @@
         android:gravity="center"
         android:padding="12dp"
         android:text="Head"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_options"
@@ -39,7 +40,8 @@
         android:gravity="center"
         android:padding="12dp"
         android:text="Options"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_put"
@@ -48,7 +50,8 @@
         android:gravity="center"
         android:padding="12dp"
         android:text="Put"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_patch"
@@ -57,7 +60,8 @@
         android:gravity="center"
         android:padding="12dp"
         android:text="Patch"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_delete"
@@ -66,7 +70,8 @@
         android:gravity="center"
         android:padding="12dp"
         android:text="Delete"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_download"

@@ -10,6 +10,7 @@ import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.body.UploadProgressRequestBody;
 import com.d.lib.rxnet.callback.UploadCallback;
 import com.d.lib.rxnet.func.ApiRetryFunc;
+import com.d.lib.rxnet.interceptor.HeadersInterceptor;
 import com.d.lib.rxnet.interceptor.UploadProgressInterceptor;
 import com.d.lib.rxnet.mode.MediaTypes;
 import com.d.lib.rxnet.observer.UploadObserver;
@@ -37,6 +38,7 @@ import okhttp3.internal.Util;
 import okio.BufferedSink;
 import okio.Okio;
 import okio.Source;
+import retrofit2.Retrofit;
 
 /**
  * Created by D on 2017/10/24.
@@ -47,7 +49,12 @@ public class UploadRequest extends IRequest<UploadRequest> {
 
     public UploadRequest(String url) {
         this.url = url;
-        this.config = HttpConfig.getNewDefaultConfig();
+        this.config = HttpConfig.getNewDefault();
+    }
+
+    @Override
+    protected Retrofit getClient() {
+        return RetrofitClient.getRetrofit(config, false);
     }
 
     protected void prepare(UploadCallback callback) {
@@ -62,7 +69,7 @@ public class UploadRequest extends IRequest<UploadRequest> {
             }
         }
         config.addNetworkInterceptors(new UploadProgressInterceptor(callback));
-        observable = RetrofitClient.getRetrofit(config).create(RetrofitAPI.class).upload(url, multipartBodyParts);
+        observable = getClient().create(RetrofitAPI.class).upload(url, multipartBodyParts);
     }
 
     public void request(final UploadCallback callback) {
@@ -81,6 +88,11 @@ public class UploadRequest extends IRequest<UploadRequest> {
     @Override
     public UploadRequest headers(Map<String, String> headers) {
         return super.headers(headers);
+    }
+
+    @Override
+    public UploadRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+        return super.headers(onHeadInterceptor);
     }
 
     @Override
@@ -257,12 +269,18 @@ public class UploadRequest extends IRequest<UploadRequest> {
     /**
      * Singleton
      */
-    public static class Singleton extends IRequest<UploadRequest> {
+    public static class Singleton extends IRequest<Singleton> {
         protected Map<String, String> params = new LinkedHashMap<>();
         protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
 
         public Singleton(String url) {
             this.url = url;
+            this.config = HttpConfig.getNewDefault();
+        }
+
+        @Override
+        protected Retrofit getClient() {
+            return RetrofitClient.getTransfer();
         }
 
         protected void prepare(UploadCallback callback) {
@@ -277,8 +295,7 @@ public class UploadRequest extends IRequest<UploadRequest> {
                 }
             }
             config.addNetworkInterceptors(new UploadProgressInterceptor(callback));
-            observable = RetrofitClient.getRetrofit(HttpConfig.getDefaultConfig())
-                    .create(RetrofitAPI.class).upload(url, multipartBodyParts);
+            observable = getClient().create(RetrofitAPI.class).upload(url, multipartBodyParts);
         }
 
         public void request(final UploadCallback callback) {

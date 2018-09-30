@@ -21,8 +21,8 @@ public class ApiRetryFunc implements Function<Observable<? extends Throwable>, O
     private int retryCount;
 
     public ApiRetryFunc(int maxRetries, long retryDelayMillis) {
-        this.maxRetries = maxRetries != -1 ? maxRetries : HttpConfig.getDefaultConfig().retryCount;
-        this.retryDelayMillis = retryDelayMillis != -1 ? retryDelayMillis : HttpConfig.getDefaultConfig().retryDelayMillis;
+        this.maxRetries = maxRetries != -1 ? maxRetries : HttpConfig.getDefault().retryCount;
+        this.retryDelayMillis = retryDelayMillis != -1 ? retryDelayMillis : HttpConfig.getDefault().retryDelayMillis;
     }
 
     @Override
