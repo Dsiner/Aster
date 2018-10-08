@@ -50,22 +50,22 @@ public class Post extends Request {
                 .request(new AsyncCallback<String, String>() {
                     @Override
                     public String apply(@NonNull String info) throws Exception {
-                        Util.printThread("dsiner_theard apply: ");
-                        ULog.d("dsiner_request apply");
+                        Util.printThread("dsiner_theard apply");
+                        ULog.d("dsiner_request--> apply");
                         return "" + info;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        Util.printThread("dsiner_theard onSuccess: ");
-                        ULog.d("dsiner_request onSuccess: " + response);
+                        Util.printThread("dsiner_theard onSuccess");
+                        ULog.d("dsiner_request--> onSuccess: " + response);
                         formatPrinting(response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request onError");
+                        Util.printThread("dsiner_theard onError");
+                        ULog.d("dsiner_request--> onError");
                     }
                 });
     }
@@ -82,23 +82,23 @@ public class Post extends Request {
                 .request(new AsyncCallback<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply: ");
-                        ULog.d("dsiner_request apply");
+                        Util.printThread("dsiner_theard apply");
+                        ULog.d("dsiner_request--> apply");
                         int size = info.subjects.size();
                         return "" + size;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        Util.printThread("dsiner_theard onSuccess: ");
-                        ULog.d("dsiner_request onSuccess: " + response);
+                        Util.printThread("dsiner_theard onSuccess");
+                        ULog.d("dsiner_request--> onSuccess: " + response);
                         formatPrinting(response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request onError");
+                        Util.printThread("dsiner_theard onError");
+                        ULog.d("dsiner_request--> onError");
                     }
                 });
     }

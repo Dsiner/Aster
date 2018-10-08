@@ -27,12 +27,12 @@ public class ApiRetryFunc implements Function<Observable<? extends Throwable>, O
 
     @Override
     public Observable<?> apply(Observable<? extends Throwable> observable) throws Exception {
-        Util.printThread("RxNet_theard retryInit: ");
+        Util.printThread("RxNet_theard retryInit");
 
         return observable.flatMap(new Function<Throwable, ObservableSource<?>>() {
             @Override
             public ObservableSource<?> apply(Throwable throwable) throws Exception {
-                Util.printThread("RxNet_theard retryApply: ");
+                Util.printThread("RxNet_theard retryApply");
                 if (++retryCount <= maxRetries && (throwable instanceof SocketTimeoutException
                         || throwable instanceof ConnectException)) {
                     ULog.d("Get response data error, it will try after " + retryDelayMillis

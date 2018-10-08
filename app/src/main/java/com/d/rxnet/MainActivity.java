@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.d.lib.rxnet.base.ApiManager;
 import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.activity.Download;
 import com.d.rxnet.activity.Get;
@@ -55,14 +54,8 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Util.deleteFile(new File(App.mPath + "1.jpg"));
+                Util.deleteFile(new File(App.mPath + App.mName));
             }
         }).run();
-    }
-
-    @Override
-    protected void onDestroy() {
-        ApiManager.get().cancelAll();
-        super.onDestroy();
     }
 }

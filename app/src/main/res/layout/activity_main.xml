@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="12dp"
-        android:text="downFile"
+        android:text="Download"
         android:textSize="14dp" />
 
     <Button
@@ -88,6 +88,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="12dp"
-        android:text="UploadFiles"
+        android:text="Upload"
         android:textSize="14dp" />
 </LinearLayout>

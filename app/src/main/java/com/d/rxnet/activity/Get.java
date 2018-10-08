@@ -48,15 +48,15 @@ public class Get extends Request {
                 .request(new SimpleCallback<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo response) {
-                        Util.printThread("dsiner_theard onSuccess: ");
-                        ULog.d("dsiner_request onSuccess: " + response);
+                        Util.printThread("dsiner_theard onSuccess");
+                        ULog.d("dsiner_request--> onSuccess: " + response);
                         formatPrinting(response.toString());
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request onError");
+                        Util.printThread("dsiner_theard onError");
+                        ULog.d("dsiner_request--> onError");
                     }
                 });
     }
@@ -73,22 +73,22 @@ public class Get extends Request {
                 .request(new AsyncCallback<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply: ");
-                        ULog.d("dsiner_request apply");
+                        Util.printThread("dsiner_theard apply");
+                        ULog.d("dsiner_request--> apply");
                         int size = info.subjects.size();
                         return "" + size;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        Util.printThread("dsiner_theard onSuccess: ");
-                        ULog.d("dsiner_request onSuccess: " + response);
+                        Util.printThread("dsiner_theard onSuccess");
+                        ULog.d("dsiner_request--> onSuccess: " + response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request onError");
+                        Util.printThread("dsiner_theard onError");
+                        ULog.d("dsiner_request--> onError");
                     }
                 });
     }
@@ -102,7 +102,7 @@ public class Get extends Request {
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
                     public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply: ");
+                        Util.printThread("dsiner_theard apply");
                         return info;
                     }
                 })
@@ -110,7 +110,7 @@ public class Get extends Request {
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
                     public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply: ");
+                        Util.printThread("dsiner_theard apply");
                         return info;
                     }
                 })
@@ -118,7 +118,7 @@ public class Get extends Request {
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
                     public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply: ");
+                        Util.printThread("dsiner_theard apply");
                         return info;
                     }
                 })
@@ -126,17 +126,17 @@ public class Get extends Request {
                 .subscribe(new DisposableObserver<MovieInfo>() {
                     @Override
                     public void onNext(@NonNull MovieInfo info) {
-                        Util.printThread("dsiner_theard onNext: ");
+                        Util.printThread("dsiner_theard onNext");
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
+                        Util.printThread("dsiner_theard onError");
                     }
 
                     @Override
                     public void onComplete() {
-                        Util.printThread("dsiner_theard onComplete: ");
+                        Util.printThread("dsiner_theard onComplete");
                     }
                 });
     }

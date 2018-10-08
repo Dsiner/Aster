@@ -17,7 +17,7 @@ public class MapFunc<T, R> implements Function<T, R> {
 
     @Override
     public R apply(T responseBody) throws Exception {
-        Util.printThread("RxNet_theard callback apply: ");
+        Util.printThread("RxNet_theard callback apply");
         return callback.apply(responseBody);
     }
 }

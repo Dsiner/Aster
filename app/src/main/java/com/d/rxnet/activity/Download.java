@@ -7,6 +7,7 @@ import com.d.lib.rxnet.callback.DownloadCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.App;
+import com.d.rxnet.R;
 
 import java.io.File;
 
@@ -18,6 +19,7 @@ public class Download extends Request {
     private final String mUrl1 = "http://imtt.dd.qq.com/16891/4EA3DBDFC3F34E43C1D76CEE67593D67.apk?fsname=com.d.music_1.0.1_2.apk&csr=1bbd";
     private final String mUrl2 = "http://imtt.dd.qq.com/16891/D44E78C914AA4D70CD4422401A7E7E5C.apk?fsname=com.tencent.mobileqq_7.2.5_744.apk&csr=1bbd";
 
+    private final String mPostfix = ".mp3";
     private ProgressDialog mDialog;
 
     @Override
@@ -41,27 +43,25 @@ public class Download extends Request {
 
     private void testIns() {
         RxNet.getDefault().download(mUrl1)
-                .tag("downloadIns")
-                .request(App.mPath, "" + System.currentTimeMillis() + ".mp3", new DownloadCallback() {
+                .request(App.mPath, "" + System.currentTimeMillis() + mPostfix, new DownloadCallback() {
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        Util.printThread("dsiner_theard onProgresss: ");
-                        ULog.d("dsiner_request onProgresss: -->download: " + currentLength + " total: " + totalLength);
+                        Util.printThread("dsiner_theard onProgresss");
+                        ULog.d("dsiner_request--> onProgresss download: " + currentLength + " total: " + totalLength);
                         setDialogProgress(currentLength, totalLength, false);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request onError " + e.getMessage());
-                        mDialog.dismiss();
+                        Util.printThread("dsiner_theard onError");
+                        ULog.d("dsiner_request--> onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        Util.printThread("dsiner_theard onComplete: ");
-                        ULog.d("dsiner_request onComplete:");
+                        Util.printThread("dsiner_theard onComplete");
+                        ULog.d("dsiner_request--> onComplete");
                         setDialogProgress(1, 1, true);
                     }
                 });
@@ -74,26 +74,25 @@ public class Download extends Request {
                 .writeTimeout(60 * 1000)
                 .retryCount(3)
                 .retryDelayMillis(1000)
-                .tag("downloadNew")
-                .request(App.mPath, "" + System.currentTimeMillis() + ".mp3", new DownloadCallback() {
+                .request(App.mPath, "" + System.currentTimeMillis() + mPostfix, new DownloadCallback() {
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
                         Util.printThread("dsiner_theard onProgresss: ");
-                        ULog.d("dsiner_request onProgresss: -->download: " + currentLength + " total: " + totalLength);
+                        ULog.d("dsiner_request--> onProgresss download: " + currentLength + " total: " + totalLength);
                         setDialogProgress(currentLength, totalLength, false);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request onError " + e.getMessage());
+                        ULog.d("dsiner_request--> onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        Util.printThread("dsiner_theard onComplete: ");
-                        ULog.d("dsiner_request onComplete:");
+                        Util.printThread("dsiner_theard onComplete");
+                        ULog.d("dsiner_request--> onComplete");
                         setDialogProgress(1, 1, true);
                     }
                 });
@@ -101,14 +100,15 @@ public class Download extends Request {
 
     private void showDialog() {
         if (!mDialog.isShowing() && !isFinishing()) {
-            mDialog.setMessage("正在下载...");
+            mDialog.setMessage(getResources().getString(R.string.downloading));
             mDialog.show();
         }
     }
 
     private void setDialogProgress(long currentLength, long totalLength, boolean finish) {
         showDialog();
-        mDialog.setMessage(!finish ? "正在下载..." : "下载完成!");
+        mDialog.setMessage(!finish ? getResources().getString(R.string.downloading)
+                : getResources().getString(R.string.downloaded));
         mDialog.setProgress((int) (currentLength * 100f / totalLength));
     }
 }

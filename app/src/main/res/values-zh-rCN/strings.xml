@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RxNet</string>
+
+    <string name="downloading">正在下载...</string>
+    <string name="downloaded">下载完成!</string>
+    <string name="uploading">正在上传...</string>
+    <string name="uploaded">上传完成!</string>
+</resources>

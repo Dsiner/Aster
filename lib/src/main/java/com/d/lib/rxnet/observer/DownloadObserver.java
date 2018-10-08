@@ -17,7 +17,7 @@ public class DownloadObserver extends AbsObserver<DownloadRequest.DownloadModel>
 
     @Override
     public void onNext(DownloadRequest.DownloadModel m) {
-        Util.printThread("RxNet_theard downloadOnNext: ");
+        Util.printThread("RxNet_theard downloadOnNext");
         callback.onProgress(m.downloadSize, m.totalSize);
     }
 

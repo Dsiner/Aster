@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import java.util.List;
 
 /**
- * 豆瓣电影
+ * MovieInfo
  * Created by D on 2017/10/26.
  */
 public class MovieInfo {

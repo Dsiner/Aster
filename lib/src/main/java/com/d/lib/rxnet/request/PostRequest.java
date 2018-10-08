@@ -1,6 +1,9 @@
 package com.d.lib.rxnet.request;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
+import com.d.lib.rxnet.callback.AsyncCallback;
+import com.d.lib.rxnet.callback.SimpleCallback;
+import com.d.lib.rxnet.interceptor.HeadersInterceptor;
 import com.d.lib.rxnet.mode.MediaTypes;
 
 import org.json.JSONArray;
@@ -12,6 +15,7 @@ import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import io.reactivex.Observable;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -65,6 +69,21 @@ public class PostRequest extends HttpRequest<PostRequest> {
         observable = getClient().create(RetrofitAPI.class).post(url);
     }
 
+    @Override
+    public <T> void request(SimpleCallback<T> callback) {
+        super.request(callback);
+    }
+
+    @Override
+    public <T, R> void request(AsyncCallback<T, R> callback) {
+        super.request(callback);
+    }
+
+    @Override
+    public <T> Observable<T> observable(Class<T> clazz) {
+        return super.observable(clazz);
+    }
+
     public PostRequest addForm(String formKey, Object formValue) {
         if (formKey != null && formValue != null) {
             forms.put(formKey, formValue);
@@ -115,6 +134,11 @@ public class PostRequest extends HttpRequest<PostRequest> {
     @Override
     public PostRequest headers(Map<String, String> headers) {
         return super.headers(headers);
+    }
+
+    @Override
+    public PostRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+        return super.headers(onHeadInterceptor);
     }
 
     @Override
@@ -204,6 +228,21 @@ public class PostRequest extends HttpRequest<PostRequest> {
                 return;
             }
             observable = getClient().create(RetrofitAPI.class).post(url);
+        }
+
+        @Override
+        public <T> void request(SimpleCallback<T> callback) {
+            super.request(callback);
+        }
+
+        @Override
+        public <T, R> void request(AsyncCallback<T, R> callback) {
+            super.request(callback);
+        }
+
+        @Override
+        public <T> Observable<T> observable(Class<T> clazz) {
+            return super.observable(clazz);
         }
 
         public Singleton addForm(String formKey, Object formValue) {

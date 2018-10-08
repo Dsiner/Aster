@@ -1,11 +1,15 @@
 package com.d.lib.rxnet.request;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
+import com.d.lib.rxnet.callback.AsyncCallback;
+import com.d.lib.rxnet.callback.SimpleCallback;
+import com.d.lib.rxnet.interceptor.HeadersInterceptor;
 
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import io.reactivex.Observable;
 import okhttp3.Interceptor;
 
 /**
@@ -27,6 +31,21 @@ public class DeleteRequest extends HttpRequest<DeleteRequest> {
     }
 
     @Override
+    public <T> void request(SimpleCallback<T> callback) {
+        super.request(callback);
+    }
+
+    @Override
+    public <T, R> void request(AsyncCallback<T, R> callback) {
+        super.request(callback);
+    }
+
+    @Override
+    public <T> Observable<T> observable(Class<T> clazz) {
+        return super.observable(clazz);
+    }
+
+    @Override
     public DeleteRequest baseUrl(String baseUrl) {
         return super.baseUrl(baseUrl);
     }
@@ -34,6 +53,11 @@ public class DeleteRequest extends HttpRequest<DeleteRequest> {
     @Override
     public DeleteRequest headers(Map<String, String> headers) {
         return super.headers(headers);
+    }
+
+    @Override
+    public DeleteRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+        return super.headers(onHeadInterceptor);
     }
 
     @Override
@@ -92,6 +116,21 @@ public class DeleteRequest extends HttpRequest<DeleteRequest> {
         @Override
         protected void prepare() {
             observable = getClient().create(RetrofitAPI.class).delete(url, params);
+        }
+
+        @Override
+        public <T> void request(SimpleCallback<T> callback) {
+            super.request(callback);
+        }
+
+        @Override
+        public <T, R> void request(AsyncCallback<T, R> callback) {
+            super.request(callback);
+        }
+
+        @Override
+        public <T> Observable<T> observable(Class<T> clazz) {
+            return super.observable(clazz);
         }
     }
 }

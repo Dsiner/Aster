@@ -20,17 +20,14 @@ import okhttp3.logging.HttpLoggingInterceptor;
  */
 public class App extends Application {
     public final static String mPath = Environment.getExternalStorageDirectory().getPath() + "/rxnet/test/";
+    public final static String mName = "1.jpg";
 
     @Override
     public void onCreate() {
         super.onCreate();
-        initRxNet();
-    }
-
-    private void initRxNet() {
         Map<String, String> headers = new HashMap<>();
         headers.put(API.CommonHeader.platform, "Android");
-        headers.put(API.CommonHeader.app_version, "v1.0.0");
+        headers.put(API.CommonHeader.appVersion, "v1.0.0");
 
         RxNet.init()
                 .baseUrl(API.API_BASE)

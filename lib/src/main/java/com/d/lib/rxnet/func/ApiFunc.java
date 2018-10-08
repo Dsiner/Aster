@@ -23,7 +23,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
 
     @Override
     public T apply(ResponseBody responseBody) throws Exception {
-        Util.printThread("RxNet_theard gsonFormat: ");
+        Util.printThread("RxNet_theard gsonFormat");
         Gson gson = new Gson();
         String json;
         try {

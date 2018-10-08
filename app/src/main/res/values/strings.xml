@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RxNet</string>
+
+    <string name="downloading">Downloading...</string>
+    <string name="downloaded">Downloaded!</string>
+    <string name="uploading">Uploading...</string>
+    <string name="uploaded">Uploaded!</string>
 </resources>

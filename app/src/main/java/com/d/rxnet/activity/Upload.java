@@ -8,6 +8,7 @@ import com.d.lib.rxnet.callback.UploadCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.App;
+import com.d.rxnet.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,7 +44,7 @@ public class Upload extends Request {
 
     @Override
     protected void request() {
-        doTask("1.jpg", new Runnable() {
+        doTask(App.mName, new Runnable() {
             @Override
             public void run() {
                 setDialogProgress(0, 1, false);
@@ -54,38 +55,37 @@ public class Upload extends Request {
     }
 
     private void testIns() {
-        File file = getFile("1.jpg");
+        File file = getFile(App.mName);
         RxNet.getDefault().upload(mUrl)
                 .addParam("token", "008")
                 .addParam("user", "0")
                 .addParam("password", "0")
                 .addFile("androidPicFile", file)
-                .tag("uploadIns")
                 .request(new UploadCallback() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        Util.printThread("dsiner_theard onProgresss: ");
-                        ULog.d("dsiner_request onProgresss--> upload: " + currentLength + " total: " + totalLength);
+                        Util.printThread("dsiner_theard onProgresss");
+                        ULog.d("dsiner_request--> onProgresss upload: " + currentLength + " total: " + totalLength);
                         setDialogProgress(currentLength, totalLength, false);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request onError: " + e.getMessage());
+                        Util.printThread("dsiner_theard onError");
+                        ULog.d("dsiner_request--> onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        Util.printThread("dsiner_theard onComplete: ");
-                        ULog.d("dsiner_request onComplete");
+                        Util.printThread("dsiner_theard onComplete");
+                        ULog.d("dsiner_request--> onComplete");
                         setDialogProgress(1, 1, true);
                     }
                 });
     }
 
     private void testNew() {
-        File file = getFile("1.jpg");
+        File file = getFile(App.mName);
         RxNet.upload(mUrl)
                 .connectTimeout(60 * 1000)
                 .readTimeout(60 * 1000)
@@ -93,25 +93,24 @@ public class Upload extends Request {
                 .retryCount(3)
                 .retryDelayMillis(1000)
                 .addImageFile("androidPicFile", file)
-                .tag("uploadNew")
                 .request(new UploadCallback() {
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        Util.printThread("dsiner_theard onProgresss: ");
-                        ULog.d("dsiner_request onProgresss--> upload: " + currentLength + " total: " + totalLength);
+                        Util.printThread("dsiner_theard onProgresss");
+                        ULog.d("dsiner_request--> onProgresss upload: " + currentLength + " total: " + totalLength);
                         setDialogProgress(currentLength, totalLength, false);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request onError: " + e.getMessage());
+                        Util.printThread("dsiner_theard onError");
+                        ULog.d("dsiner_request--> onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        Util.printThread("dsiner_theard onComplete: ");
-                        ULog.d("dsiner_request onComplete");
+                        Util.printThread("dsiner_theard onComplete");
+                        ULog.d("dsiner_request--> onComplete");
                         setDialogProgress(1, 1, true);
                     }
                 });
@@ -184,14 +183,15 @@ public class Upload extends Request {
 
     private void showDialog() {
         if (!mDialog.isShowing() && !isFinishing()) {
-            mDialog.setMessage("正在上传...");
+            mDialog.setMessage(getResources().getString(R.string.uploading));
             mDialog.show();
         }
     }
 
     private void setDialogProgress(long currentLength, long totalLength, boolean finish) {
         showDialog();
-        mDialog.setMessage(!finish ? "正在上传..." : "上传完成!");
+        mDialog.setMessage(!finish ? getResources().getString(R.string.uploading)
+                : getResources().getString(R.string.uploaded));
         mDialog.setProgress((int) (currentLength * 100f / totalLength));
     }
 }

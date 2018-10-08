@@ -8,14 +8,12 @@
     <EditText
         android:id="@+id/et_url"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="https://api.douban.com/v2/movie/top250" />
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/et_params"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="start=0;count=10"
         android:visibility="gone" />
 
     <Button

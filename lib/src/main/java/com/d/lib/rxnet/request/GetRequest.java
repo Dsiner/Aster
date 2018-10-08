@@ -1,11 +1,15 @@
 package com.d.lib.rxnet.request;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
+import com.d.lib.rxnet.callback.AsyncCallback;
+import com.d.lib.rxnet.callback.SimpleCallback;
+import com.d.lib.rxnet.interceptor.HeadersInterceptor;
 
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import io.reactivex.Observable;
 import okhttp3.Interceptor;
 
 /**
@@ -31,6 +35,21 @@ public class GetRequest extends HttpRequest<GetRequest> {
     }
 
     @Override
+    public <T> void request(SimpleCallback<T> callback) {
+        super.request(callback);
+    }
+
+    @Override
+    public <T, R> void request(AsyncCallback<T, R> callback) {
+        super.request(callback);
+    }
+
+    @Override
+    public <T> Observable<T> observable(Class<T> clazz) {
+        return super.observable(clazz);
+    }
+
+    @Override
     public GetRequest baseUrl(String baseUrl) {
         return super.baseUrl(baseUrl);
     }
@@ -38,6 +57,11 @@ public class GetRequest extends HttpRequest<GetRequest> {
     @Override
     public GetRequest headers(Map<String, String> headers) {
         return super.headers(headers);
+    }
+
+    @Override
+    public GetRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+        return super.headers(onHeadInterceptor);
     }
 
     @Override
@@ -100,6 +124,21 @@ public class GetRequest extends HttpRequest<GetRequest> {
             } else {
                 observable = getClient().create(RetrofitAPI.class).get(url, params);
             }
+        }
+
+        @Override
+        public <T> void request(SimpleCallback<T> callback) {
+            super.request(callback);
+        }
+
+        @Override
+        public <T, R> void request(AsyncCallback<T, R> callback) {
+            super.request(callback);
+        }
+
+        @Override
+        public <T> Observable<T> observable(Class<T> clazz) {
+            return super.observable(clazz);
         }
     }
 }

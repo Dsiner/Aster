@@ -16,7 +16,7 @@ public class UploadObserver extends AbsObserver<Object> {
 
     @Override
     public void onNext(Object o) {
-        Util.printThread("RxNet_theard uploadOnNext: ");
+        Util.printThread("RxNet_theard uploadOnNext");
         callback.onComplete();
     }
 
