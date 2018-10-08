@@ -89,6 +89,9 @@ Simple use cases will look something like this:
 
 More usage see [Demo](app/src/main/java/com/d/rxnet/MainActivity.java)
 
+## Latest Changes
+- [Changelog.md](CHANGELOG.md)
+
 ## Licence
 
 ```txt
