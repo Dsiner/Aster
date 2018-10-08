@@ -1,7 +1,7 @@
 Changelog
 --------------------------------
 
-Version: Last
+Version: 1.2.0
 --------------------------------
 - Api change
 - Support for custom clients

@@ -27,12 +27,12 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>rxnet</artifactId>
-  <version>1.1.1</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner.lib:rxnet:1.1.1'
+compile 'com.dsiner.lib:rxnet:1.2.0'
 ```
 
 or:
@@ -41,7 +41,7 @@ For example:
 
 ```groovy
 dependencies {
-    implementation('com.dsiner.lib:rxnet:1.1.1', {
+    implementation('com.dsiner.lib:rxnet:1.2.0', {
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.squareup.okhttp3', module: 'logging-interceptor'
