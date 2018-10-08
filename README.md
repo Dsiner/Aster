@@ -6,20 +6,20 @@
 [![Wiki-Guide](https://img.shields.io/badge/Wiki-Guide-brightgreen.svg)](https://github.com/Dsiner/RxNet/wiki)
 [![Readme](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-brightgreen.svg)](https://github.com/Dsiner/RxNet/blob/master/README-zh.md)
 
-> A network request library based on `Retrofit2` + `Okhttp3` + `RxJava2`
+> A network request library based on `Okhttp3` + `Retrofit2` + `RxJava2`
 
 ## Features
-- `1` chain, completely chained `.func0().func1().func2()...`, `Adaptive`, `Jane`
-- `2` Client forms (`Singleton` global configuration, ` New instance ` fully custom configuration)
-- `3` chained form, fully expanded
+- A chain, full chain call `.func0().func1().func2()...` , `adaptive`, `simple`
+- Two client forms (`Singleton` global configuration, `New instance` fully custom configuration)
+- Three chain forms, fully extended
 
 ## Support
-- [x] Supports Get, Post, Head, Options, Put, Patch, Delete Request Protocol
+- [x] Support Get, Post, Head, Options, Put, Patch, Delete request protocol
 - [x] Support file download, progress callback
 - [x] Support file upload, progress callback
-- [x] Support for adding fixed header headers, dynamic header headers
-- [x] Support failure retry mechanism, can specify retry times, retry interval
-- [x] Support Tag, Cancel Data Request, Unsubscribe
+- [x] Support for adding fixed headers, dynamic headers
+- [x] Support failure retry mechanism, you can specify the number of retries, retry interval
+- [x] Support Tag, Cancel Request, Unsubscribe
 
 ## Getting Started
 Maven:
@@ -35,9 +35,8 @@ or Gradle:
 compile 'com.dsiner.lib:rxnet:1.2.0'
 ```
 
-or:
-If you need or would prefer to use a different version of the library you should exclude "xx.xx.xx" from your dependency in your build.gradle file.
-For example:
+or If you need or would prefer to use a different version of the library you should exclude "xx.xx.xx" from your dependency in your build.gradle file.
+</br></br>For example:
 
 ```groovy
 dependencies {
@@ -66,7 +65,7 @@ dependencies {
 
 ### How do I use RxNet?
 
-See the [wiki](app/src/main/java/com/d/rxnet/MainActivity.java).
+See the [wiki](https://github.com/Dsiner/RxNet/wiki).
 
 Simple use cases will look something like this:
 ```java

@@ -5,7 +5,7 @@
 [![Download](https://api.bintray.com/packages/dsiner/maven/rxnet/images/download.svg) ](https://bintray.com/dsiner/maven/rxnet/_latestVersion)
 [![Wiki-Guide](https://img.shields.io/badge/Wiki-Guide-brightgreen.svg)](https://github.com/Dsiner/RxNet/wiki)
 
-> 基于 `Retrofit2` + `Okhttp3` + `RxJava2` 实现的 `网络请求库`
+> 基于 `Okhttp3` + `Retrofit2` + `RxJava2` 实现的 `网络请求库`
 
 ## 特点
 -  `1` 条链，完全链式调用 `.func0().func1().func2()...` ， `自适应` 、 `简`
@@ -18,7 +18,7 @@
 - [x] 支持文件上传、进度回调
 - [x] 支持添加固定header头、动态header头
 - [x] 支持失败重试机制，可以指定重试次数、重试间隔
-- [x] 支持Tag、取消数据请求，取消订阅
+- [x] 支持Tag、取消请求，取消订阅
 
 ## 使用
 Maven:
@@ -34,9 +34,8 @@ or Gradle:
 compile 'com.dsiner.lib:rxnet:1.2.0'
 ```
 
-or:
-If you need or would prefer to use a different version of the library you should exclude "xx.xx.xx" from your dependency in your build.gradle file.
-For example:
+or If you need or would prefer to use a different version of the library you should exclude "xx.xx.xx" from your dependency in your build.gradle file.
+</br></br>For example:
 
 ```groovy
 dependencies {
@@ -65,7 +64,7 @@ dependencies {
 
 ### How do I use RxNet?
 
-See the [wiki](app/src/main/java/com/d/rxnet/MainActivity.java).
+See the [wiki](https://github.com/Dsiner/RxNet/wiki).
 
 Simple use cases will look something like this:
 ```java
