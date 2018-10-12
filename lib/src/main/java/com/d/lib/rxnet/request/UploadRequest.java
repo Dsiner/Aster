@@ -3,9 +3,9 @@ package com.d.lib.rxnet.request;
 import android.support.annotation.NonNull;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
-import com.d.lib.rxnet.base.ApiManager;
 import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.base.IRequest;
+import com.d.lib.rxnet.base.RequestManager;
 import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.body.UploadProgressRequestBody;
 import com.d.lib.rxnet.callback.UploadCallback;
@@ -141,7 +141,7 @@ public class UploadRequest extends IRequest<UploadRequest> {
                                     final UploadCallback callback) {
         DisposableObserver disposableObserver = new UploadObserver(callback);
         if (tag != null) {
-            ApiManager.get().add(tag, disposableObserver);
+            RequestManager.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

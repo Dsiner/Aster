@@ -1,8 +1,8 @@
 package com.d.lib.rxnet.request;
 
-import com.d.lib.rxnet.base.ApiManager;
 import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.base.IRequest;
+import com.d.lib.rxnet.base.RequestManager;
 import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.callback.AsyncCallback;
 import com.d.lib.rxnet.callback.SimpleCallback;
@@ -62,7 +62,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
         prepare();
         DisposableObserver disposableObserver = new ApiObserver(callback);
         if (tag != null) {
-            ApiManager.get().add(tag, disposableObserver);
+            RequestManager.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -76,7 +76,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
         prepare();
         DisposableObserver disposableObserver = new AsyncApiObserver(callback);
         if (tag != null) {
-            ApiManager.get().add(tag, disposableObserver);
+            RequestManager.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -198,7 +198,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
             prepare();
             DisposableObserver disposableObserver = new ApiObserver(callback);
             if (tag != null) {
-                ApiManager.get().add(tag, disposableObserver);
+                RequestManager.getIns().add(tag, disposableObserver);
             }
             observable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
@@ -212,7 +212,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
             prepare();
             DisposableObserver disposableObserver = new AsyncApiObserver(callback);
             if (tag != null) {
-                ApiManager.get().add(tag, disposableObserver);
+                RequestManager.getIns().add(tag, disposableObserver);
             }
             observable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())

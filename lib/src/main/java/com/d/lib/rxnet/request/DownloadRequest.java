@@ -3,9 +3,9 @@ package com.d.lib.rxnet.request;
 import android.text.TextUtils;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
-import com.d.lib.rxnet.base.ApiManager;
 import com.d.lib.rxnet.base.HttpConfig;
 import com.d.lib.rxnet.base.IRequest;
+import com.d.lib.rxnet.base.RequestManager;
 import com.d.lib.rxnet.base.RetrofitClient;
 import com.d.lib.rxnet.callback.DownloadCallback;
 import com.d.lib.rxnet.func.ApiRetryFunc;
@@ -92,7 +92,7 @@ public class DownloadRequest extends IRequest<DownloadRequest> {
                                     final Object tag) {
         DisposableObserver disposableObserver = new DownloadObserver(callback);
         if (tag != null) {
-            ApiManager.get().add(tag, disposableObserver);
+            RequestManager.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
