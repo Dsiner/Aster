@@ -34,13 +34,11 @@ public class Get extends Request {
 
     @Override
     protected void request() {
-        testIns();
-        // testNew();
-        // testObservable();
-        // testRetrofit();
+        requestImp(TYPE_SINGLETON);
     }
 
-    private void testIns() {
+    @Override
+    protected void requestSingleton() {
         Params params = new Params(mUrl);
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
@@ -61,7 +59,8 @@ public class Get extends Request {
                 });
     }
 
-    private void testNew() {
+    @Override
+    protected void requestNew() {
         Params params = new Params(mUrl);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
@@ -93,7 +92,8 @@ public class Get extends Request {
                 });
     }
 
-    private void testObservable() {
+    @Override
+    protected void requestObservable() {
         Params params = new Params(mUrl);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
@@ -141,7 +141,8 @@ public class Get extends Request {
                 });
     }
 
-    private void testRetrofit() {
+    @Override
+    protected void requestRetrofit() {
         RxNet.getRetrofit().create(RetrofitAPI.class)
                 .get(mUrl)
                 .subscribeOn(Schedulers.io())

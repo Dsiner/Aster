@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.callback.UploadCallback;
+import com.d.lib.rxnet.base.RequestManager;
+import com.d.lib.rxnet.callback.ProgressCallback;
+import com.d.lib.rxnet.callback.SimpleCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.App;
@@ -22,6 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 /**
  * Request --> Upload
@@ -48,20 +51,27 @@ public class Upload extends Request {
             @Override
             public void run() {
                 setDialogProgress(0, 1, false);
-                testIns();
-                // testNew();
+                requestImp(TYPE_SINGLETON);
             }
         });
     }
 
-    private void testIns() {
+    @Override
+    protected void requestSingleton() {
         File file = getFile(App.mName);
         RxNet.getDefault().upload(mUrl)
+                .tag(mUrl)
                 .addParam("token", "008")
                 .addParam("user", "0")
                 .addParam("password", "0")
-                .addFile("androidPicFile", file)
-                .request(new UploadCallback() {
+                .addFile("androidPicFile", file, new ProgressCallback() {
+
+                    @Override
+                    public void onStart() {
+                        Util.printThread("dsiner_theard onStart");
+                        ULog.d("dsiner_request--> onStart");
+                    }
+
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
                         Util.printThread("dsiner_theard onProgresss");
@@ -70,21 +80,35 @@ public class Upload extends Request {
                     }
 
                     @Override
+                    public void onSuccess() {
+                        Util.printThread("dsiner_theard onSuccess");
+                        ULog.d("dsiner_request--> onSuccess");
+                        setDialogProgress(1, 1, true);
+                    }
+
+                    @Override
                     public void onError(Throwable e) {
                         Util.printThread("dsiner_theard onError");
                         ULog.d("dsiner_request--> onError: " + e.getMessage());
                     }
+                })
+                .request(new SimpleCallback<ResponseBody>() {
+                    @Override
+                    public void onSuccess(ResponseBody response) {
+                        Util.printThread("dsiner_theard onSuccess -All");
+                        ULog.d("dsiner_request--> onSuccess -All");
+                    }
 
                     @Override
-                    public void onComplete() {
-                        Util.printThread("dsiner_theard onComplete");
-                        ULog.d("dsiner_request--> onComplete");
-                        setDialogProgress(1, 1, true);
+                    public void onError(Throwable e) {
+                        Util.printThread("dsiner_theard onError -All");
+                        ULog.d("dsiner_request--> onError -All");
                     }
                 });
     }
 
-    private void testNew() {
+    @Override
+    protected void requestNew() {
         File file = getFile(App.mName);
         RxNet.upload(mUrl)
                 .connectTimeout(60 * 1000)
@@ -92,8 +116,13 @@ public class Upload extends Request {
                 .writeTimeout(60 * 1000)
                 .retryCount(3)
                 .retryDelayMillis(1000)
-                .addImageFile("androidPicFile", file)
-                .request(new UploadCallback() {
+                .addImageFile("androidPicFile", file, new ProgressCallback() {
+                    @Override
+                    public void onStart() {
+                        Util.printThread("dsiner_theard onStart");
+                        ULog.d("dsiner_request--> onStart");
+                    }
+
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
                         Util.printThread("dsiner_theard onProgresss");
@@ -102,18 +131,18 @@ public class Upload extends Request {
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                        ULog.d("dsiner_request--> onError: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void onSuccess() {
                         Util.printThread("dsiner_theard onComplete");
                         ULog.d("dsiner_request--> onComplete");
                         setDialogProgress(1, 1, true);
                     }
-                });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Util.printThread("dsiner_theard onError");
+                        ULog.d("dsiner_request--> onError: " + e.getMessage());
+                    }
+                }).request();
     }
 
     @SuppressLint("CheckResult")
@@ -193,5 +222,11 @@ public class Upload extends Request {
         mDialog.setMessage(!finish ? getResources().getString(R.string.uploading)
                 : getResources().getString(R.string.uploaded));
         mDialog.setProgress((int) (currentLength * 100f / totalLength));
+    }
+
+    @Override
+    protected void onDestroy() {
+        RequestManager.getIns().cancel(mUrl);
+        super.onDestroy();
     }
 }

@@ -36,13 +36,11 @@ public class Post extends Request {
 
     @Override
     protected void request() {
-        testIns();
-        // testNew();
-        // testObservable();
-        // testRetrofit();
+        requestImp(TYPE_SINGLETON);
     }
 
-    private void testIns() {
+    @Override
+    protected void requestSingleton() {
         Params params = new Params(mUrl);
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
@@ -70,7 +68,8 @@ public class Post extends Request {
                 });
     }
 
-    private void testNew() {
+    @Override
+    protected void requestNew() {
         Params params = new Params(mUrl);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
@@ -103,7 +102,8 @@ public class Post extends Request {
                 });
     }
 
-    private void testObservable() {
+    @Override
+    protected void requestObservable() {
         RxNet.getDefault().post(mUrl)
                 .observable(ResponseBody.class)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -129,7 +129,8 @@ public class Post extends Request {
                 });
     }
 
-    private void testRetrofit() {
+    @Override
+    protected void requestRetrofit() {
         RxNet.getRetrofit().create(RetrofitAPI.class)
                 .post(mUrl)
                 .subscribeOn(Schedulers.io())

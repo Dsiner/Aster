@@ -3,7 +3,8 @@ package com.d.rxnet.activity;
 import android.app.ProgressDialog;
 
 import com.d.lib.rxnet.RxNet;
-import com.d.lib.rxnet.callback.DownloadCallback;
+import com.d.lib.rxnet.base.RequestManager;
+import com.d.lib.rxnet.callback.ProgressCallback;
 import com.d.lib.rxnet.utils.ULog;
 import com.d.lib.rxnet.utils.Util;
 import com.d.rxnet.App;
@@ -19,7 +20,7 @@ public class Download extends Request {
     private final String mUrl1 = "http://imtt.dd.qq.com/16891/4EA3DBDFC3F34E43C1D76CEE67593D67.apk?fsname=com.d.music_1.0.1_2.apk&csr=1bbd";
     private final String mUrl2 = "http://imtt.dd.qq.com/16891/D44E78C914AA4D70CD4422401A7E7E5C.apk?fsname=com.tencent.mobileqq_7.2.5_744.apk&csr=1bbd";
 
-    private final String mPostfix = ".mp3";
+    private final String mPostfix = ".apk";
     private ProgressDialog mDialog;
 
     @Override
@@ -36,14 +37,20 @@ public class Download extends Request {
     @Override
     protected void request() {
         Util.deleteFile(new File(App.mPath));
-        setDialogProgress(0, 1, false);
-        testIns();
-        // testNew();
+        requestImp(TYPE_SINGLETON);
     }
 
-    private void testIns() {
+    @Override
+    protected void requestSingleton() {
         RxNet.getDefault().download(mUrl1)
-                .request(App.mPath, "" + System.currentTimeMillis() + mPostfix, new DownloadCallback() {
+                .tag(mUrl1)
+                .request(App.mPath, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
+                    @Override
+                    public void onStart() {
+                        Util.printThread("dsiner_theard onStart");
+                        ULog.d("dsiner_request--> onStart");
+                        setDialogProgress(0, 1, false);
+                    }
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
@@ -53,28 +60,36 @@ public class Download extends Request {
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                        ULog.d("dsiner_request--> onError: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void onSuccess() {
                         Util.printThread("dsiner_theard onComplete");
                         ULog.d("dsiner_request--> onComplete");
                         setDialogProgress(1, 1, true);
                     }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Util.printThread("dsiner_theard onError");
+                        ULog.d("dsiner_request--> onError: " + e.getMessage());
+                    }
                 });
     }
 
-    private void testNew() {
+    @Override
+    protected void requestNew() {
         RxNet.download(mUrl2)
                 .connectTimeout(60 * 1000)
                 .readTimeout(60 * 1000)
                 .writeTimeout(60 * 1000)
                 .retryCount(3)
                 .retryDelayMillis(1000)
-                .request(App.mPath, "" + System.currentTimeMillis() + mPostfix, new DownloadCallback() {
+                .tag(mUrl2)
+                .request(App.mPath, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
+                    @Override
+                    public void onStart() {
+                        Util.printThread("dsiner_theard onStart");
+                        ULog.d("dsiner_request--> onStart");
+                        setDialogProgress(0, 1, false);
+                    }
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
@@ -84,16 +99,16 @@ public class Download extends Request {
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request--> onError: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void onSuccess() {
                         Util.printThread("dsiner_theard onComplete");
                         ULog.d("dsiner_request--> onComplete");
                         setDialogProgress(1, 1, true);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Util.printThread("dsiner_theard onError: ");
+                        ULog.d("dsiner_request--> onError: " + e.getMessage());
                     }
                 });
     }
@@ -110,5 +125,12 @@ public class Download extends Request {
         mDialog.setMessage(!finish ? getResources().getString(R.string.downloading)
                 : getResources().getString(R.string.downloaded));
         mDialog.setProgress((int) (currentLength * 100f / totalLength));
+    }
+
+    @Override
+    protected void onDestroy() {
+        RequestManager.getIns().cancel(mUrl1);
+        RequestManager.getIns().cancel(mUrl2);
+        super.onDestroy();
     }
 }
