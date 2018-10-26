@@ -1,5 +1,9 @@
 package com.d.lib.rxnet.base;
 
+import android.support.annotation.Nullable;
+
+import com.d.lib.rxnet.observer.DownloadObserver;
+
 import java.util.HashMap;
 import java.util.Set;
 
@@ -24,11 +28,14 @@ public class RequestManager {
     }
 
     public synchronized void add(Object tag, Disposable disposable) {
+        if (tag == null || disposable == null) {
+            return;
+        }
         mHashMap.put(tag, disposable);
     }
 
     public synchronized void remove(Object tag) {
-        if (mHashMap.isEmpty()) {
+        if (mHashMap.isEmpty() || tag == null) {
             return;
         }
         mHashMap.remove(tag);
@@ -41,15 +48,30 @@ public class RequestManager {
         mHashMap.clear();
     }
 
-    public synchronized void cancel(Object tag) {
-        cancelImp(tag);
-        mHashMap.remove(tag);
+    public synchronized boolean canceled(Object tag) {
+        if (tag == null) {
+            return false;
+        }
+        boolean canceled = mHashMap.containsKey(tag);
+        cancel(tag);
+        return canceled;
     }
 
-    private void cancelImp(Object tag) {
-        Disposable value = mHashMap.get(tag);
+    public synchronized void cancel(Object tag) {
+        if (tag == null) {
+            return;
+        }
+        Disposable value = mHashMap.remove(tag);
+        cancelImp(value);
+    }
+
+    private void cancelImp(@Nullable Disposable value) {
         if (value != null && !value.isDisposed()) {
-            value.dispose();
+            if (value instanceof DownloadObserver) {
+                ((DownloadObserver) value).cancel();
+            } else {
+                value.dispose();
+            }
         }
     }
 
@@ -57,10 +79,11 @@ public class RequestManager {
         if (mHashMap.isEmpty()) {
             return;
         }
-        Set<Object> keys = mHashMap.keySet();
-        for (Object k : keys) {
-            cancelImp(k);
-        }
+        HashMap<Object, Disposable> temp = new HashMap<>(mHashMap);
         mHashMap.clear();
+        Set<Object> keys = temp.keySet();
+        for (Object k : keys) {
+            cancelImp(temp.get(k));
+        }
     }
 }

@@ -91,6 +91,12 @@ public class Upload extends Request {
                         Util.printThread("dsiner_theard onError");
                         ULog.d("dsiner_request--> onError: " + e.getMessage());
                     }
+
+                    @Override
+                    public void onCancel() {
+                        Util.printThread("dsiner_theard onCancel");
+                        ULog.d("dsiner_request--> onCancel");
+                    }
                 })
                 .request(new SimpleCallback<ResponseBody>() {
                     @Override
@@ -141,6 +147,12 @@ public class Upload extends Request {
                     public void onError(Throwable e) {
                         Util.printThread("dsiner_theard onError");
                         ULog.d("dsiner_request--> onError: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Util.printThread("dsiner_theard onCancel");
+                        ULog.d("dsiner_request--> onCancel");
                     }
                 }).request();
     }
