@@ -31,7 +31,8 @@ public class UploadProgressRequestBody extends RequestBody {
     private ProgressCallback mCallback;
     private long mLastTime;
 
-    public UploadProgressRequestBody(@NonNull RequestBody requestBody, @NonNull ProgressCallback callback) {
+    public UploadProgressRequestBody(@NonNull RequestBody requestBody,
+                                     @NonNull ProgressCallback callback) {
         this.mRequestBody = requestBody;
         this.mCallback = callback;
     }
@@ -53,33 +54,54 @@ public class UploadProgressRequestBody extends RequestBody {
 
     @Override
     public void writeTo(@NonNull BufferedSink sink) throws IOException {
+        onStartImp();
+        BufferedSink bufferedSink;
+        try {
+            bufferedSink = Okio.buffer(new CountingSink(sink));
+            mRequestBody.writeTo(bufferedSink);
+            bufferedSink.flush();
+            onSuccessImp();
+        } catch (final Throwable e) {
+            e.printStackTrace();
+            onErrorImp(e);
+            throw e;
+        }
+    }
+
+    private void onStartImp() {
+        if (mCallback == null) {
+            return;
+        }
         Util.executeMain(new Runnable() {
             @Override
             public void run() {
                 mCallback.onStart();
             }
         });
-        BufferedSink bufferedSink;
-        try {
-            bufferedSink = Okio.buffer(new CountingSink(sink));
-            mRequestBody.writeTo(bufferedSink);
-            bufferedSink.flush();
-            Util.executeMain(new Runnable() {
-                @Override
-                public void run() {
-                    mCallback.onSuccess();
-                }
-            });
-        } catch (final Throwable e) {
-            e.printStackTrace();
-            Util.executeMain(new Runnable() {
-                @Override
-                public void run() {
-                    mCallback.onError(e);
-                }
-            });
-            throw e;
+    }
+
+    private void onErrorImp(final Throwable e) {
+        if (mCallback == null) {
+            return;
         }
+        Util.executeMain(new Runnable() {
+            @Override
+            public void run() {
+                mCallback.onError(e);
+            }
+        });
+    }
+
+    private void onSuccessImp() {
+        if (mCallback == null) {
+            return;
+        }
+        Util.executeMain(new Runnable() {
+            @Override
+            public void run() {
+                mCallback.onSuccess();
+            }
+        });
     }
 
     private final class CountingSink extends ForwardingSink {

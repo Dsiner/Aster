@@ -48,9 +48,15 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
 
     public void cancel() {
         dispose();
-        if (mCallback != null) {
-            mCallback.onCancel();
+        if (mCallback == null) {
+            return;
         }
+        Util.executeMain(new Runnable() {
+            @Override
+            public void run() {
+                mCallback.onCancel();
+            }
+        });
     }
 
     @Override

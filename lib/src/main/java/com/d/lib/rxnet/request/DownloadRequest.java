@@ -1,5 +1,6 @@
 package com.d.lib.rxnet.request;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.d.lib.rxnet.api.RetrofitAPI;
@@ -56,7 +57,9 @@ public class DownloadRequest extends IRequest<DownloadRequest> {
         }
     }
 
-    public void request(final String path, final String name, final ProgressCallback callback) {
+    @SuppressWarnings("ConstantConditions")
+    public void request(@NonNull final String path, @NonNull final String name,
+                        @NonNull final ProgressCallback callback) {
         if (TextUtils.isEmpty(path)) {
             throw new IllegalArgumentException("This path can not be empty!");
         }
@@ -75,14 +78,15 @@ public class DownloadRequest extends IRequest<DownloadRequest> {
                                     final Object tag,
                                     final String path, final String name,
                                     final ProgressCallback callback) {
-        Util.executeMain(new Runnable() {
-            @Override
-            public void run() {
-                if (callback != null) {
+        if (callback != null) {
+            Util.executeMain(new Runnable() {
+                @Override
+                public void run() {
                     callback.onStart();
+
                 }
-            }
-        });
+            });
+        }
         DisposableObserver<ResponseBody> disposableObserver = new DownloadObserver(path, name, tag, callback);
         if (tag != null) {
             RequestManager.getIns().add(tag, disposableObserver);
@@ -176,7 +180,9 @@ public class DownloadRequest extends IRequest<DownloadRequest> {
             }
         }
 
-        public void request(final String path, final String name, final ProgressCallback callback) {
+        @SuppressWarnings("ConstantConditions")
+        public void request(@NonNull final String path, @NonNull final String name,
+                            @NonNull final ProgressCallback callback) {
             if (TextUtils.isEmpty(path)) {
                 throw new IllegalArgumentException("This path can not be empty!");
             }

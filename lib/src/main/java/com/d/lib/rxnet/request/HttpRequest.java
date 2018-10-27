@@ -58,7 +58,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
 
     public <T> void request(SimpleCallback<T> callback) {
         prepare();
-        DisposableObserver<T> disposableObserver = new ApiObserver<T>(callback);
+        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
         if (mTag != null) {
             RequestManager.getIns().add(mTag, disposableObserver);
         }
@@ -72,7 +72,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
 
     public <T, R> void request(AsyncCallback<T, R> callback) {
         prepare();
-        DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(callback);
+        DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
         if (mTag != null) {
             RequestManager.getIns().add(mTag, disposableObserver);
         }
@@ -193,7 +193,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
 
         public <T> void request(SimpleCallback<T> callback) {
             prepare();
-            DisposableObserver<T> disposableObserver = new ApiObserver<T>(callback);
+            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
             if (mTag != null) {
                 RequestManager.getIns().add(mTag, disposableObserver);
             }
@@ -208,7 +208,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR> {
 
         public <T, R> void request(AsyncCallback<T, R> callback) {
             prepare();
-            DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(callback);
+            DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
             if (mTag != null) {
                 RequestManager.getIns().add(mTag, disposableObserver);
             }

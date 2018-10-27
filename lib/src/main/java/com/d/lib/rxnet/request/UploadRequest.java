@@ -144,7 +144,7 @@ public class UploadRequest extends IRequest<UploadRequest> {
                                     final HttpConfig config,
                                     final Object tag,
                                     final SimpleCallback<ResponseBody> callback) {
-        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(callback);
+        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, callback);
         if (tag != null) {
             RequestManager.getIns().add(tag, disposableObserver);
         }

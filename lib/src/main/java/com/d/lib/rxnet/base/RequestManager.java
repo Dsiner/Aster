@@ -3,6 +3,7 @@ package com.d.lib.rxnet.base;
 import android.support.annotation.Nullable;
 
 import com.d.lib.rxnet.observer.DownloadObserver;
+import com.d.lib.rxnet.observer.UploadObserver;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -69,6 +70,8 @@ public class RequestManager {
         if (value != null && !value.isDisposed()) {
             if (value instanceof DownloadObserver) {
                 ((DownloadObserver) value).cancel();
+            } else if (value instanceof UploadObserver) {
+                ((UploadObserver) value).cancel();
             } else {
                 value.dispose();
             }
