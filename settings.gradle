@@ -1,1 +1,7 @@
-include ':app', ':lib'
+include ':app'
+include ':lib'
+include ':integration'
+include ':integration:http'
+include ':integration:okhttp3'
+include ':integration:volley'
+include ':integration:retrofit'
