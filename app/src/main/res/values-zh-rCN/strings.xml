@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RxNet</string>
+    <string name="app_name">Aster</string>
 
     <string name="downloading">正在下载...</string>
     <string name="downloaded">下载完成!</string>

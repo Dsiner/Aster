@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.d.rxnet">
+    package="com.d.aster">
 
     <application
-        android:name="com.d.rxnet.App"
+        android:name="com.d.aster.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.d.rxnet.MainActivity">
+        <activity android:name="com.d.aster.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,16 +19,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.d.rxnet.activity.Get"
+            android:name="com.d.aster.activity.Get"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.d.rxnet.activity.Post"
+            android:name="com.d.aster.activity.Post"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.d.rxnet.activity.Download"
+            android:name="com.d.aster.activity.Download"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.d.rxnet.activity.Upload"
+            android:name="com.d.aster.activity.Upload"
             android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 

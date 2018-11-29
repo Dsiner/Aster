@@ -1,9 +1,9 @@
-# RxNet for Android
+# Aster for Android
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![API](https://img.shields.io/badge/API-9%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=9)
-[![Download](https://api.bintray.com/packages/dsiner/maven/rxnet/images/download.svg) ](https://bintray.com/dsiner/maven/rxnet/_latestVersion)
-[![Wiki-Guide](https://img.shields.io/badge/Wiki-Guide-brightgreen.svg)](https://github.com/Dsiner/RxNet/wiki)
+[![Download](https://api.bintray.com/packages/dsiner/maven/aster/images/download.svg) ](https://bintray.com/dsiner/maven/aster/_latestVersion)
+[![Wiki-Guide](https://img.shields.io/badge/Wiki-Guide-brightgreen.svg)](https://github.com/Dsiner/Aster/wiki)
 
 > 基于 `Okhttp3` + `Retrofit2` + `RxJava2` 实现的 `网络请求库`
 
@@ -25,13 +25,13 @@ Maven:
 ```xml
 <dependency>
   <groupId>com.dsiner.lib</groupId>
-  <artifactId>rxnet</artifactId>
+  <artifactId>aster</artifactId>
   <version>1.2.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner.lib:rxnet:1.2.1'
+compile 'com.dsiner.lib:aster:1.2.1'
 ```
 
 or If you need or would prefer to use a different version of the library you should exclude "xx.xx.xx" from your dependency in your build.gradle file.
@@ -39,7 +39,7 @@ or If you need or would prefer to use a different version of the library you sho
 
 ```groovy
 dependencies {
-    implementation('com.dsiner.lib:rxnet:1.2.1', {
+    implementation('com.dsiner.lib:aster:1.2.1', {
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.squareup.okhttp3', module: 'logging-interceptor'
@@ -62,16 +62,16 @@ dependencies {
 }
 ```
 
-### How do I use RxNet?
+### How do I use Aster?
 
-See the [wiki](https://github.com/Dsiner/RxNet/wiki).
+See the [wiki](https://github.com/Dsiner/Aster/wiki).
 
 Simple use cases will look something like this:
 ```java
         Params params = new Params("https://api.douban.com/v2/movie/top250");
         params.addParam("start", "0");
         params.addParam("count", "10");
-        RxNet.get("https://api.douban.com/v2/movie/top250", params)
+        Aster.get("https://api.douban.com/v2/movie/top250", params)
                 .request(new SimpleCallback<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo response) {
@@ -85,7 +85,7 @@ Simple use cases will look something like this:
                 });
 ```
 
-More usage see [Demo](app/src/main/java/com/d/rxnet/MainActivity.java)
+More usage see [Demo](app/src/main/java/com/d/aster/MainActivity.java)
 
 ## Latest Changes
 - [Changelog.md](CHANGELOG.md)

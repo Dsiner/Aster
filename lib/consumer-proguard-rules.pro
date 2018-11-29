@@ -1,4 +1,4 @@
--keep class com.d.lib.rxnet.** {*;}
+-keep class com.d.lib.aster.** {*;}
 
 # ----- Gson -----
 -keep class com.google.gson.** {*;}

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        applicationId "com.d.rxnet"
+        applicationId "com.d.aster"
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
