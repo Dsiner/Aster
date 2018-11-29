@@ -32,7 +32,7 @@ Maven:
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner.lib:rxnet:1.2.0'
+compile 'com.dsiner.lib:rxnet:1.2.1'
 ```
 
 or If you need or would prefer to use a different version of the library you should exclude "xx.xx.xx" from your dependency in your build.gradle file.
@@ -40,7 +40,7 @@ or If you need or would prefer to use a different version of the library you sho
 
 ```groovy
 dependencies {
-    implementation('com.dsiner.lib:rxnet:1.2.0', {
+    implementation('com.dsiner.lib:rxnet:1.2.1', {
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.squareup.okhttp3', module: 'logging-interceptor'
