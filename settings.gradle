@@ -1,6 +1,7 @@
 include ':app'
 include ':lib'
 include ':integration'
+include ':integration:base'
 include ':integration:http'
 include ':integration:okhttp3'
 include ':integration:volley'

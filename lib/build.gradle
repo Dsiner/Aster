@@ -36,5 +36,4 @@ dependencies {
     api project(':integration:okhttp3')
     api project(':integration:volley')
     api project(':integration:retrofit')
-    compileOnly 'com.android.support:support-annotations:27.1.1'
 }
