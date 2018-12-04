@@ -1,21 +1,20 @@
 package com.d.lib.aster.utils;
 
-import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-
 /**
  * Util
  * Created by D on 2017/10/25.
  */
 public class Util {
+
+    private static Handler mainHandler = new Handler(Looper.getMainLooper());
 
     /**
      * Print the thread information of the current code
@@ -57,13 +56,7 @@ public class Util {
         }
     }
 
-    @SuppressLint("CheckResult")
     public static void executeMain(@NonNull Runnable r) {
-        Observable.just(r).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Runnable>() {
-            @Override
-            public void accept(Runnable runnable) throws Exception {
-                runnable.run();
-            }
-        });
+        mainHandler.post(r);
     }
 }

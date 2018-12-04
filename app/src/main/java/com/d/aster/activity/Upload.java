@@ -3,14 +3,14 @@ package com.d.aster.activity;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 
-import com.d.lib.aster.Aster;
-import com.d.lib.aster.base.RequestManager;
-import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.utils.ULog;
-import com.d.lib.aster.utils.Util;
 import com.d.aster.App;
 import com.d.aster.R;
+import com.d.lib.aster.Aster;
+import com.d.lib.aster.callback.ProgressCallback;
+import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.utils.Util;
 
 import java.io.File;
 import java.io.FileOutputStream;

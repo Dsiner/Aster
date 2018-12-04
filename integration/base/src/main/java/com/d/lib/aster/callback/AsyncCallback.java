@@ -1,6 +1,6 @@
 package com.d.lib.aster.callback;
 
-import io.reactivex.annotations.NonNull;
+import android.support.annotation.NonNull;
 
 /**
  * AsyncCallback

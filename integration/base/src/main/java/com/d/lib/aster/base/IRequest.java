@@ -1,38 +1,28 @@
 package com.d.lib.aster.base;
 
-import com.d.lib.aster.func.ApiFunc;
-import com.d.lib.aster.func.ApiRetryFunc;
 import com.d.lib.aster.interceptor.HeadersInterceptor;
+import com.d.lib.aster.interceptor.Interceptor;
 
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.Interceptor;
-import okhttp3.ResponseBody;
-
 /**
  * IRequest
  * Created by D on 2017/10/24.
  */
-public abstract class IRequest<R extends IRequest> extends IConfig<R> {
-    protected HttpConfig mConfig;
+public abstract class IRequest<R extends IRequest, C extends IClient> extends IConfig<R> {
+    protected Config mConfig;
     protected String mUrl;
     protected Map<String, String> mParams;
-    protected Observable<ResponseBody> mObservable;
     protected Object mTag; // Request tag
 
     /**
      * Get the Client
      *
-     * @return Retrofit
+     * @return Client
      */
-    protected abstract HttpClient getClient();
+    protected abstract C getClient();
 
     /**
      * Set request tag
@@ -113,22 +103,5 @@ public abstract class IRequest<R extends IRequest> extends IConfig<R> {
     protected R retryDelayMillis(long retryDelayMillis) {
         mConfig.retryDelayMillis(retryDelayMillis);
         return (R) this;
-    }
-
-    /**
-     * e.g observable.compose(this.<T>norTransformer(callback))
-     */
-    protected <OTF> ObservableTransformer<ResponseBody, OTF> norTransformer(final Class<OTF> clazz) {
-        return new ObservableTransformer<ResponseBody, OTF>() {
-            @Override
-            public ObservableSource<OTF> apply(Observable<ResponseBody> apiResultObservable) {
-                return apiResultObservable
-                        .subscribeOn(Schedulers.io())
-                        .unsubscribeOn(Schedulers.io())
-                        .map(new ApiFunc<OTF>(clazz))
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .retryWhen(new ApiRetryFunc(mConfig.retryCount, mConfig.retryDelayMillis));
-            }
-        };
     }
 }

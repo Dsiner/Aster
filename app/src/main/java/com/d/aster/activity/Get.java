@@ -1,14 +1,14 @@
 package com.d.aster.activity;
 
+import com.d.aster.api.API;
+import com.d.aster.model.MovieInfo;
 import com.d.lib.aster.Aster;
-import com.d.lib.aster.api.RetrofitAPI;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
-import com.d.aster.api.API;
-import com.d.aster.model.MovieInfo;
 
 import java.util.ArrayList;
 

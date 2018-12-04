@@ -1,16 +1,17 @@
 package com.d.lib.aster;
 
-import com.d.lib.aster.base.HttpClient;
-import com.d.lib.aster.base.HttpConfig;
-import com.d.lib.aster.request.DeleteRequest;
-import com.d.lib.aster.request.DownloadRequest;
-import com.d.lib.aster.request.GetRequest;
-import com.d.lib.aster.request.HeadRequest;
-import com.d.lib.aster.request.OptionRequest;
-import com.d.lib.aster.request.PatchRequest;
-import com.d.lib.aster.request.PostRequest;
-import com.d.lib.aster.request.PutRequest;
-import com.d.lib.aster.request.UploadRequest;
+import com.d.lib.aster.base.Config;
+import com.d.lib.aster.base.IClient;
+import com.d.lib.aster.integration.retrofit.RetrofitClient;
+import com.d.lib.aster.integration.retrofit.request.DeleteRequest;
+import com.d.lib.aster.integration.retrofit.request.DownloadRequest;
+import com.d.lib.aster.integration.retrofit.request.GetRequest;
+import com.d.lib.aster.integration.retrofit.request.HeadRequest;
+import com.d.lib.aster.integration.retrofit.request.OptionRequest;
+import com.d.lib.aster.integration.retrofit.request.PatchRequest;
+import com.d.lib.aster.integration.retrofit.request.PostRequest;
+import com.d.lib.aster.integration.retrofit.request.PutRequest;
+import com.d.lib.aster.integration.retrofit.request.UploadRequest;
 
 import java.util.Map;
 
@@ -21,8 +22,8 @@ import retrofit2.Retrofit;
  */
 public class Aster {
 
-    public static HttpConfig.Builder init() {
-        return new HttpConfig.Builder();
+    public static Config.Builder init() {
+        return new Config.Builder();
     }
 
     public static Singleton getDefault() {
@@ -30,7 +31,7 @@ public class Aster {
     }
 
     public static Retrofit getRetrofit() {
-        return HttpClient.getDefault(HttpClient.TYPE_NORMAL).getRetrofitClient();
+        return RetrofitClient.getDefault(IClient.TYPE_NORMAL).getClient();
     }
 
     private Aster() {

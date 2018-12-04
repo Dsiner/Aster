@@ -1,12 +1,11 @@
 package com.d.lib.aster.base;
 
 import com.d.lib.aster.interceptor.HeadersInterceptor;
+import com.d.lib.aster.interceptor.Interceptor;
 
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
-
-import okhttp3.Interceptor;
 
 /**
  * IConfig
@@ -19,7 +18,6 @@ public abstract class IConfig<R> {
 
     protected abstract R headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor);
 
-    /************************** OkHttp client **************************/
     protected abstract R connectTimeout(long timeout);
 
     protected abstract R readTimeout(long timeout);

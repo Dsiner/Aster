@@ -3,16 +3,14 @@ package com.d.aster;
 import android.app.Application;
 import android.os.Environment;
 
-import com.d.lib.aster.Aster;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.utils.SSLUtil;
 import com.d.aster.api.API;
+import com.d.lib.aster.Aster;
+import com.d.lib.aster.base.Config;
+import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
+import com.d.lib.aster.utils.SSLUtil;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * App
@@ -34,9 +32,9 @@ public class App extends Application {
                 .headers(headers)
                 .headers(new HeadersInterceptor.OnHeadInterceptor() {
                     @Override
-                    public void intercept(Request.Builder builder) {
+                    public void intercept(Map<String, String> heads) {
                         // Add a dynamic request header such as token
-                        builder.addHeader("token", "008");
+                        heads.put("token", "008");
                     }
                 })
                 .connectTimeout(10 * 1000)
@@ -45,7 +43,7 @@ public class App extends Application {
                 .retryCount(3)
                 .retryDelayMillis(2 * 1000)
                 .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
-                .setLog("RetrofitLog Back = ", HttpLoggingInterceptor.Level.BODY)
+                .setLog("RetrofitLog Back = ", Config.Level.BODY)
                 .setDebug(true)
                 .build();
     }
