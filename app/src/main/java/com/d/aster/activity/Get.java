@@ -94,51 +94,51 @@ public class Get extends Request {
 
     @Override
     protected void requestObservable() {
-        Params params = new Params(mUrl);
-        params.addParam(API.MovieTop.start, "1");
-        params.addParam(API.MovieTop.count, "10");
-        Aster.getDefault().get(API.MovieTop.rtpType, params)
-                .observable(MovieInfo.class)
-                .map(new Function<MovieInfo, MovieInfo>() {
-                    @Override
-                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply");
-                        return info;
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(new Function<MovieInfo, MovieInfo>() {
-                    @Override
-                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply");
-                        return info;
-                    }
-                })
-                .observeOn(Schedulers.io())
-                .map(new Function<MovieInfo, MovieInfo>() {
-                    @Override
-                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply");
-                        return info;
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<MovieInfo>() {
-                    @Override
-                    public void onNext(@NonNull MovieInfo info) {
-                        Util.printThread("dsiner_theard onNext");
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Util.printThread("dsiner_theard onComplete");
-                    }
-                });
+//        Params params = new Params(mUrl);
+//        params.addParam(API.MovieTop.start, "1");
+//        params.addParam(API.MovieTop.count, "10");
+//        Aster.getDefault().get(API.MovieTop.rtpType, params)
+//                .observable(MovieInfo.class)
+//                .map(new Function<MovieInfo, MovieInfo>() {
+//                    @Override
+//                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+//                        Util.printThread("dsiner_theard apply");
+//                        return info;
+//                    }
+//                })
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .map(new Function<MovieInfo, MovieInfo>() {
+//                    @Override
+//                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+//                        Util.printThread("dsiner_theard apply");
+//                        return info;
+//                    }
+//                })
+//                .observeOn(Schedulers.io())
+//                .map(new Function<MovieInfo, MovieInfo>() {
+//                    @Override
+//                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+//                        Util.printThread("dsiner_theard apply");
+//                        return info;
+//                    }
+//                })
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new DisposableObserver<MovieInfo>() {
+//                    @Override
+//                    public void onNext(@NonNull MovieInfo info) {
+//                        Util.printThread("dsiner_theard onNext");
+//                    }
+//
+//                    @Override
+//                    public void onError(@NonNull Throwable e) {
+//                        Util.printThread("dsiner_theard onError");
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        Util.printThread("dsiner_theard onComplete");
+//                    }
+//                });
     }
 
     @Override

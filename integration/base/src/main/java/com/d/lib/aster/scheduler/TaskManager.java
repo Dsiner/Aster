@@ -1,4 +1,4 @@
-package com.d.lib.aster.taskscheduler;
+package com.d.lib.aster.scheduler;
 
 import android.os.Handler;
 import android.os.Looper;

@@ -1,5 +1,6 @@
 package com.d.lib.aster.integration.retrofit.request;
 
+import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
@@ -21,7 +22,7 @@ public class GetRequest extends HttpRequest<GetRequest> {
         super(url);
     }
 
-    public GetRequest(String url, Map<String, String> params) {
+    public GetRequest(String url, Params params) {
         super(url, params);
     }
 
@@ -113,7 +114,7 @@ public class GetRequest extends HttpRequest<GetRequest> {
             super(url);
         }
 
-        public Singleton(String url, Map<String, String> params) {
+        public Singleton(String url, Params params) {
             super(url, params);
         }
 

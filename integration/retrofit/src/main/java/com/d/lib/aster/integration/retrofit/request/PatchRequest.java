@@ -1,5 +1,6 @@
 package com.d.lib.aster.integration.retrofit.request;
 
+import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
@@ -17,7 +18,7 @@ import io.reactivex.Observable;
  */
 public class PatchRequest extends HttpRequest<PatchRequest> {
 
-    public PatchRequest(String url, Map<String, String> params) {
+    public PatchRequest(String url, Params params) {
         super(url, params);
     }
 
@@ -101,7 +102,7 @@ public class PatchRequest extends HttpRequest<PatchRequest> {
      */
     public static class Singleton extends HttpRequest.Singleton<Singleton> {
 
-        public Singleton(String url, Map<String, String> params) {
+        public Singleton(String url, Params params) {
             super(url, params);
         }
 

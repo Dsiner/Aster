@@ -17,7 +17,7 @@ import retrofit2.Retrofit;
 /**
  * Created by D on 2017/10/24.
  */
-public class Aster {
+public class AsterOkhttp {
 
     public static Config.Builder init() {
         return new Config.Builder();
@@ -31,7 +31,7 @@ public class Aster {
         return null;
     }
 
-    private Aster() {
+    private AsterOkhttp() {
     }
 
     public static GetRequest get(String url) {

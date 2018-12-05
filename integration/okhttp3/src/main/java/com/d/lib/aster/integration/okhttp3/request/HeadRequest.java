@@ -1,17 +1,15 @@
-package com.d.lib.aster.integration.retrofit.request;
+package com.d.lib.aster.integration.okhttp3.request;
 
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.scheduler.Observable;
 
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
-
-import io.reactivex.Observable;
 
 /**
  * Created by D on 2017/10/24.
@@ -24,7 +22,7 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
 
     @Override
     protected void prepare() {
-        mObservable = getClient().getClient().create(RetrofitAPI.class).head(mUrl, mParams);
+        mObservable = getClient().create().head(mUrl, mParams);
     }
 
     @Override
@@ -38,7 +36,7 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
     }
 
     @Override
-    public <T> Observable<T> observable(Class<T> clazz) {
+    public <T> Observable.Observe<T> observable(Class<T> clazz) {
         return super.observable(clazz);
     }
 
@@ -108,7 +106,7 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
 
         @Override
         protected void prepare() {
-            mObservable = getClient().getClient().create(RetrofitAPI.class).head(mUrl, mParams);
+            mObservable = getClient().create().head(mUrl, mParams);
         }
 
         @Override
@@ -122,7 +120,7 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
         }
 
         @Override
-        public <T> Observable<T> observable(Class<T> clazz) {
+        public <T> Observable.Observe<T> observable(Class<T> clazz) {
             return super.observable(clazz);
         }
     }

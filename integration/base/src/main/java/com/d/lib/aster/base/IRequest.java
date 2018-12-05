@@ -14,7 +14,7 @@ import javax.net.ssl.SSLSocketFactory;
 public abstract class IRequest<R extends IRequest, C extends IClient> extends IConfig<R> {
     protected Config mConfig;
     protected String mUrl;
-    protected Map<String, String> mParams;
+    protected Params mParams;
     protected Object mTag; // Request tag
 
     /**

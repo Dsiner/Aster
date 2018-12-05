@@ -104,29 +104,29 @@ public class Post extends Request {
 
     @Override
     protected void requestObservable() {
-        Aster.getDefault().post(mUrl)
-                .observable(ResponseBody.class)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ResponseBody>() {
-                    @Override
-                    public void onNext(@NonNull ResponseBody response) {
-                        try {
-                            formatPrinting(response.string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+//        Aster.getDefault().post(mUrl)
+//                .observable(ResponseBody.class)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new DisposableObserver<ResponseBody>() {
+//                    @Override
+//                    public void onNext(@NonNull ResponseBody response) {
+//                        try {
+//                            formatPrinting(response.string());
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(@NonNull Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
     }
 
     @Override

@@ -1,11 +1,11 @@
-package com.d.lib.aster.taskscheduler;
+package com.d.lib.aster.scheduler;
 
-import com.d.lib.aster.taskscheduler.callback.Function;
-import com.d.lib.aster.taskscheduler.callback.Observer;
-import com.d.lib.aster.taskscheduler.callback.Task;
-import com.d.lib.aster.taskscheduler.schedule.FunctionEmitter;
-import com.d.lib.aster.taskscheduler.schedule.Schedulers;
-import com.d.lib.aster.taskscheduler.schedule.TaskEmitter;
+import com.d.lib.aster.scheduler.callback.Function;
+import com.d.lib.aster.scheduler.callback.Observer;
+import com.d.lib.aster.scheduler.callback.Task;
+import com.d.lib.aster.scheduler.schedule.FunctionEmitter;
+import com.d.lib.aster.scheduler.schedule.Schedulers;
+import com.d.lib.aster.scheduler.schedule.TaskEmitter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * TaskScheduler
  * Created by D on 2018/5/15.
  */
-public class TaskScheduler<T> {
+public class Observable<T> {
     private Task<T> task;
     private int subscribeScheduler = Schedulers.defaultThread();
 
@@ -65,47 +65,47 @@ public class TaskScheduler<T> {
     /**
      * Create task
      */
-    public static <T> TaskScheduler<T> create(final Task<T> task) {
-        TaskScheduler<T> schedulers = new TaskScheduler<T>();
+    public static <T> Observable<T> create(final Task<T> task) {
+        Observable<T> schedulers = new Observable<T>();
         schedulers.task = task;
         return schedulers;
     }
 
-    private TaskScheduler() {
+    private Observable() {
     }
 
-    public TaskObserve<T> subscribeOn(@Schedulers.Scheduler int scheduler) {
+    public Observe<T> subscribeOn(@Schedulers.Scheduler int scheduler) {
         this.subscribeScheduler = scheduler;
-        return new TaskObserve<T>(new TaskEmitter<T>(task, subscribeScheduler));
+        return new Observe<T>(new TaskEmitter<T>(task, subscribeScheduler));
     }
 
-    public static class TaskObserve<T> {
+    public static class Observe<T> {
         private TaskEmitter taskEmitter;
         private List<FunctionEmitter> emitters;
         private int observeOnScheduler = Schedulers.defaultThread();
 
-        private TaskObserve() {
+        private Observe() {
         }
 
-        TaskObserve(TaskEmitter<T> taskEmitter) {
+        Observe(TaskEmitter<T> taskEmitter) {
             this.taskEmitter = taskEmitter;
             this.emitters = new ArrayList<>();
         }
 
-        TaskObserve(TaskObserve middle) {
+        Observe(Observe middle) {
             this.taskEmitter = middle.taskEmitter;
             this.observeOnScheduler = middle.observeOnScheduler;
             this.emitters = middle.emitters;
         }
 
-        public TaskObserve<T> observeOn(@Schedulers.Scheduler int scheduler) {
+        public Observe<T> observeOn(@Schedulers.Scheduler int scheduler) {
             this.observeOnScheduler = scheduler;
             return this;
         }
 
-        public <TR> TaskObserve<TR> map(Function<? super T, ? extends TR> f) {
+        public <TR> Observe<TR> map(Function<? super T, ? extends TR> f) {
             this.emitters.add(new FunctionEmitter<T, TR>(f, observeOnScheduler));
-            return new TaskObserve<TR>(this);
+            return new Observe<TR>(this);
         }
 
         public void subscribe() {

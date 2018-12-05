@@ -1,12 +1,12 @@
-package com.d.lib.aster.integration.retrofit.request;
+package com.d.lib.aster.integration.okhttp3.request;
 
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.scheduler.Observable;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +17,6 @@ import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -51,23 +50,23 @@ public class PostRequest extends HttpRequest<PostRequest> {
                     }
                 }
             }
-            mObservable = getClient().getClient().create(RetrofitAPI.class).postForm(mUrl, mForms);
+            mObservable = getClient().create().postForm(mUrl, mForms);
             return;
         }
         if (mRequestBody != null) {
-            mObservable = getClient().getClient().create(RetrofitAPI.class).postBody(mUrl, mRequestBody);
+            mObservable = getClient().create().postBody(mUrl, mRequestBody);
             return;
         }
         if (mContent != null && mMediaType != null) {
             mRequestBody = RequestBody.create(mMediaType, mContent);
-            mObservable = getClient().getClient().create(RetrofitAPI.class).postBody(mUrl, mRequestBody);
+            mObservable = getClient().create().postBody(mUrl, mRequestBody);
             return;
         }
         if (mParams != null && mParams.size() > 0) {
-            mObservable = getClient().getClient().create(RetrofitAPI.class).post(mUrl, mParams);
+            mObservable = getClient().create().post(mUrl, mParams);
             return;
         }
-        mObservable = getClient().getClient().create(RetrofitAPI.class).post(mUrl);
+        mObservable = getClient().create().post(mUrl);
     }
 
     @Override
@@ -81,7 +80,7 @@ public class PostRequest extends HttpRequest<PostRequest> {
     }
 
     @Override
-    public <T> Observable<T> observable(Class<T> clazz) {
+    public <T> Observable.Observe<T> observable(Class<T> clazz) {
         return super.observable(clazz);
     }
 
@@ -212,23 +211,23 @@ public class PostRequest extends HttpRequest<PostRequest> {
                         }
                     }
                 }
-                mObservable = getClient().getClient().create(RetrofitAPI.class).postForm(mUrl, mForms);
+                mObservable = getClient().create().postForm(mUrl, mForms);
                 return;
             }
             if (mRequestBody != null) {
-                mObservable = getClient().getClient().create(RetrofitAPI.class).postBody(mUrl, mRequestBody);
+                mObservable = getClient().create().postBody(mUrl, mRequestBody);
                 return;
             }
             if (mContent != null && mMediaType != null) {
                 mRequestBody = RequestBody.create(mMediaType, mContent);
-                mObservable = getClient().getClient().create(RetrofitAPI.class).postBody(mUrl, mRequestBody);
+                mObservable = getClient().create().postBody(mUrl, mRequestBody);
                 return;
             }
             if (mParams != null && mParams.size() > 0) {
-                mObservable = getClient().getClient().create(RetrofitAPI.class).post(mUrl, mParams);
+                mObservable = getClient().create().post(mUrl, mParams);
                 return;
             }
-            mObservable = getClient().getClient().create(RetrofitAPI.class).post(mUrl);
+            mObservable = getClient().create().post(mUrl);
         }
 
         @Override
@@ -242,7 +241,7 @@ public class PostRequest extends HttpRequest<PostRequest> {
         }
 
         @Override
-        public <T> Observable<T> observable(Class<T> clazz) {
+        public <T> Observable.Observe<T> observable(Class<T> clazz) {
             return super.observable(clazz);
         }
 

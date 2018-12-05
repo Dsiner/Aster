@@ -1,10 +1,10 @@
-package com.d.lib.aster.taskscheduler.schedule;
+package com.d.lib.aster.scheduler.schedule;
 
 import android.os.Looper;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 
-import com.d.lib.aster.taskscheduler.TaskScheduler;
+import com.d.lib.aster.scheduler.Observable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -54,13 +54,13 @@ public class Schedulers {
      */
     public static void switchThread(@Scheduler final int scheduler, @NonNull final Runnable runnable) {
         if (scheduler == NEW_THREAD) {
-            TaskScheduler.executeNew(runnable);
+            Observable.executeNew(runnable);
             return;
         } else if (scheduler == IO) {
-            TaskScheduler.executeTask(runnable);
+            Observable.executeTask(runnable);
             return;
         } else if (scheduler == MAIN_THREAD) {
-            TaskScheduler.executeMain(runnable);
+            Observable.executeMain(runnable);
             return;
         }
         runnable.run();

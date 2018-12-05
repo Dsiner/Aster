@@ -1,6 +1,6 @@
-package com.d.lib.aster.taskscheduler.schedule;
+package com.d.lib.aster.scheduler.schedule;
 
-import com.d.lib.aster.taskscheduler.callback.Task;
+import com.d.lib.aster.scheduler.callback.Task;
 
 /**
  * TaskEmitter

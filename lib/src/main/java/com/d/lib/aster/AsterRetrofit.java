@@ -1,23 +1,25 @@
 package com.d.lib.aster;
 
 import com.d.lib.aster.base.Config;
+import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
-import com.d.lib.aster.integration.okhttp3.request.DeleteRequest;
-import com.d.lib.aster.integration.okhttp3.request.DownloadRequest;
-import com.d.lib.aster.integration.okhttp3.request.GetRequest;
-import com.d.lib.aster.integration.okhttp3.request.HeadRequest;
-import com.d.lib.aster.integration.okhttp3.request.OptionRequest;
-import com.d.lib.aster.integration.okhttp3.request.PatchRequest;
-import com.d.lib.aster.integration.okhttp3.request.PostRequest;
-import com.d.lib.aster.integration.okhttp3.request.PutRequest;
-import com.d.lib.aster.integration.okhttp3.request.UploadRequest;
+import com.d.lib.aster.integration.retrofit.RetrofitClient;
+import com.d.lib.aster.integration.retrofit.request.DeleteRequest;
+import com.d.lib.aster.integration.retrofit.request.DownloadRequest;
+import com.d.lib.aster.integration.retrofit.request.GetRequest;
+import com.d.lib.aster.integration.retrofit.request.HeadRequest;
+import com.d.lib.aster.integration.retrofit.request.OptionRequest;
+import com.d.lib.aster.integration.retrofit.request.PatchRequest;
+import com.d.lib.aster.integration.retrofit.request.PostRequest;
+import com.d.lib.aster.integration.retrofit.request.PutRequest;
+import com.d.lib.aster.integration.retrofit.request.UploadRequest;
 
 import retrofit2.Retrofit;
 
 /**
  * Created by D on 2017/10/24.
  */
-public class Aster {
+public class AsterRetrofit {
 
     public static Config.Builder init() {
         return new Config.Builder();
@@ -28,10 +30,10 @@ public class Aster {
     }
 
     public static Retrofit getRetrofit() {
-        return null;
+        return RetrofitClient.getDefault(IClient.TYPE_NORMAL).getClient();
     }
 
-    private Aster() {
+    private AsterRetrofit() {
     }
 
     public static GetRequest get(String url) {

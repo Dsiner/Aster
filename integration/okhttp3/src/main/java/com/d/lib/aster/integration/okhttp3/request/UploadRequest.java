@@ -1,4 +1,4 @@
-package com.d.lib.aster.integration.retrofit.request;
+package com.d.lib.aster.integration.okhttp3.request;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,14 +10,16 @@ import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
+import com.d.lib.aster.integration.okhttp3.OkHttpClient;
+import com.d.lib.aster.integration.okhttp3.RequestManager;
 import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
+import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RequestManager;
-import com.d.lib.aster.integration.retrofit.RetrofitAPI;
-import com.d.lib.aster.integration.retrofit.RetrofitClient;
-import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
-import com.d.lib.aster.integration.retrofit.observer.UploadObserver;
+import com.d.lib.aster.integration.okhttp3.observer.UploadObserver;
 import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.scheduler.Observable;
+import com.d.lib.aster.scheduler.callback.DisposableObserver;
+import com.d.lib.aster.scheduler.schedule.Schedulers;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,10 +31,6 @@ import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -45,7 +43,7 @@ import okio.Source;
 /**
  * Created by D on 2017/10/24.
  */
-public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
+public class UploadRequest extends IRequest<UploadRequest, OkHttpClient> {
     protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
     protected Observable<ResponseBody> mObservable;
 
@@ -60,8 +58,8 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
     }
 
     @Override
-    protected RetrofitClient getClient() {
-        return RetrofitClient.create(IClient.TYPE_UPLOAD, mConfig.log(false));
+    protected OkHttpClient getClient() {
+        return OkHttpClient.create(IClient.TYPE_UPLOAD, mConfig.log(false));
     }
 
     protected void prepare() {
@@ -75,7 +73,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
                 }
             }
         }
-        mObservable = getClient().getClient().create(RetrofitAPI.class).upload(mUrl, mMultipartBodyParts);
+        mObservable = getClient().create().upload(mUrl, mMultipartBodyParts);
     }
 
     public void request() {
@@ -151,10 +149,17 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
             RequestManager.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))
-                .subscribe(disposableObserver);
+                .observeOn(Schedulers.mainThread())
+                .subscribe(new ApiRetryFunc<ResponseBody>(disposableObserver,
+                        config.retryCount, config.retryDelayMillis,
+                        new ApiRetryFunc.OnRetry<ResponseBody>() {
+                            @NonNull
+                            @Override
+                            public Observable.Observe<ResponseBody> observe() {
+                                return observable.subscribeOn(Schedulers.io())
+                                        .observeOn(Schedulers.mainThread());
+                            }
+                        }));
     }
 
     public UploadRequest addParam(String paramKey, String paramValue) {
@@ -276,7 +281,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
     /**
      * Singleton
      */
-    public static class Singleton extends IRequest<Singleton, RetrofitClient> {
+    public static class Singleton extends IRequest<Singleton, OkHttpClient> {
         protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
         protected Observable<ResponseBody> mObservable;
 
@@ -286,8 +291,8 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
         }
 
         @Override
-        protected RetrofitClient getClient() {
-            return RetrofitClient.getDefault(IClient.TYPE_UPLOAD);
+        protected OkHttpClient getClient() {
+            return OkHttpClient.getDefault(IClient.TYPE_UPLOAD);
         }
 
         protected void prepare() {
@@ -301,7 +306,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
                     }
                 }
             }
-            mObservable = getClient().getClient().create(RetrofitAPI.class).upload(mUrl, multipartBodyParts);
+            mObservable = getClient().create().upload(mUrl, multipartBodyParts);
         }
 
         public void request() {

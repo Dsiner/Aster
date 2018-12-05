@@ -17,7 +17,7 @@ import java.util.Map;
  * Created by D on 2017/10/27.
  */
 public class App extends Application {
-    public final static String mPath = Environment.getExternalStorageDirectory().getPath() + "/aster/test/";
+    public final static String mPath = Environment.getExternalStorageDirectory().getPath() + "/Aster/test/";
     public final static String mName = "1.jpg";
 
     @Override

@@ -1,30 +1,29 @@
-package com.d.lib.aster.integration.retrofit.request;
+package com.d.lib.aster.integration.okhttp3.request;
 
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.scheduler.Observable;
 
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import io.reactivex.Observable;
-
 /**
+ * Singleton
  * Created by D on 2017/10/24.
  */
-public class HeadRequest extends HttpRequest<HeadRequest> {
+public class PutRequest extends HttpRequest<PutRequest> {
 
-    public HeadRequest(String url, Params params) {
+    public PutRequest(String url, Params params) {
         super(url, params);
     }
 
     @Override
     protected void prepare() {
-        mObservable = getClient().getClient().create(RetrofitAPI.class).head(mUrl, mParams);
+        mObservable = getClient().create().put(mUrl, mParams);
     }
 
     @Override
@@ -38,62 +37,62 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
     }
 
     @Override
-    public <T> Observable<T> observable(Class<T> clazz) {
+    public <T> Observable.Observe<T> observable(Class<T> clazz) {
         return super.observable(clazz);
     }
 
     @Override
-    public HeadRequest baseUrl(String baseUrl) {
+    public PutRequest baseUrl(String baseUrl) {
         return super.baseUrl(baseUrl);
     }
 
     @Override
-    public HeadRequest headers(Map<String, String> headers) {
+    public PutRequest headers(Map<String, String> headers) {
         return super.headers(headers);
     }
 
     @Override
-    public HeadRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    public PutRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         return super.headers(onHeadInterceptor);
     }
 
     @Override
-    public HeadRequest connectTimeout(long timeout) {
+    public PutRequest connectTimeout(long timeout) {
         return super.connectTimeout(timeout);
     }
 
     @Override
-    public HeadRequest readTimeout(long timeout) {
+    public PutRequest readTimeout(long timeout) {
         return super.readTimeout(timeout);
     }
 
     @Override
-    public HeadRequest writeTimeout(long timeout) {
+    public PutRequest writeTimeout(long timeout) {
         return super.writeTimeout(timeout);
     }
 
     @Override
-    public HeadRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+    public PutRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
         return super.sslSocketFactory(sslSocketFactory);
     }
 
     @Override
-    public HeadRequest addInterceptor(Interceptor interceptor) {
+    public PutRequest addInterceptor(Interceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public HeadRequest addNetworkInterceptors(Interceptor interceptor) {
+    public PutRequest addNetworkInterceptors(Interceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 
     @Override
-    public HeadRequest retryCount(int retryCount) {
+    public PutRequest retryCount(int retryCount) {
         return super.retryCount(retryCount);
     }
 
     @Override
-    public HeadRequest retryDelayMillis(long retryDelayMillis) {
+    public PutRequest retryDelayMillis(long retryDelayMillis) {
         return super.retryDelayMillis(retryDelayMillis);
     }
 
@@ -108,7 +107,7 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
 
         @Override
         protected void prepare() {
-            mObservable = getClient().getClient().create(RetrofitAPI.class).head(mUrl, mParams);
+            mObservable = getClient().create().put(mUrl, mParams);
         }
 
         @Override
@@ -122,7 +121,7 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
         }
 
         @Override
-        public <T> Observable<T> observable(Class<T> clazz) {
+        public <T> Observable.Observe<T> observable(Class<T> clazz) {
             return super.observable(clazz);
         }
     }

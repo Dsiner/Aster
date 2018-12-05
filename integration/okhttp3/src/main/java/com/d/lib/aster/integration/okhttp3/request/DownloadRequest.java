@@ -1,4 +1,4 @@
-package com.d.lib.aster.integration.retrofit.request;
+package com.d.lib.aster.integration.okhttp3.request;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -8,28 +8,27 @@ import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
+import com.d.lib.aster.integration.okhttp3.OkHttpClient;
+import com.d.lib.aster.integration.okhttp3.RequestManager;
+import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RequestManager;
-import com.d.lib.aster.integration.retrofit.RetrofitAPI;
-import com.d.lib.aster.integration.retrofit.RetrofitClient;
-import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
-import com.d.lib.aster.integration.retrofit.observer.DownloadObserver;
+import com.d.lib.aster.integration.okhttp3.observer.DownloadObserver;
 import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.scheduler.Observable;
+import com.d.lib.aster.scheduler.callback.DisposableObserver;
+import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.Util;
 
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import io.reactivex.Observable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
 /**
  * Created by D on 2017/10/24.
  */
-public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
+public class DownloadRequest extends IRequest<DownloadRequest, OkHttpClient> {
     protected Observable<ResponseBody> mObservable;
 
     public DownloadRequest(String url) {
@@ -47,15 +46,15 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
     }
 
     @Override
-    protected RetrofitClient getClient() {
-        return RetrofitClient.create(IClient.TYPE_DOWNLOAD, mConfig.log(false));
+    protected OkHttpClient getClient() {
+        return OkHttpClient.create(IClient.TYPE_DOWNLOAD, mConfig.log(false));
     }
 
     private void prepare() {
         if (mParams == null || mParams.size() <= 0) {
-            mObservable = getClient().getClient().create(RetrofitAPI.class).download(mUrl);
+            mObservable = getClient().create().download(mUrl);
         } else {
-            mObservable = getClient().getClient().create(RetrofitAPI.class).download(mUrl, mParams);
+            mObservable = getClient().create().download(mUrl, mParams);
         }
     }
 
@@ -94,10 +93,17 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
             RequestManager.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))
-                .subscribe(disposableObserver);
+                .subscribe(new ApiRetryFunc<ResponseBody>(disposableObserver,
+                        config.retryCount, config.retryDelayMillis,
+                        new ApiRetryFunc.OnRetry<ResponseBody>() {
+                            @NonNull
+                            @Override
+                            public Observable.Observe<ResponseBody> observe() {
+                                return observable.subscribeOn(Schedulers.io())
+                                        .observeOn(Schedulers.io());
+                            }
+                        }));
     }
 
     @Override
@@ -158,7 +164,7 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
     /**
      * Singleton
      */
-    public static class Singleton extends IRequest<Singleton, RetrofitClient> {
+    public static class Singleton extends IRequest<Singleton, OkHttpClient> {
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
@@ -171,15 +177,15 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
         }
 
         @Override
-        protected RetrofitClient getClient() {
-            return RetrofitClient.getDefault(IClient.TYPE_DOWNLOAD);
+        protected OkHttpClient getClient() {
+            return OkHttpClient.getDefault(IClient.TYPE_DOWNLOAD);
         }
 
         private void prepare() {
             if (mParams == null || mParams.size() <= 0) {
-                mObservable = getClient().getClient().create(RetrofitAPI.class).download(mUrl);
+                mObservable = getClient().create().download(mUrl);
             } else {
-                mObservable = getClient().getClient().create(RetrofitAPI.class).download(mUrl, mParams);
+                mObservable = getClient().create().download(mUrl, mParams);
             }
         }
 

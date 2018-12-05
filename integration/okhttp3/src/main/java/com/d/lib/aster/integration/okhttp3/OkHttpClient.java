@@ -21,6 +21,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * Created by D on 2017/7/14.
  */
 public class OkHttpClient extends IClient {
+    private OkHttpApi okHttpApi;
 
     private static class Default {
         private final static OkHttpClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
@@ -37,11 +38,17 @@ public class OkHttpClient extends IClient {
     private OkHttpClient(@State int type, @NonNull Config config) {
         super(type, config);
         this.mClient = getClient(config);
+        this.okHttpApi = new OkHttpApi(mClient);
     }
 
     @NonNull
     public okhttp3.OkHttpClient getClient() {
         return mClient;
+    }
+
+    @NonNull
+    public OkHttpApi create() {
+        return okHttpApi;
     }
 
     public static OkHttpClient create(@State int type, @NonNull Config config) {
