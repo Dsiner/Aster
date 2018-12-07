@@ -47,7 +47,7 @@ public class Upload extends Request {
 
     @Override
     protected void request() {
-        doTask(App.mName, new Runnable() {
+        doTask(App.PIC_NAME, new Runnable() {
             @Override
             public void run() {
                 setDialogProgress(0, 1, false);
@@ -58,7 +58,7 @@ public class Upload extends Request {
 
     @Override
     protected void requestSingleton() {
-        File file = getFile(App.mName);
+        File file = getFile(App.PIC_NAME);
         Aster.getDefault().upload(mUrl)
                 .tag(mUrl)
                 .addParam("token", "008")
@@ -115,7 +115,7 @@ public class Upload extends Request {
 
     @Override
     protected void requestNew() {
-        File file = getFile(App.mName);
+        File file = getFile(App.PIC_NAME);
         Aster.upload(mUrl)
                 .connectTimeout(60 * 1000)
                 .readTimeout(60 * 1000)
@@ -215,7 +215,7 @@ public class Upload extends Request {
     }
 
     private File getFile(String name) {
-        File dir = new File(App.mPath);
+        File dir = new File(App.FILE_PATH);
         if (!dir.exists()) {
             dir.mkdirs();
         }

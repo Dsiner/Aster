@@ -36,7 +36,7 @@ public class Download extends Request {
 
     @Override
     protected void request() {
-        Util.deleteFile(new File(App.mPath));
+        Util.deleteFile(new File(App.FILE_PATH));
         requestImp(TYPE_SINGLETON);
     }
 
@@ -44,7 +44,7 @@ public class Download extends Request {
     protected void requestSingleton() {
         Aster.getDefault().download(mUrl1)
                 .tag(mUrl1)
-                .request(App.mPath, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
+                .request(App.FILE_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
                     @Override
                     public void onStart() {
                         Util.printThread("dsiner_theard onStart");
@@ -89,7 +89,7 @@ public class Download extends Request {
                 .retryCount(3)
                 .retryDelayMillis(1000)
                 .tag(mUrl2)
-                .request(App.mPath, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
+                .request(App.FILE_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
                     @Override
                     public void onStart() {
                         Util.printThread("dsiner_theard onStart");

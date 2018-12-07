@@ -332,13 +332,13 @@ public class Config extends IConfig<Config> {
             return this;
         }
 
-        public Builder setLog(String tag, Level level) {
+        public Builder log(String tag, Level level) {
             Default.TAG_LOG = tag;
             Default.LOG_LEVEL = level;
             return this;
         }
 
-        public Builder setDebug(boolean debug) {
+        public Builder debug(boolean debug) {
             ULog.setDebug(debug);
             return this;
         }

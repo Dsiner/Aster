@@ -17,8 +17,8 @@ import java.util.Map;
  * Created by D on 2017/10/27.
  */
 public class App extends Application {
-    public final static String mPath = Environment.getExternalStorageDirectory().getPath() + "/Aster/test/";
-    public final static String mName = "1.jpg";
+    public final static String FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Aster/test/";
+    public final static String PIC_NAME = "1.jpg";
 
     @Override
     public void onCreate() {
@@ -43,8 +43,8 @@ public class App extends Application {
                 .retryCount(3)
                 .retryDelayMillis(2 * 1000)
                 .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
-                .setLog("RetrofitLog Back = ", Config.Level.BODY)
-                .setDebug(true)
+                .log("RetrofitLog Back = ", Config.Level.BODY)
+                .debug(true)
                 .build();
     }
 }

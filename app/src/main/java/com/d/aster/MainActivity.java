@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Util.deleteFile(new File(App.mPath + App.mName));
+                Util.deleteFile(new File(App.FILE_PATH + App.PIC_NAME));
             }
         }).run();
     }
