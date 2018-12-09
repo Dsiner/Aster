@@ -4,15 +4,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 
+import java.io.Closeable;
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 
 /**
  * Util
  * Created by D on 2017/10/25.
  */
 public class Util {
+    public static final Charset UTF_8 = Charset.forName("UTF-8");
 
     private static Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -53,6 +56,21 @@ public class Util {
             file.delete();
         } else if (file.exists()) {
             file.delete();
+        }
+    }
+
+    /**
+     * Closes {@code closeable}, ignoring any checked exceptions. Does nothing if {@code closeable} is
+     * null.
+     */
+    public static void closeQuietly(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (RuntimeException rethrown) {
+                throw rethrown;
+            } catch (Exception ignored) {
+            }
         }
     }
 

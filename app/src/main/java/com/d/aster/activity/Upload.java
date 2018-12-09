@@ -8,6 +8,7 @@ import com.d.aster.R;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.integration.retrofit.RequestManager;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
@@ -24,7 +25,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
 /**
  * Request --> Upload
