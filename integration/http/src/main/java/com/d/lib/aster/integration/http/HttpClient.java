@@ -106,9 +106,9 @@ public class HttpClient extends IClient {
         }
 
         if (headers != null && headers.size() > 0 || onHeadInterceptor != null) {
-            // TODO: @diner Impl... 2018/12/9
-//            builder.addInterceptor((Interceptor) new HeadersInterceptor(headers)
-//                    .setOnHeadInterceptor(onHeadInterceptor));
+            builder.addInterceptor((Interceptor) new com.d.lib.aster.integration.http.interceptor
+                    .HeadersInterceptor(headers)
+                    .setOnHeadInterceptor(onHeadInterceptor));
         }
         if (interceptors != null && interceptors.size() > 0) {
             for (Interceptor interceptor : interceptors) {

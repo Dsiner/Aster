@@ -9,11 +9,14 @@ public final class RealResponse implements Response {
     final String message;
     final @Nullable
     ResponseBody body;
+    final Exception exception;
 
-    public RealResponse(int code, String message, @Nullable ResponseBody body) {
+    public RealResponse(int code, String message, @Nullable ResponseBody body,
+                        @Nullable Exception exception) {
         this.code = code;
         this.message = message;
         this.body = body;
+        this.exception = exception;
     }
 
     /**

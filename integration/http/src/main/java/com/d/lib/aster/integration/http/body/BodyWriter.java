@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.Map;
 
 /**
@@ -34,7 +35,6 @@ public class BodyWriter {
         sb.append(LINE_END);
         sb.append("Content-Disposition: form-data; name=\"").append(key).append("\"");
         sb.append(LINE_END);
-
         sb.append("Content-Type: " + "text/plain");
         sb.append(LINE_END);
         sb.append("Content-Lenght: ").append(value.length());
@@ -44,6 +44,8 @@ public class BodyWriter {
         sb.append(LINE_END);
         return sb.toString();
     }
+
+
 
     public static void writeFile(File file, String fileKey, String fileType,
                                  final DataOutputStream outputStream,
@@ -80,9 +82,6 @@ public class BodyWriter {
         Util.closeQuietly(inputStream);
     }
 
-    /**
-     * 上传文件时得到一定格式的拼接字符串
-     */
     public static String getFileParamsString(File file, String fileKey, String fileType) {
         StringBuilder sb = new StringBuilder();
         sb.append(LINE_END);

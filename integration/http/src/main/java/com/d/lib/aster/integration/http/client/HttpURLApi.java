@@ -10,6 +10,7 @@ import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.body.BodyWriter;
 import com.d.lib.aster.integration.http.body.MultipartBody;
 import com.d.lib.aster.integration.http.body.RequestBody;
+import com.d.lib.aster.interceptor.Interceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.Task;
 import com.d.lib.aster.utils.Util;
@@ -52,8 +53,8 @@ public class HttpURLApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().getImp(url);
-                    int code = response.code();
+                    Response response = getImp().get(url);
+                    checkSuccessful(response);
                     return response.body();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -63,13 +64,14 @@ public class HttpURLApi {
         });
     }
 
+
     public Observable<ResponseBody> post(final String url) {
         return Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
                     Response response = getImp().post(url);
-                    int code = response.code();
+                    checkSuccessful(response);
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -85,7 +87,7 @@ public class HttpURLApi {
             public ResponseBody run() throws Exception {
                 try {
                     Response response = getImp().post(url, params);
-                    int code = response.code();
+                    checkSuccessful(response);
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -101,7 +103,7 @@ public class HttpURLApi {
             public ResponseBody run() throws Exception {
                 try {
                     Response response = getImp().postBody(url, null);
-                    int code = response.code();
+                    checkSuccessful(response);
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -116,8 +118,8 @@ public class HttpURLApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().postBodyImp(url, requestBody);
-                    int code = response.code();
+                    Response response = getImp().postBody(url, requestBody);
+                    checkSuccessful(response);
                     return response.body();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -132,8 +134,8 @@ public class HttpURLApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().putImp(url, params);
-                    int code = response.code();
+                    Response response = getImp().put(url, params);
+                    checkSuccessful(response);
                     return response.body();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -148,8 +150,8 @@ public class HttpURLApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().putImp(url, params);
-                    int code = response.code();
+                    Response response = getImp().patch(url, params);
+                    checkSuccessful(response);
                     return response.body();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -165,7 +167,7 @@ public class HttpURLApi {
             public ResponseBody run() throws Exception {
                 try {
                     Response response = getImp().options(url, params);
-                    int code = response.code();
+                    checkSuccessful(response);
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -181,7 +183,7 @@ public class HttpURLApi {
             public ResponseBody run() throws Exception {
                 try {
                     Response response = getImp().head(url, params);
-                    int code = response.code();
+                    checkSuccessful(response);
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -197,7 +199,7 @@ public class HttpURLApi {
             public ResponseBody run() throws Exception {
                 try {
                     Response response = getImp().delete(url, params);
-                    int code = response.code();
+                    checkSuccessful(response);
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -212,8 +214,8 @@ public class HttpURLApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().downloadImp(url);
-                    int code = response.code();
+                    Response response = getImp().download(url);
+                    checkSuccessful(response);
                     return response.body();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -232,8 +234,8 @@ public class HttpURLApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().uploadImp(url, multipartBodyParts);
-                    int code = response.code();
+                    Response response = getImp().upload(url, multipartBodyParts);
+                    checkSuccessful(response);
                     return response.body();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -243,6 +245,17 @@ public class HttpURLApi {
         });
     }
 
+    private void checkSuccessful(@NonNull Response response) throws Exception {
+        if (!response.isSuccessful()) {
+            if (((RealResponse) response).exception != null) {
+                throw ((RealResponse) response).exception;
+            }
+            String message = ((RealResponse) response).message;
+            throw new NetworkErrorException(!TextUtils.isEmpty(message) ?
+                    "Request is not successful for " + message
+                    : "Request is not successful.");
+        }
+    }
 
     static class Imp {
         private HttpURLClient mClient;
@@ -251,35 +264,12 @@ public class HttpURLApi {
             this.mClient = client;
         }
 
-        private HttpURLConnection getHttpURLConnection(String requestURL, String requestMethod)
-                throws IOException {
-            URL url = new URL(requestURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(mClient.connectTimeout);
-            conn.setReadTimeout(mClient.readTimeout);
-            conn.setRequestMethod(requestMethod);
-            return conn;
+        public Response get(String url, Params params) {
+            return get(url + "?" + params.getRequestParamsString());
         }
 
-        private RealResponse getRealResponse(@Nullable HttpURLConnection conn) {
-            if (conn != null) {
-                try {
-                    return new RealResponse(conn.getResponseCode(),
-                            conn.getResponseMessage(),
-                            ResponseBody.create(conn));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return new RealResponse(-1, "", null);
-        }
-
-        public void get(String url, Params params, SimpleCallback<Response> callback) {
-            get(url + "?" + params.getRequestParamsString(), callback);
-        }
-
-        public void get(String url, final SimpleCallback<Response> callback) {
-            enqueue(getImp(url), callback);
+        public Response get(String url) {
+            return getImp(url);
         }
 
         private RealResponse getImp(String url) {
@@ -287,14 +277,19 @@ public class HttpURLApi {
             try {
                 conn = getHttpURLConnection(url, "GET");
                 conn.setDoInput(true);
+                intercept(conn);
                 conn.connect();
                 return getRealResponse(conn);
             } catch (Exception e) {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
+        }
+
+        public Response patch(String url, Params params) {
+            return patchImp(url, params);
         }
 
         private RealResponse patchImp(String url, Params params) {
@@ -302,14 +297,19 @@ public class HttpURLApi {
             try {
                 conn = getHttpURLConnection(url, "PATCH");
                 conn.setDoInput(true);
+                intercept(conn);
                 conn.connect();
                 return getRealResponse(conn);
             } catch (Exception e) {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
+        }
+
+        public Response put(String url, Params params) {
+            return putImp(url, params);
         }
 
         private RealResponse putImp(String url, Params params) {
@@ -317,13 +317,14 @@ public class HttpURLApi {
             try {
                 conn = getHttpURLConnection(url, "PUT");
                 conn.setDoInput(true);
+                intercept(conn);
                 conn.connect();
                 return getRealResponse(conn);
             } catch (Exception e) {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
         }
 
@@ -354,6 +355,7 @@ public class HttpURLApi {
                 if (!TextUtils.isEmpty("")) {
                     conn.setRequestProperty("Content-Type", "");
                 }
+                intercept(conn);
                 conn.connect();
                 String body = params.getRequestParamsString();
                 if (!TextUtils.isEmpty(body)) {
@@ -369,7 +371,7 @@ public class HttpURLApi {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
         }
 
@@ -392,6 +394,7 @@ public class HttpURLApi {
                 if (!TextUtils.isEmpty("")) {
                     conn.setRequestProperty("Content-Type", "");
                 }
+                intercept(conn);
                 conn.connect();
                 return getRealResponse(conn);
             } catch (Exception e) {
@@ -399,7 +402,7 @@ public class HttpURLApi {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
         }
 
@@ -412,13 +415,14 @@ public class HttpURLApi {
             try {
                 conn = getHttpURLConnection(url, "OPTIONS");
                 conn.setDoInput(true);
+                intercept(conn);
                 conn.connect();
                 return getRealResponse(conn);
             } catch (Exception e) {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
         }
 
@@ -431,13 +435,14 @@ public class HttpURLApi {
             try {
                 conn = getHttpURLConnection(url, "HEAD");
                 conn.setDoInput(true);
+                intercept(conn);
                 conn.connect();
                 return getRealResponse(conn);
             } catch (Exception e) {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
         }
 
@@ -450,14 +455,19 @@ public class HttpURLApi {
             try {
                 conn = getHttpURLConnection(url, "DELETE");
                 conn.setDoInput(true);
+                intercept(conn);
                 conn.connect();
                 return getRealResponse(conn);
             } catch (Exception e) {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
+        }
+
+        public Response download(String url) {
+            return downloadImp(url);
         }
 
         private RealResponse downloadImp(String url) {
@@ -465,14 +475,19 @@ public class HttpURLApi {
             try {
                 conn = getHttpURLConnection(url, "GET");
                 conn.setDoInput(true);
+                intercept(conn);
                 conn.connect();
                 return getRealResponse(conn);
             } catch (Exception e) {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
+        }
+
+        public Response upload(String url, List<MultipartBody.Part> multipartBodyParts) {
+            return uploadImp(url, multipartBodyParts);
         }
 
         private RealResponse uploadImp(String url, List<MultipartBody.Part> multipartBodyParts) {
@@ -480,13 +495,14 @@ public class HttpURLApi {
             try {
                 conn = getHttpURLConnection(url, "POST");
                 setConnection(conn);
+                intercept(conn);
                 conn.connect();
                 DataOutputStream outputStream = new DataOutputStream(conn.getOutputStream());
                 for (MultipartBody.Part part : multipartBodyParts) {
                     if (part.requestBody == null
                             && !TextUtils.isEmpty(part.key)
                             && !TextUtils.isEmpty(part.key)) {
-                        // 上传参数
+                        // Upload parameter
                         outputStream.write(BodyWriter.getParamsString(part.key, part.value)
                                 .getBytes());
                         outputStream.flush();
@@ -494,7 +510,7 @@ public class HttpURLApi {
                         part.requestBody.writeTo(outputStream);
                     }
                 }
-                // 写结束标记位
+                // Write end mark
                 byte[] endData = (LINE_END + TWO_HYPHENS
                         + BOUNDARY
                         + TWO_HYPHENS + LINE_END).getBytes();
@@ -502,8 +518,18 @@ public class HttpURLApi {
                 outputStream.flush();
                 return getRealResponse(conn);
             } catch (Exception e) {
-                return getRealResponse(null);
+                return getRealResponse(e);
             }
+        }
+
+        private HttpURLConnection getHttpURLConnection(String requestURL, String requestMethod)
+                throws IOException {
+            URL url = new URL(requestURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(mClient.connectTimeout);
+            conn.setReadTimeout(mClient.readTimeout);
+            conn.setRequestMethod(requestMethod);
+            return conn;
         }
 
         private void setConnection(HttpURLConnection conn) throws ProtocolException {
@@ -513,6 +539,34 @@ public class HttpURLApi {
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("Charset", "UTF-8");
             conn.setRequestProperty("Content-Type", "multipart/form-data; BOUNDARY=" + BOUNDARY);
+        }
+
+        private void intercept(HttpURLConnection conn) throws IOException {
+            List<Interceptor> interceptors = mClient.interceptors;
+            if (interceptors == null) {
+                return;
+            }
+            for (Interceptor interceptor : interceptors) {
+                interceptor.intercept(conn);
+            }
+        }
+
+        private RealResponse getRealResponse(@Nullable HttpURLConnection conn) {
+            if (conn != null) {
+                try {
+                    return new RealResponse(conn.getResponseCode(),
+                            conn.getResponseMessage(),
+                            ResponseBody.create(conn),
+                            null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return new RealResponse(-1, "", null, null);
+        }
+
+        private RealResponse getRealResponse(@Nullable Exception e) {
+            return new RealResponse(-1, "", null, e);
         }
 
         private void enqueue(final Response response,
