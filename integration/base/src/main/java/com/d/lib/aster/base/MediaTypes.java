@@ -1,5 +1,4 @@
-package com.d.lib.aster.integration.http;
-
+package com.d.lib.aster.base;
 
 import com.d.lib.aster.base.MediaType;
 

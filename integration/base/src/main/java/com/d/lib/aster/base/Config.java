@@ -1,5 +1,6 @@
 package com.d.lib.aster.base;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -252,6 +253,7 @@ public class Config extends IConfig<Config> {
     }
 
     public static class Builder {
+        private Context context;
         private String baseUrl;
         private Map<String, String> headers = new LinkedHashMap<>();
         private HeadersInterceptor.OnHeadInterceptor onHeadInterceptor;
@@ -268,6 +270,10 @@ public class Config extends IConfig<Config> {
         private ArrayList<Interceptor> networkInterceptors = new ArrayList<>();
 
         public Builder() {
+        }
+
+        public Builder(Context context) {
+            this.context = context.getApplicationContext();
         }
 
         public Builder baseUrl(String baseUrl) {
@@ -344,6 +350,7 @@ public class Config extends IConfig<Config> {
         }
 
         public void build() {
+            IClient.setContext(context);
             Singleton.setDefault(this);
         }
     }

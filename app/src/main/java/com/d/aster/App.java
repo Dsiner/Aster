@@ -27,7 +27,7 @@ public class App extends Application {
         headers.put(API.CommonHeader.platform, "Android");
         headers.put(API.CommonHeader.appVersion, "v1.0.0");
 
-        Aster.init()
+        Aster.init(getApplicationContext())
                 .baseUrl(API.API_BASE)
                 .headers(headers)
                 .headers(new HeadersInterceptor.OnHeadInterceptor() {

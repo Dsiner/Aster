@@ -1,4 +1,4 @@
-package com.d.lib.aster.integration.http.body;
+package com.d.lib.aster.integration.volley.body;
 /*
  * Copyright (C) 2014 Square, Inc.
  *
@@ -20,7 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.MediaType;
-import com.d.lib.aster.base.MediaTypes;
+import com.d.lib.aster.integration.volley.MediaTypes;
 import com.d.lib.aster.utils.Util;
 
 import java.io.DataOutputStream;

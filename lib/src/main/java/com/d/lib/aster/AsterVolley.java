@@ -1,7 +1,5 @@
 package com.d.lib.aster;
 
-import android.content.Context;
-
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.integration.volley.request.DeleteRequest;
@@ -19,14 +17,10 @@ import retrofit2.Retrofit;
 /**
  * Created by D on 2017/10/24.
  */
-public class Aster {
+public class AsterVolley {
 
     public static Config.Builder init() {
         return new Config.Builder();
-    }
-
-    public static Config.Builder init(Context context) {
-        return new Config.Builder(context);
     }
 
     public static Singleton getDefault() {
@@ -37,7 +31,7 @@ public class Aster {
         return null;
     }
 
-    private Aster() {
+    private AsterVolley() {
     }
 
     public static GetRequest get(String url) {

@@ -1,4 +1,4 @@
-package com.d.lib.aster.integration.http.request;
+package com.d.lib.aster.integration.volley.request;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,19 +7,19 @@ import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.MediaType;
+import com.d.lib.aster.base.MediaTypes;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.integration.http.HttpClient;
-import com.d.lib.aster.base.MediaTypes;
-import com.d.lib.aster.integration.http.RequestManager;
-import com.d.lib.aster.integration.http.body.BodyWriter;
-import com.d.lib.aster.integration.http.body.MultipartBody;
-import com.d.lib.aster.integration.http.body.RequestBody;
-import com.d.lib.aster.integration.http.body.UploadProgressRequestBody;
-import com.d.lib.aster.integration.http.client.ResponseBody;
-import com.d.lib.aster.integration.http.func.ApiRetryFunc;
-import com.d.lib.aster.integration.http.observer.UploadObserver;
+import com.d.lib.aster.integration.volley.RequestManager;
+import com.d.lib.aster.integration.volley.VolleyClient;
+import com.d.lib.aster.integration.volley.body.BodyWriter;
+import com.d.lib.aster.integration.volley.body.MultipartBody;
+import com.d.lib.aster.integration.volley.body.RequestBody;
+import com.d.lib.aster.integration.volley.body.UploadProgressRequestBody;
+import com.d.lib.aster.integration.volley.client.ResponseBody;
+import com.d.lib.aster.integration.volley.func.ApiRetryFunc;
+import com.d.lib.aster.integration.volley.observer.UploadObserver;
 import com.d.lib.aster.interceptor.HeadersInterceptor;
 import com.d.lib.aster.interceptor.Interceptor;
 import com.d.lib.aster.scheduler.Observable;
@@ -40,7 +40,7 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
-public class UploadRequest extends IRequest<UploadRequest, HttpClient> {
+public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
     protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
     protected Observable<ResponseBody> mObservable;
 
@@ -55,8 +55,8 @@ public class UploadRequest extends IRequest<UploadRequest, HttpClient> {
     }
 
     @Override
-    protected HttpClient getClient() {
-        return HttpClient.create(IClient.TYPE_UPLOAD, mConfig.log(false));
+    protected VolleyClient getClient() {
+        return VolleyClient.create(IClient.TYPE_UPLOAD, mConfig.log(false));
     }
 
     protected void prepare() {
@@ -272,7 +272,7 @@ public class UploadRequest extends IRequest<UploadRequest, HttpClient> {
     /**
      * Singleton
      */
-    public static class Singleton extends IRequest<Singleton, HttpClient> {
+    public static class Singleton extends IRequest<Singleton, VolleyClient> {
         protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
         protected Observable<ResponseBody> mObservable;
 
@@ -282,8 +282,8 @@ public class UploadRequest extends IRequest<UploadRequest, HttpClient> {
         }
 
         @Override
-        protected HttpClient getClient() {
-            return HttpClient.getDefault(IClient.TYPE_UPLOAD);
+        protected VolleyClient getClient() {
+            return VolleyClient.getDefault(IClient.TYPE_UPLOAD);
         }
 
         protected void prepare() {

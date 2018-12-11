@@ -8,8 +8,8 @@ import com.d.aster.R;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.integration.volley.client.ResponseBody;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
