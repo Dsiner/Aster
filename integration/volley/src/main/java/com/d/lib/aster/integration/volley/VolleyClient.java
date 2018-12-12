@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
+import com.d.lib.aster.integration.volley.client.OkHttpStack;
 import com.d.lib.aster.integration.volley.client.VolleyApi;
 import com.d.lib.aster.integration.volley.interceptor.HttpLoggingInterceptor;
 import com.d.lib.aster.interceptor.HeadersInterceptor;
@@ -72,11 +73,11 @@ public class VolleyClient extends IClient {
      * New instance - Custom configuration
      *
      * @param config Configuration
-     * @return OkHttpClient
+     * @return VolleyClient
      */
     @NonNull
     public static com.d.lib.aster.integration.volley.client.VolleyClient getClient(@NonNull Config config) {
-        return getOkHttpClient(config.headers,
+        return getVolleyClient(config.headers,
                 config.onHeadInterceptor,
                 config.connectTimeout != -1 ? config.connectTimeout : Config.getDefault().connectTimeout,
                 config.readTimeout != -1 ? config.readTimeout : Config.getDefault().readTimeout,
@@ -87,7 +88,7 @@ public class VolleyClient extends IClient {
                 config.log);
     }
 
-    private static com.d.lib.aster.integration.volley.client.VolleyClient getOkHttpClient(Map<String, String> headers,
+    private static com.d.lib.aster.integration.volley.client.VolleyClient getVolleyClient(Map<String, String> headers,
                                                                                           HeadersInterceptor.OnHeadInterceptor onHeadInterceptor,
                                                                                           long connectTimeout,
                                                                                           long readTimeout,
@@ -98,6 +99,7 @@ public class VolleyClient extends IClient {
                                                                                           boolean log) {
         com.d.lib.aster.integration.volley.client.VolleyClient.Builder builder
                 = new com.d.lib.aster.integration.volley.client.VolleyClient().newBuilder()
+                .setHurlStack(new OkHttpStack())
                 .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS);
@@ -117,7 +119,7 @@ public class VolleyClient extends IClient {
             }
         }
         if (log) {
-            builder.addInterceptor(getOkhttpLog());
+            builder.addInterceptor(getVolleyLog());
         }
 
         if (networkInterceptors != null && networkInterceptors.size() > 0) {
@@ -128,7 +130,7 @@ public class VolleyClient extends IClient {
         return builder.build();
     }
 
-    private static HttpLoggingInterceptor getOkhttpLog() {
+    private static HttpLoggingInterceptor getVolleyLog() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         return loggingInterceptor;
     }

@@ -43,6 +43,7 @@ public class VolleyClient {
     final int readTimeout;
     final int writeTimeout;
     final int pingInterval;
+    final OkHttpStack okHttpStack;
 
     volatile RequestQueue mRequestQueue;
 
@@ -51,6 +52,7 @@ public class VolleyClient {
     }
 
     VolleyClient(Builder builder) {
+        this.okHttpStack = builder.okHttpStack;
         this.proxy = builder.proxy;
         this.interceptors = builder.interceptors;
         this.networkInterceptors = builder.networkInterceptors;
@@ -77,8 +79,11 @@ public class VolleyClient {
         if (mRequestQueue == null) {
             synchronized (this) {
                 if (mRequestQueue == null) {
-                    mRequestQueue = Volley.newRequestQueue(IClient.getContext()
-                            /*new OkHttpStack()*/);
+                    if (okHttpStack != null) {
+                        mRequestQueue = Volley.newRequestQueue(IClient.getContext(), okHttpStack);
+                    } else {
+                        mRequestQueue = Volley.newRequestQueue(IClient.getContext());
+                    }
                 }
             }
         }
@@ -131,6 +136,7 @@ public class VolleyClient {
         int readTimeout;
         int writeTimeout;
         int pingInterval;
+        OkHttpStack okHttpStack;
 
         public Builder() {
             proxySelector = ProxySelector.getDefault();
@@ -145,6 +151,7 @@ public class VolleyClient {
         }
 
         Builder(VolleyClient volleyClient) {
+            this.okHttpStack = volleyClient.okHttpStack;
             this.proxy = volleyClient.proxy;
             this.interceptors.addAll(volleyClient.interceptors);
             this.networkInterceptors.addAll(volleyClient.networkInterceptors);
@@ -158,6 +165,11 @@ public class VolleyClient {
             this.readTimeout = volleyClient.readTimeout;
             this.writeTimeout = volleyClient.writeTimeout;
             this.pingInterval = volleyClient.pingInterval;
+        }
+
+        public Builder setHurlStack(OkHttpStack okHttpStack) {
+            this.okHttpStack = okHttpStack;
+            return this;
         }
 
         public Builder connectTimeout(long connectTimeout, TimeUnit milliseconds) {
