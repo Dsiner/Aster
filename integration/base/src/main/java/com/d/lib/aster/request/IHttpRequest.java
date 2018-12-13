@@ -37,11 +37,6 @@ public abstract class IHttpRequest<HR extends IHttpRequest, C extends IClient>
         this.mConfig = config != null ? config : Config.getDefault();
     }
 
-    @Override
-    protected C getClient() {
-        return null;
-    }
-
     /**
      * Initialize Observable, etc.
      */
@@ -126,7 +121,7 @@ public abstract class IHttpRequest<HR extends IHttpRequest, C extends IClient>
     /**
      * Singleton
      */
-    public static abstract class Singleton<HRF extends IRequest, C extends IClient>
+    public static abstract class Singleton<HRF extends Singleton, C extends IClient>
             extends IRequest<HRF, C> {
 
         private Singleton() {
@@ -144,11 +139,6 @@ public abstract class IHttpRequest<HR extends IHttpRequest, C extends IClient>
             this.mUrl = url;
             this.mParams = params;
             this.mConfig = config != null ? config : Config.getDefault();
-        }
-
-        @Override
-        protected C getClient() {
-            return null;
         }
 
         /**

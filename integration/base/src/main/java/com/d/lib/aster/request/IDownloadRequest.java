@@ -17,7 +17,7 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
-public abstract class IDownloadRequest<HR extends IHttpRequest, C extends IClient>
+public abstract class IDownloadRequest<HR extends IDownloadRequest, C extends IClient>
         extends IRequest<HR, C> {
 
     public IDownloadRequest(String url) {
@@ -32,11 +32,6 @@ public abstract class IDownloadRequest<HR extends IHttpRequest, C extends IClien
         this.mUrl = url;
         this.mParams = params;
         this.mConfig = config != null ? config : Config.getDefault();
-    }
-
-    @Override
-    protected C getClient() {
-        return null;
     }
 
     protected abstract void prepare();
@@ -104,7 +99,7 @@ public abstract class IDownloadRequest<HR extends IHttpRequest, C extends IClien
     /**
      * Singleton
      */
-    public static abstract class Singleton<HRF extends IHttpRequest, C extends IClient>
+    public static abstract class Singleton<HRF extends Singleton, C extends IClient>
             extends IRequest<HRF, C> {
 
         public Singleton(String url) {
@@ -114,11 +109,6 @@ public abstract class IDownloadRequest<HR extends IHttpRequest, C extends IClien
         public Singleton(String url, Params params) {
             this.mUrl = url;
             this.mParams = params;
-        }
-
-        @Override
-        protected C getClient() {
-            return null;
         }
 
         protected abstract void prepare();

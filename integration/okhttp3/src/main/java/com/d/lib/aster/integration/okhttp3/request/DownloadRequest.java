@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.okhttp3.OkHttpClient;
@@ -14,6 +13,7 @@ import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.integration.okhttp3.observer.DownloadObserver;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.request.IDownloadRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -28,21 +28,19 @@ import okhttp3.ResponseBody;
 /**
  * Created by D on 2017/10/24.
  */
-public class DownloadRequest extends IRequest<DownloadRequest, OkHttpClient> {
+public class DownloadRequest extends IDownloadRequest<DownloadRequest, OkHttpClient> {
     protected Observable<ResponseBody> mObservable;
 
     public DownloadRequest(String url) {
-        this(url, null);
+        super(url, null);
     }
 
     public DownloadRequest(String url, Params params) {
-        this(url, params, null);
+        super(url, params);
     }
 
     public DownloadRequest(String url, Params params, Config config) {
-        this.mUrl = url;
-        this.mParams = params;
-        this.mConfig = config != null ? config : Config.getDefault();
+        super(url, params, config);
     }
 
     @Override
@@ -50,7 +48,8 @@ public class DownloadRequest extends IRequest<DownloadRequest, OkHttpClient> {
         return OkHttpClient.create(IClient.TYPE_DOWNLOAD, mConfig.log(false));
     }
 
-    private void prepare() {
+    @Override
+    protected void prepare() {
         if (mParams == null || mParams.size() <= 0) {
             mObservable = getClient().create().download(mUrl);
         } else {
@@ -59,6 +58,7 @@ public class DownloadRequest extends IRequest<DownloadRequest, OkHttpClient> {
     }
 
     @SuppressWarnings("ConstantConditions")
+    @Override
     public void request(@NonNull final String path, @NonNull final String name,
                         @NonNull final ProgressCallback callback) {
         if (TextUtils.isEmpty(path)) {
@@ -164,16 +164,15 @@ public class DownloadRequest extends IRequest<DownloadRequest, OkHttpClient> {
     /**
      * Singleton
      */
-    public static class Singleton extends IRequest<Singleton, OkHttpClient> {
+    public static class Singleton extends IDownloadRequest.Singleton<Singleton, OkHttpClient> {
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
-            this(url, null);
+            super(url);
         }
 
         public Singleton(String url, Params params) {
-            this.mUrl = url;
-            this.mParams = params;
+            super(url, params);
         }
 
         @Override
@@ -181,7 +180,8 @@ public class DownloadRequest extends IRequest<DownloadRequest, OkHttpClient> {
             return OkHttpClient.getDefault(IClient.TYPE_DOWNLOAD);
         }
 
-        private void prepare() {
+        @Override
+        protected void prepare() {
             if (mParams == null || mParams.size() <= 0) {
                 mObservable = getClient().create().download(mUrl);
             } else {
@@ -190,6 +190,7 @@ public class DownloadRequest extends IRequest<DownloadRequest, OkHttpClient> {
         }
 
         @SuppressWarnings("ConstantConditions")
+        @Override
         public void request(@NonNull final String path, @NonNull final String name,
                             @NonNull final ProgressCallback callback) {
             if (TextUtils.isEmpty(path)) {

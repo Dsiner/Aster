@@ -46,8 +46,13 @@ public class GetRequest extends HttpRequest<GetRequest> {
     }
 
     @Override
-    public <T> Observable<T> observable(Class<T> clazz) {
+    public <T> com.d.lib.aster.scheduler.Observable.Observe<T> observable(Class<T> clazz) {
         return super.observable(clazz);
+    }
+
+    @Override
+    public <T> Observable<T> observableRx(Class<T> clazz) {
+        return super.observableRx(clazz);
     }
 
     @Override
@@ -138,8 +143,13 @@ public class GetRequest extends HttpRequest<GetRequest> {
         }
 
         @Override
-        public <T> Observable<T> observable(Class<T> clazz) {
+        public <T> com.d.lib.aster.scheduler.Observable.Observe<T> observable(Class<T> clazz) {
             return super.observable(clazz);
+        }
+
+        @Override
+        public <T> Observable<T> observableRx(Class<T> clazz) {
+            return super.observableRx(clazz);
         }
     }
 }

@@ -6,7 +6,7 @@
 [![Wiki-Guide](https://img.shields.io/badge/Wiki-Guide-brightgreen.svg)](https://github.com/Dsiner/Aster/wiki)
 [![Readme](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-brightgreen.svg)](https://github.com/Dsiner/Aster/blob/master/README-zh.md)
 
-> A network request library based on `Okhttp3` + `Retrofit2` + `RxJava2`
+> A network request library based on `OkHttp3` + `Retrofit2` + `RxJava2`
 
 ## Features
 - A chain, full chain call `.func0().func1().func2()...` , `adaptive`, `simple`

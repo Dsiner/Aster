@@ -135,7 +135,7 @@ public abstract class IPostRequest<HR extends IHttpRequest, C extends IClient>
     /**
      * Singleton
      */
-    public abstract static class Singleton<HRF extends IHttpRequest, C extends IClient>
+    public abstract static class Singleton<HRF extends Singleton, C extends IClient>
             extends IHttpRequest.Singleton<HRF, C> {
 
         public Singleton(String url) {
@@ -161,32 +161,32 @@ public abstract class IPostRequest<HR extends IHttpRequest, C extends IClient>
             return super.observable(clazz);
         }
 
-        public Singleton<HRF, C> addForm(String formKey, Object formValue) {
-            return this;
+        public HRF addForm(String formKey, Object formValue) {
+            return (HRF) this;
         }
 
 //        public Singleton setRequestBody(RequestBody requestBody) {
 //            return this;
 //        }
 
-        public Singleton<HRF, C> setString(String string) {
-            return this;
+        public HRF setString(String string) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> setString(String string, MediaType mediaType) {
-            return this;
+        public HRF setString(String string, MediaType mediaType) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> setJson(String json) {
-            return this;
+        public HRF setJson(String json) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> setJson(JSONObject jsonObject) {
-            return this;
+        public HRF setJson(JSONObject jsonObject) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> setJson(JSONArray jsonArray) {
-            return this;
+        public HRF setJson(JSONArray jsonArray) {
+            return (HRF) this;
         }
     }
 }

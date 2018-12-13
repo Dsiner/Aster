@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
@@ -15,6 +14,7 @@ import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
 import com.d.lib.aster.integration.retrofit.observer.DownloadObserver;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.request.IDownloadRequest;
 import com.d.lib.aster.utils.Util;
 
 import java.util.Map;
@@ -29,21 +29,19 @@ import okhttp3.ResponseBody;
 /**
  * Created by D on 2017/10/24.
  */
-public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
+public class DownloadRequest extends IDownloadRequest<DownloadRequest, RetrofitClient> {
     protected Observable<ResponseBody> mObservable;
 
     public DownloadRequest(String url) {
-        this(url, null);
+        super(url);
     }
 
     public DownloadRequest(String url, Params params) {
-        this(url, params, null);
+        super(url, params);
     }
 
     public DownloadRequest(String url, Params params, Config config) {
-        this.mUrl = url;
-        this.mParams = params;
-        this.mConfig = config != null ? config : Config.getDefault();
+        super(url, params, config);
     }
 
     @Override
@@ -51,7 +49,8 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
         return RetrofitClient.create(IClient.TYPE_DOWNLOAD, mConfig.log(false));
     }
 
-    private void prepare() {
+    @Override
+    protected void prepare() {
         if (mParams == null || mParams.size() <= 0) {
             mObservable = getClient().getClient().create(RetrofitAPI.class).download(mUrl);
         } else {
@@ -60,6 +59,7 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
     }
 
     @SuppressWarnings("ConstantConditions")
+    @Override
     public void request(@NonNull final String path, @NonNull final String name,
                         @NonNull final ProgressCallback callback) {
         if (TextUtils.isEmpty(path)) {
@@ -158,16 +158,15 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
     /**
      * Singleton
      */
-    public static class Singleton extends IRequest<Singleton, RetrofitClient> {
+    public static class Singleton extends IDownloadRequest.Singleton<Singleton, RetrofitClient> {
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
-            this(url, null);
+            super(url);
         }
 
         public Singleton(String url, Params params) {
-            this.mUrl = url;
-            this.mParams = params;
+            super(url, params);
         }
 
         @Override
@@ -175,7 +174,8 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
             return RetrofitClient.getDefault(IClient.TYPE_DOWNLOAD);
         }
 
-        private void prepare() {
+        @Override
+        protected void prepare() {
             if (mParams == null || mParams.size() <= 0) {
                 mObservable = getClient().getClient().create(RetrofitAPI.class).download(mUrl);
             } else {
@@ -184,6 +184,7 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
         }
 
         @SuppressWarnings("ConstantConditions")
+        @Override
         public void request(@NonNull final String path, @NonNull final String name,
                             @NonNull final ProgressCallback callback) {
             if (TextUtils.isEmpty(path)) {

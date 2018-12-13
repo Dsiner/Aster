@@ -2,7 +2,6 @@ package com.d.lib.aster.integration.retrofit.request;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
@@ -15,6 +14,7 @@ import com.d.lib.aster.integration.retrofit.func.MapFunc;
 import com.d.lib.aster.integration.retrofit.observer.ApiObserver;
 import com.d.lib.aster.integration.retrofit.observer.AsyncApiObserver;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.request.IHttpRequest;
 import com.d.lib.aster.utils.Util;
 
 import java.util.Map;
@@ -30,24 +30,20 @@ import okhttp3.ResponseBody;
 /**
  * Created by D on 2017/10/24.
  */
-public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, RetrofitClient> {
+public abstract class HttpRequest<HR extends HttpRequest>
+        extends IHttpRequest<HR, RetrofitClient> {
     protected Observable<ResponseBody> mObservable;
 
-    private HttpRequest() {
-    }
-
     public HttpRequest(String url) {
-        this(url, null);
+        super(url);
     }
 
     public HttpRequest(String url, Params params) {
-        this(url, params, null);
+        super(url, params);
     }
 
     public HttpRequest(String url, Params params, Config config) {
-        this.mUrl = url;
-        this.mParams = params;
-        this.mConfig = config != null ? config : Config.getDefault();
+        super(url, params, config);
     }
 
     @Override
@@ -60,6 +56,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, R
      */
     protected abstract void prepare();
 
+    @Override
     public <T> void request(SimpleCallback<T> callback) {
         prepare();
         DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
@@ -74,6 +71,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, R
                 .subscribe(disposableObserver);
     }
 
+    @Override
     public <T, R> void request(AsyncCallback<T, R> callback) {
         prepare();
         DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
@@ -89,7 +87,12 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, R
                 .subscribe(disposableObserver);
     }
 
-    public <T> Observable<T> observable(Class<T> clazz) {
+    @Override
+    public <T> com.d.lib.aster.scheduler.Observable.Observe<T> observable(Class<T> clazz) {
+        return super.observable(clazz);
+    }
+
+    public <T> Observable<T> observableRx(Class<T> clazz) {
         prepare();
         return mObservable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -166,24 +169,20 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, R
     /**
      * Singleton
      */
-    public static abstract class Singleton<HRF extends IRequest> extends IRequest<HRF, RetrofitClient> {
+    public static abstract class Singleton<HRF extends Singleton>
+            extends IHttpRequest.Singleton<HRF, RetrofitClient> {
         protected Observable<ResponseBody> mObservable;
 
-        private Singleton() {
-        }
-
         public Singleton(String url) {
-            this(url, null);
+            super(url);
         }
 
         public Singleton(String url, Params params) {
-            this(url, params, null);
+            super(url, params);
         }
 
         public Singleton(String url, Params params, Config config) {
-            this.mUrl = url;
-            this.mParams = params;
-            this.mConfig = config != null ? config : Config.getDefault();
+            super(url, params, config);
         }
 
         @Override
@@ -196,6 +195,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, R
          */
         protected abstract void prepare();
 
+        @Override
         public <T> void request(SimpleCallback<T> callback) {
             prepare();
             DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
@@ -211,6 +211,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, R
                     .subscribe(disposableObserver);
         }
 
+        @Override
         public <T, R> void request(AsyncCallback<T, R> callback) {
             prepare();
             DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
@@ -227,7 +228,12 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, R
                     .subscribe(disposableObserver);
         }
 
-        public <T> Observable<T> observable(Class<T> clazz) {
+        @Override
+        public <T> com.d.lib.aster.scheduler.Observable.Observe<T> observable(Class<T> clazz) {
+            return super.observable(clazz);
+        }
+
+        public <T> Observable<T> observableRx(Class<T> clazz) {
             prepare();
             return mObservable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())

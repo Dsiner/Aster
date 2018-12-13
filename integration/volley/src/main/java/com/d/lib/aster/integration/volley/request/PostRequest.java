@@ -1,13 +1,17 @@
 package com.d.lib.aster.integration.volley.request;
 
+import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.volley.MediaTypes;
+import com.d.lib.aster.integration.volley.VolleyClient;
 import com.d.lib.aster.integration.volley.body.RequestBody;
+import com.d.lib.aster.integration.volley.client.ResponseBody;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.request.IPostRequest;
 import com.d.lib.aster.scheduler.Observable;
 
 import org.json.JSONArray;
@@ -22,7 +26,8 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
-public class PostRequest extends HttpRequest<PostRequest> {
+public class PostRequest extends IPostRequest<PostRequest, VolleyClient> {
+    protected Observable<ResponseBody> mObservable;
     private Map<String, Object> mForms = new LinkedHashMap<>();
     private RequestBody mRequestBody;
     private MediaType mMediaType;
@@ -34,6 +39,11 @@ public class PostRequest extends HttpRequest<PostRequest> {
 
     public PostRequest(String url, Params params) {
         super(url, params);
+    }
+
+    @Override
+    protected VolleyClient getClient() {
+        return VolleyClient.create(IClient.TYPE_NORMAL, mConfig.log(true));
     }
 
     @Override
@@ -183,7 +193,8 @@ public class PostRequest extends HttpRequest<PostRequest> {
     /**
      * Singleton
      */
-    public static class Singleton extends HttpRequest.Singleton<Singleton> {
+    public static class Singleton extends IPostRequest.Singleton<Singleton, VolleyClient> {
+        protected Observable<ResponseBody> mObservable;
         private Map<String, Object> mForms = new LinkedHashMap<>();
         private RequestBody mRequestBody;
         private MediaType mMediaType;
@@ -195,6 +206,11 @@ public class PostRequest extends HttpRequest<PostRequest> {
 
         public Singleton(String url, Params params) {
             super(url, params);
+        }
+
+        @Override
+        protected VolleyClient getClient() {
+            return VolleyClient.getDefault(IClient.TYPE_NORMAL);
         }
 
         @Override
@@ -244,6 +260,7 @@ public class PostRequest extends HttpRequest<PostRequest> {
             return super.observable(clazz);
         }
 
+        @Override
         public Singleton addForm(String formKey, Object formValue) {
             if (formKey != null && formValue != null) {
                 mForms.put(formKey, formValue);
@@ -256,6 +273,7 @@ public class PostRequest extends HttpRequest<PostRequest> {
             return this;
         }
 
+        @Override
         public Singleton setString(String string) {
             this.mContent = string;
             this.mMediaType = MediaTypes.TEXT_PLAIN_TYPE;
@@ -268,18 +286,21 @@ public class PostRequest extends HttpRequest<PostRequest> {
             return this;
         }
 
+        @Override
         public Singleton setJson(String json) {
             this.mContent = json;
             this.mMediaType = MediaTypes.APPLICATION_JSON_TYPE;
             return this;
         }
 
+        @Override
         public Singleton setJson(JSONObject jsonObject) {
             this.mContent = jsonObject.toString();
             this.mMediaType = MediaTypes.APPLICATION_JSON_TYPE;
             return this;
         }
 
+        @Override
         public Singleton setJson(JSONArray jsonArray) {
             this.mContent = jsonArray.toString();
             this.mMediaType = MediaTypes.APPLICATION_JSON_TYPE;

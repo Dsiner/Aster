@@ -5,8 +5,6 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.base.IRequest;
-import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
@@ -18,6 +16,7 @@ import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
 import com.d.lib.aster.integration.retrofit.observer.UploadObserver;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.request.IUploadRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,18 +44,16 @@ import okio.Source;
 /**
  * Created by D on 2017/10/24.
  */
-public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
+public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient> {
     protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
     protected Observable<ResponseBody> mObservable;
 
     public UploadRequest(String url) {
-        this(url, null);
+        super(url);
     }
 
     public UploadRequest(String url, Config config) {
-        this.mUrl = url;
-        this.mParams = new Params();
-        this.mConfig = config != null ? config : Config.getDefault();
+        super(url, config);
     }
 
     @Override
@@ -64,6 +61,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
         return RetrofitClient.create(IClient.TYPE_UPLOAD, mConfig.log(false));
     }
 
+    @Override
     protected void prepare() {
         if (mParams != null && mParams.size() > 0) {
             Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
@@ -78,6 +76,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
         mObservable = getClient().getClient().create(RetrofitAPI.class).upload(mUrl, mMultipartBodyParts);
     }
 
+    @Override
     public void request() {
         request(null);
     }
@@ -157,6 +156,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
                 .subscribe(disposableObserver);
     }
 
+    @Override
     public UploadRequest addParam(String paramKey, String paramValue) {
         if (paramKey != null && paramValue != null) {
             this.mParams.put(paramKey, paramValue);
@@ -164,10 +164,12 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
         return this;
     }
 
+    @Override
     public UploadRequest addFile(String key, File file) {
         return addFile(key, file, null);
     }
 
+    @Override
     public UploadRequest addFile(String key, File file, ProgressCallback callback) {
         if (key == null || file == null) {
             return this;
@@ -184,10 +186,12 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
         return this;
     }
 
+    @Override
     public UploadRequest addImageFile(String key, File file) {
         return addImageFile(key, file, null);
     }
 
+    @Override
     public UploadRequest addImageFile(String key, File file, ProgressCallback callback) {
         if (key == null || file == null) {
             return this;
@@ -204,10 +208,12 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
         return this;
     }
 
+    @Override
     public UploadRequest addBytes(String key, byte[] bytes, String name) {
         return addBytes(key, bytes, name, null);
     }
 
+    @Override
     public UploadRequest addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
         if (key == null || bytes == null || name == null) {
             return this;
@@ -224,10 +230,12 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
         return this;
     }
 
+    @Override
     public UploadRequest addStream(String key, InputStream inputStream, String name) {
         return addStream(key, inputStream, name, null);
     }
 
+    @Override
     public UploadRequest addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
         if (key == null || inputStream == null || name == null) {
             return this;
@@ -276,13 +284,12 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
     /**
      * Singleton
      */
-    public static class Singleton extends IRequest<Singleton, RetrofitClient> {
+    public static class Singleton extends IUploadRequest.Singleton<Singleton, RetrofitClient> {
         protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
-            this.mUrl = url;
-            this.mParams = new Params();
+            super(url);
         }
 
         @Override
@@ -290,6 +297,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
             return RetrofitClient.getDefault(IClient.TYPE_UPLOAD);
         }
 
+        @Override
         protected void prepare() {
             if (mParams != null && mParams.size() > 0) {
                 Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
@@ -304,6 +312,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
             mObservable = getClient().getClient().create(RetrofitAPI.class).upload(mUrl, multipartBodyParts);
         }
 
+        @Override
         public void request() {
             request(null);
         }
@@ -313,6 +322,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
             requestImpl(mObservable, getClient().getHttpConfig(), mTag, callback);
         }
 
+        @Override
         public Singleton addParam(String paramKey, String paramValue) {
             if (paramKey != null && paramValue != null) {
                 this.mParams.put(paramKey, paramValue);
@@ -320,10 +330,12 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
             return this;
         }
 
+        @Override
         public Singleton addFile(String key, File file) {
             return addFile(key, file, null);
         }
 
+        @Override
         public Singleton addFile(String key, File file, ProgressCallback callback) {
             if (key == null || file == null) {
                 return this;
@@ -340,6 +352,7 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
             return this;
         }
 
+        @Override
         public Singleton addImageFile(String key, File file) {
             return addImageFile(key, file, null);
         }

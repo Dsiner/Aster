@@ -116,7 +116,7 @@ public class OkHttpClient extends IClient {
             }
         }
         if (log) {
-            builder.addInterceptor(getOkhttpLog());
+            builder.addInterceptor(getOkHttpLog());
         }
 
         if (networkInterceptors != null && networkInterceptors.size() > 0) {
@@ -127,7 +127,7 @@ public class OkHttpClient extends IClient {
         return builder.build();
     }
 
-    private static HttpLoggingInterceptor getOkhttpLog() {
+    private static HttpLoggingInterceptor getOkHttpLog() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
 
             @Override

@@ -5,7 +5,7 @@
 [![Download](https://api.bintray.com/packages/dsiner/maven/aster/images/download.svg) ](https://bintray.com/dsiner/maven/aster/_latestVersion)
 [![Wiki-Guide](https://img.shields.io/badge/Wiki-Guide-brightgreen.svg)](https://github.com/Dsiner/Aster/wiki)
 
-> 基于 `Okhttp3` + `Retrofit2` + `RxJava2` 实现的 `网络请求库`
+> 基于 `OkHttp3` + `Retrofit2` + `RxJava2` 实现的 `网络请求库`
 
 ## 特点
 -  `1` 条链，完全链式调用 `.func0().func1().func2()...` ， `自适应` 、 `简`

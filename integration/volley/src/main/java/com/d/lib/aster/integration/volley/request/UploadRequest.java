@@ -5,10 +5,8 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.base.MediaTypes;
-import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.volley.RequestManager;
@@ -22,6 +20,7 @@ import com.d.lib.aster.integration.volley.func.ApiRetryFunc;
 import com.d.lib.aster.integration.volley.observer.UploadObserver;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.request.IUploadRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -40,18 +39,16 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
-public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
+public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
     protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
     protected Observable<ResponseBody> mObservable;
 
     public UploadRequest(String url) {
-        this(url, null);
+        super(url);
     }
 
     public UploadRequest(String url, Config config) {
-        this.mUrl = url;
-        this.mParams = new Params();
-        this.mConfig = config != null ? config : Config.getDefault();
+        super(url, config);
     }
 
     @Override
@@ -59,6 +56,7 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
         return VolleyClient.create(IClient.TYPE_UPLOAD, mConfig.log(false));
     }
 
+    @Override
     protected void prepare() {
         if (mParams != null && mParams.size() > 0) {
             Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
@@ -73,6 +71,7 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
         mObservable = getClient().create().upload(mUrl, mMultipartBodyParts);
     }
 
+    @Override
     public void request() {
         request(null);
     }
@@ -159,6 +158,7 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
                         }));
     }
 
+    @Override
     public UploadRequest addParam(String paramKey, String paramValue) {
         if (paramKey != null && paramValue != null) {
             this.mParams.put(paramKey, paramValue);
@@ -166,10 +166,12 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
         return this;
     }
 
+    @Override
     public UploadRequest addFile(String key, File file) {
         return addFile(key, file, null);
     }
 
+    @Override
     public UploadRequest addFile(String key, File file, ProgressCallback callback) {
         if (key == null || file == null) {
             return this;
@@ -186,10 +188,12 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
         return this;
     }
 
+    @Override
     public UploadRequest addImageFile(String key, File file) {
         return addImageFile(key, file, null);
     }
 
+    @Override
     public UploadRequest addImageFile(String key, File file, ProgressCallback callback) {
         if (key == null || file == null) {
             return this;
@@ -206,10 +210,12 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
         return this;
     }
 
+    @Override
     public UploadRequest addBytes(String key, byte[] bytes, String name) {
         return addBytes(key, bytes, name, null);
     }
 
+    @Override
     public UploadRequest addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
         if (key == null || bytes == null || name == null) {
             return this;
@@ -226,10 +232,12 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
         return this;
     }
 
+    @Override
     public UploadRequest addStream(String key, InputStream inputStream, String name) {
         return addStream(key, inputStream, name, null);
     }
 
+    @Override
     public UploadRequest addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
         if (key == null || inputStream == null || name == null) {
             return this;
@@ -272,13 +280,12 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
     /**
      * Singleton
      */
-    public static class Singleton extends IRequest<Singleton, VolleyClient> {
+    public static class Singleton extends IUploadRequest.Singleton<Singleton, VolleyClient> {
         protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
-            this.mUrl = url;
-            this.mParams = new Params();
+            super(url);
         }
 
         @Override
@@ -286,6 +293,7 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
             return VolleyClient.getDefault(IClient.TYPE_UPLOAD);
         }
 
+        @Override
         protected void prepare() {
             if (mParams != null && mParams.size() > 0) {
                 Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
@@ -300,6 +308,7 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
             mObservable = getClient().create().upload(mUrl, multipartBodyParts);
         }
 
+        @Override
         public void request() {
             request(null);
         }
@@ -309,6 +318,7 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
             requestImpl(mObservable, getClient().getHttpConfig(), mTag, callback);
         }
 
+        @Override
         public Singleton addParam(String paramKey, String paramValue) {
             if (paramKey != null && paramValue != null) {
                 this.mParams.put(paramKey, paramValue);
@@ -316,10 +326,12 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
             return this;
         }
 
+        @Override
         public Singleton addFile(String key, File file) {
             return addFile(key, file, null);
         }
 
+        @Override
         public Singleton addFile(String key, File file, ProgressCallback callback) {
             if (key == null || file == null) {
                 return this;
@@ -336,10 +348,12 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
             return this;
         }
 
+        @Override
         public Singleton addImageFile(String key, File file) {
             return addImageFile(key, file, null);
         }
 
+        @Override
         public Singleton addImageFile(String key, File file, ProgressCallback callback) {
             if (key == null || file == null) {
                 return this;
@@ -356,10 +370,12 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
             return this;
         }
 
+        @Override
         public Singleton addBytes(String key, byte[] bytes, String name) {
             return addBytes(key, bytes, name, null);
         }
 
+        @Override
         public Singleton addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
             if (key == null || bytes == null || name == null) {
                 return this;
@@ -376,10 +392,12 @@ public class UploadRequest extends IRequest<UploadRequest, VolleyClient> {
             return this;
         }
 
+        @Override
         public Singleton addStream(String key, InputStream inputStream, String name) {
             return addStream(key, inputStream, name, null);
         }
 
+        @Override
         public Singleton addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
             if (key == null || inputStream == null || name == null) {
                 return this;

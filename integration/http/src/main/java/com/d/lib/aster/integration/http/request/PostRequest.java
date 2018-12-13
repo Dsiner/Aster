@@ -1,13 +1,17 @@
 package com.d.lib.aster.integration.http.request;
 
+import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.MediaType;
+import com.d.lib.aster.base.MediaTypes;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.base.MediaTypes;
+import com.d.lib.aster.integration.http.HttpClient;
 import com.d.lib.aster.integration.http.body.RequestBody;
+import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.request.IPostRequest;
 import com.d.lib.aster.scheduler.Observable;
 
 import org.json.JSONArray;
@@ -19,11 +23,11 @@ import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
-
 /**
  * Created by D on 2017/10/24.
  */
-public class PostRequest extends HttpRequest<PostRequest> {
+public class PostRequest extends IPostRequest<PostRequest, HttpClient> {
+    protected Observable<ResponseBody> mObservable;
     private Map<String, Object> mForms = new LinkedHashMap<>();
     private RequestBody mRequestBody;
     private MediaType mMediaType;
@@ -35,6 +39,11 @@ public class PostRequest extends HttpRequest<PostRequest> {
 
     public PostRequest(String url, Params params) {
         super(url, params);
+    }
+
+    @Override
+    protected HttpClient getClient() {
+        return HttpClient.create(IClient.TYPE_NORMAL, mConfig.log(false));
     }
 
     @Override
@@ -184,7 +193,8 @@ public class PostRequest extends HttpRequest<PostRequest> {
     /**
      * Singleton
      */
-    public static class Singleton extends HttpRequest.Singleton<Singleton> {
+    public static class Singleton extends IPostRequest.Singleton<Singleton, HttpClient> {
+        protected Observable<ResponseBody> mObservable;
         private Map<String, Object> mForms = new LinkedHashMap<>();
         private RequestBody mRequestBody;
         private MediaType mMediaType;
@@ -196,6 +206,11 @@ public class PostRequest extends HttpRequest<PostRequest> {
 
         public Singleton(String url, Params params) {
             super(url, params);
+        }
+
+        @Override
+        protected HttpClient getClient() {
+            return HttpClient.getDefault(IClient.TYPE_NORMAL);
         }
 
         @Override

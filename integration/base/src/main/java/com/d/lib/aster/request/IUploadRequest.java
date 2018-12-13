@@ -17,7 +17,7 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
-public abstract class IUploadRequest<HR extends IHttpRequest, C extends IClient>
+public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClient>
         extends IRequest<HR, C> {
 
     public IUploadRequest(String url) {
@@ -28,11 +28,6 @@ public abstract class IUploadRequest<HR extends IHttpRequest, C extends IClient>
         this.mUrl = url;
         this.mParams = new Params();
         this.mConfig = config != null ? config : Config.getDefault();
-    }
-
-    @Override
-    protected C getClient() {
-        return null;
     }
 
     protected abstract void prepare();
@@ -95,46 +90,46 @@ public abstract class IUploadRequest<HR extends IHttpRequest, C extends IClient>
         return super.retryDelayMillis(retryDelayMillis);
     }
 
-    public IUploadRequest<HR, C> addParam(String paramKey, String paramValue) {
-        return this;
+    public HR addParam(String paramKey, String paramValue) {
+        return (HR) this;
     }
 
-    public IUploadRequest<HR, C> addFile(String key, File file) {
-        return addFile(key, file, null);
+    public HR addFile(String key, File file) {
+        return (HR) this;
     }
 
-    public IUploadRequest<HR, C> addFile(String key, File file, ProgressCallback callback) {
-        return this;
+    public HR addFile(String key, File file, ProgressCallback callback) {
+        return (HR) this;
     }
 
-    public IUploadRequest<HR, C> addImageFile(String key, File file) {
-        return this;
+    public HR addImageFile(String key, File file) {
+        return (HR) this;
     }
 
-    public IUploadRequest<HR, C> addImageFile(String key, File file, ProgressCallback callback) {
-        return this;
+    public HR addImageFile(String key, File file, ProgressCallback callback) {
+        return (HR) this;
     }
 
-    public IUploadRequest<HR, C> addBytes(String key, byte[] bytes, String name) {
-        return this;
+    public HR addBytes(String key, byte[] bytes, String name) {
+        return (HR) this;
     }
 
-    public IUploadRequest<HR, C> addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
-        return this;
+    public HR addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
+        return (HR) this;
     }
 
-    public IUploadRequest<HR, C> addStream(String key, InputStream inputStream, String name) {
-        return this;
+    public HR addStream(String key, InputStream inputStream, String name) {
+        return (HR) this;
     }
 
-    public IUploadRequest<HR, C> addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
-        return this;
+    public HR addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
+        return (HR) this;
     }
 
     /**
      * Singleton
      */
-    public abstract static class Singleton<HRF extends IHttpRequest, C extends IClient>
+    public abstract static class Singleton<HRF extends Singleton, C extends IClient>
             extends IRequest<HRF, C> {
 
         public Singleton(String url) {
@@ -142,50 +137,45 @@ public abstract class IUploadRequest<HR extends IHttpRequest, C extends IClient>
             this.mParams = new Params();
         }
 
-        @Override
-        protected C getClient() {
-            return null;
-        }
-
         protected abstract void prepare();
 
         public void request() {
         }
 
-        public Singleton<HRF, C> addParam(String paramKey, String paramValue) {
-            return this;
+        public HRF addParam(String paramKey, String paramValue) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> addFile(String key, File file) {
-            return this;
+        public HRF addFile(String key, File file) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> addFile(String key, File file, ProgressCallback callback) {
-            return this;
+        public HRF addFile(String key, File file, ProgressCallback callback) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> addImageFile(String key, File file) {
-            return this;
+        public HRF addImageFile(String key, File file) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> addImageFile(String key, File file, ProgressCallback callback) {
-            return this;
+        public HRF addImageFile(String key, File file, ProgressCallback callback) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> addBytes(String key, byte[] bytes, String name) {
-            return this;
+        public HRF addBytes(String key, byte[] bytes, String name) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
-            return this;
+        public HRF addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> addStream(String key, InputStream inputStream, String name) {
-            return this;
+        public HRF addStream(String key, InputStream inputStream, String name) {
+            return (HRF) this;
         }
 
-        public Singleton<HRF, C> addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
-            return this;
+        public HRF addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
+            return (HRF) this;
         }
     }
 }

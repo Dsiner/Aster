@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
@@ -18,6 +17,7 @@ import com.d.lib.aster.integration.volley.observer.ApiObserver;
 import com.d.lib.aster.integration.volley.observer.AsyncApiObserver;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.request.IHttpRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -30,24 +30,20 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
-public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, VolleyClient> {
+public abstract class HttpRequest<HR extends HttpRequest>
+        extends IHttpRequest<HR, VolleyClient> {
     protected Observable<ResponseBody> mObservable;
 
-    private HttpRequest() {
-    }
-
     public HttpRequest(String url) {
-        this(url, null);
+        super(url);
     }
 
     public HttpRequest(String url, Params params) {
-        this(url, params, null);
+        super(url, params);
     }
 
     public HttpRequest(String url, Params params, Config config) {
-        this.mUrl = url;
-        this.mParams = params;
-        this.mConfig = config != null ? config : Config.getDefault();
+        super(url, params, config);
     }
 
     @Override
@@ -55,11 +51,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, V
         return VolleyClient.create(IClient.TYPE_NORMAL, mConfig.log(true));
     }
 
-    /**
-     * Initialize Observable, etc.
-     */
-    protected abstract void prepare();
-
+    @Override
     public <T> void request(final SimpleCallback<T> callback) {
         prepare();
         DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
@@ -83,6 +75,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, V
                         }));
     }
 
+    @Override
     public <T, R> void request(final AsyncCallback<T, R> callback) {
         prepare();
         DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
@@ -107,6 +100,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, V
                         }));
     }
 
+    @Override
     public <T> Observable.Observe<T> observable(Class<T> clazz) {
         prepare();
         return mObservable.subscribeOn(Schedulers.io())
@@ -182,24 +176,20 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, V
     /**
      * Singleton
      */
-    public static abstract class Singleton<HRF extends IRequest> extends IRequest<HRF, VolleyClient> {
+    public static abstract class Singleton<HRF extends Singleton>
+            extends IHttpRequest.Singleton<HRF, VolleyClient> {
         protected Observable<ResponseBody> mObservable;
 
-        private Singleton() {
-        }
-
         public Singleton(String url) {
-            this(url, null);
+            super(url);
         }
 
         public Singleton(String url, Params params) {
-            this(url, params, null);
+            super(url, params);
         }
 
         public Singleton(String url, Params params, Config config) {
-            this.mUrl = url;
-            this.mParams = params;
-            this.mConfig = config != null ? config : Config.getDefault();
+            super(url, params, config);
         }
 
         @Override
@@ -207,11 +197,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, V
             return VolleyClient.getDefault(IClient.TYPE_NORMAL);
         }
 
-        /**
-         * Initialize Observable, etc.
-         */
-        protected abstract void prepare();
-
+        @Override
         public <T> void request(final SimpleCallback<T> callback) {
             prepare();
             DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
@@ -235,6 +221,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, V
                             }));
         }
 
+        @Override
         public <T, R> void request(final AsyncCallback<T, R> callback) {
             prepare();
             DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
@@ -260,6 +247,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, V
                             }));
         }
 
+        @Override
         public <T> Observable.Observe<T> observable(Class<T> clazz) {
             prepare();
             return mObservable.subscribeOn(Schedulers.io())

@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
@@ -18,6 +17,7 @@ import com.d.lib.aster.integration.http.observer.ApiObserver;
 import com.d.lib.aster.integration.http.observer.AsyncApiObserver;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.request.IHttpRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -30,24 +30,19 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
-public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, HttpClient> {
+public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<HR, HttpClient> {
     protected Observable<ResponseBody> mObservable;
 
-    private HttpRequest() {
-    }
-
     public HttpRequest(String url) {
-        this(url, null);
+        super(url);
     }
 
     public HttpRequest(String url, Params params) {
-        this(url, params, null);
+        super(url, params);
     }
 
     public HttpRequest(String url, Params params, Config config) {
-        this.mUrl = url;
-        this.mParams = params;
-        this.mConfig = config != null ? config : Config.getDefault();
+        super(url, params, config);
     }
 
     @Override
@@ -182,24 +177,20 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, H
     /**
      * Singleton
      */
-    public static abstract class Singleton<HRF extends IRequest> extends IRequest<HRF, HttpClient> {
+    public static abstract class Singleton<HRF extends Singleton>
+            extends IHttpRequest.Singleton<HRF, HttpClient> {
         protected Observable<ResponseBody> mObservable;
 
-        private Singleton() {
-        }
-
         public Singleton(String url) {
-            this(url, null);
+            super(url);
         }
 
         public Singleton(String url, Params params) {
-            this(url, params, null);
+            super(url, params);
         }
 
         public Singleton(String url, Params params, Config config) {
-            this.mUrl = url;
-            this.mParams = params;
-            this.mConfig = config != null ? config : Config.getDefault();
+            super(url, params, config);
         }
 
         @Override

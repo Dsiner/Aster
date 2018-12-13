@@ -254,6 +254,7 @@ public class Config extends IConfig<Config> {
 
     public static class Builder {
         private Context context;
+        private Object module;
         private String baseUrl;
         private Map<String, String> headers = new LinkedHashMap<>();
         private IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor;
@@ -274,6 +275,11 @@ public class Config extends IConfig<Config> {
 
         public Builder(Context context) {
             this.context = context.getApplicationContext();
+        }
+
+        public Builder module(Object module) {
+            this.module = module;
+            return this;
         }
 
         public Builder baseUrl(String baseUrl) {
