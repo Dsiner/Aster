@@ -16,7 +16,7 @@ import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
 import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.integration.okhttp3.observer.UploadObserver;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -121,12 +121,12 @@ public class UploadRequest extends IRequest<UploadRequest, OkHttpClient> {
     }
 
     @Override
-    public UploadRequest addInterceptor(Interceptor interceptor) {
+    public UploadRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public UploadRequest addNetworkInterceptors(Interceptor interceptor) {
+    public UploadRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

@@ -10,7 +10,7 @@ import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.volley.body.MultipartBody;
 import com.d.lib.aster.integration.volley.body.RequestBody;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.Task;
 
@@ -453,11 +453,11 @@ public class VolleyApi {
         }
 
         private void intercept(HttpURLConnection conn) throws IOException {
-            List<Interceptor> interceptors = mClient.interceptors;
+            List<IInterceptor> interceptors = mClient.interceptors;
             if (interceptors == null) {
                 return;
             }
-            for (Interceptor interceptor : interceptors) {
+            for (IInterceptor interceptor : interceptors) {
                 interceptor.intercept(conn);
             }
         }

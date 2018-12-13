@@ -16,7 +16,7 @@ import com.d.lib.aster.integration.okhttp3.func.MapFunc;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.integration.okhttp3.observer.ApiObserver;
 import com.d.lib.aster.integration.okhttp3.observer.AsyncApiObserver;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -157,13 +157,13 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, O
     }
 
     @Override
-    public HR addInterceptor(Interceptor interceptor) {
+    public HR addInterceptor(IInterceptor interceptor) {
         mConfig.addInterceptor(interceptor);
         return (HR) this;
     }
 
     @Override
-    public HR addNetworkInterceptors(Interceptor interceptor) {
+    public HR addNetworkInterceptors(IInterceptor interceptor) {
         mConfig.addNetworkInterceptors(interceptor);
         return (HR) this;
     }

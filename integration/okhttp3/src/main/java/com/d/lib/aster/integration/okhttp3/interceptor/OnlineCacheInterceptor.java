@@ -3,6 +3,7 @@ package com.d.lib.aster.integration.okhttp3.interceptor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.utils.ULog;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import okhttp3.Response;
  * Online cache interception
  */
 public class OnlineCacheInterceptor implements Interceptor,
-        com.d.lib.aster.interceptor.Interceptor<Interceptor.Chain, Response> {
+        IInterceptor<Interceptor.Chain, Response> {
     private String mCacheControlValue;
 
     public OnlineCacheInterceptor() {

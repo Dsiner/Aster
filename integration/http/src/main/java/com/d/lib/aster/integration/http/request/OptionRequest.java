@@ -3,8 +3,8 @@ package com.d.lib.aster.integration.http.request;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 
 import java.util.Map;
@@ -51,7 +51,7 @@ public class OptionRequest extends HttpRequest<OptionRequest> {
     }
 
     @Override
-    public OptionRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    public OptionRequest headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         return super.headers(onHeadInterceptor);
     }
 
@@ -76,12 +76,12 @@ public class OptionRequest extends HttpRequest<OptionRequest> {
     }
 
     @Override
-    public OptionRequest addInterceptor(Interceptor interceptor) {
+    public OptionRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public OptionRequest addNetworkInterceptors(Interceptor interceptor) {
+    public OptionRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

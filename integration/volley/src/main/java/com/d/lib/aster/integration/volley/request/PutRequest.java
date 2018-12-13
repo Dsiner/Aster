@@ -3,8 +3,8 @@ package com.d.lib.aster.integration.volley.request;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 
 import java.util.Map;
@@ -52,7 +52,7 @@ public class PutRequest extends HttpRequest<PutRequest> {
     }
 
     @Override
-    public PutRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    public PutRequest headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         return super.headers(onHeadInterceptor);
     }
 
@@ -77,12 +77,12 @@ public class PutRequest extends HttpRequest<PutRequest> {
     }
 
     @Override
-    public PutRequest addInterceptor(Interceptor interceptor) {
+    public PutRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public PutRequest addNetworkInterceptors(Interceptor interceptor) {
+    public PutRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

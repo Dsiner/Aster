@@ -3,7 +3,8 @@ package com.d.lib.aster.integration.volley.interceptor;
 import android.support.annotation.NonNull;
 
 import com.d.lib.aster.integration.volley.client.ResponseRequest;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -13,8 +14,8 @@ import java.util.Set;
 /**
  * Request header interception
  */
-public class HeadersInterceptor extends com.d.lib.aster.interceptor.HeadersInterceptor
-        implements Interceptor<ResponseRequest, ResponseRequest> {
+public class HeadersInterceptor extends IHeadersInterceptor
+        implements IInterceptor<ResponseRequest, ResponseRequest> {
 
     public HeadersInterceptor(Map<String, String> headers) {
         super(headers);

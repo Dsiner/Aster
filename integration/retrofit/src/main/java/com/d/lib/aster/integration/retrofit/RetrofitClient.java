@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.utils.ULog;
 
 import java.util.ArrayList;
@@ -100,8 +100,8 @@ public class RetrofitClient extends IClient {
                                                 long readTimeout,
                                                 long writeTimeout,
                                                 SSLSocketFactory sslSocketFactory,
-                                                ArrayList<Interceptor> interceptors,
-                                                ArrayList<Interceptor> networkInterceptors,
+                                                ArrayList<IInterceptor> interceptors,
+                                                ArrayList<IInterceptor> networkInterceptors,
                                                 boolean log) {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder()
                 .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
@@ -117,7 +117,7 @@ public class RetrofitClient extends IClient {
                     .setOnHeadInterceptor(onHeadInterceptor));
         }
         if (interceptors != null && interceptors.size() > 0) {
-            for (Interceptor interceptor : interceptors) {
+            for (IInterceptor interceptor : interceptors) {
                 builder.addInterceptor((okhttp3.Interceptor) interceptor);
             }
         }
@@ -126,7 +126,7 @@ public class RetrofitClient extends IClient {
         }
 
         if (networkInterceptors != null && networkInterceptors.size() > 0) {
-            for (Interceptor networkInterceptor : networkInterceptors) {
+            for (IInterceptor networkInterceptor : networkInterceptors) {
                 builder.addNetworkInterceptor((okhttp3.Interceptor) networkInterceptor);
             }
         }

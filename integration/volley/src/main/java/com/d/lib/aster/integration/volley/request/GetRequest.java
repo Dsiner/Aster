@@ -3,8 +3,8 @@ package com.d.lib.aster.integration.volley.request;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 
 import java.util.Map;
@@ -59,7 +59,7 @@ public class GetRequest extends HttpRequest<GetRequest> {
     }
 
     @Override
-    public GetRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    public GetRequest headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         return super.headers(onHeadInterceptor);
     }
 
@@ -84,12 +84,12 @@ public class GetRequest extends HttpRequest<GetRequest> {
     }
 
     @Override
-    public GetRequest addInterceptor(Interceptor interceptor) {
+    public GetRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public GetRequest addNetworkInterceptors(Interceptor interceptor) {
+    public GetRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

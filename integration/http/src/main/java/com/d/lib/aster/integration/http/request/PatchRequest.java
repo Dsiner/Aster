@@ -3,8 +3,8 @@ package com.d.lib.aster.integration.http.request;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 
 import java.util.Map;
@@ -51,7 +51,7 @@ public class PatchRequest extends HttpRequest<PatchRequest> {
     }
 
     @Override
-    public PatchRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    public PatchRequest headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         return super.headers(onHeadInterceptor);
     }
 
@@ -76,12 +76,12 @@ public class PatchRequest extends HttpRequest<PatchRequest> {
     }
 
     @Override
-    public PatchRequest addInterceptor(Interceptor interceptor) {
+    public PatchRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public PatchRequest addNetworkInterceptors(Interceptor interceptor) {
+    public PatchRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

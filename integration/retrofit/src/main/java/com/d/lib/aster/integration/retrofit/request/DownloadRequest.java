@@ -14,7 +14,7 @@ import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
 import com.d.lib.aster.integration.retrofit.observer.DownloadObserver;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.utils.Util;
 
 import java.util.Map;
@@ -136,12 +136,12 @@ public class DownloadRequest extends IRequest<DownloadRequest, RetrofitClient> {
     }
 
     @Override
-    public DownloadRequest addInterceptor(Interceptor interceptor) {
+    public DownloadRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public DownloadRequest addNetworkInterceptors(Interceptor interceptor) {
+    public DownloadRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

@@ -1,7 +1,7 @@
 package com.d.lib.aster.base;
 
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public abstract class IConfig<R> {
 
     protected abstract R headers(Map<String, String> headers);
 
-    protected abstract R headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor);
+    protected abstract R headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor);
 
     protected abstract R connectTimeout(long timeout);
 
@@ -26,9 +26,9 @@ public abstract class IConfig<R> {
 
     protected abstract R sslSocketFactory(SSLSocketFactory sslSocketFactory);
 
-    protected abstract R addInterceptor(Interceptor interceptor);
+    protected abstract R addInterceptor(IInterceptor interceptor);
 
-    protected abstract R addNetworkInterceptors(Interceptor interceptor);
+    protected abstract R addNetworkInterceptors(IInterceptor interceptor);
 
     /************************** Retry **************************/
     protected abstract R retryCount(int retryCount);

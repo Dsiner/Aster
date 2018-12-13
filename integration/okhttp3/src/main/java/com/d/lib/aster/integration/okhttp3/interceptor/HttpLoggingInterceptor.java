@@ -15,6 +15,8 @@
  */
 package com.d.lib.aster.integration.okhttp3.interceptor;
 
+import com.d.lib.aster.interceptor.IInterceptor;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -45,7 +47,7 @@ import static okhttp3.internal.platform.Platform.INFO;
  * a stable logging format, use your own interceptor.
  */
 public final class HttpLoggingInterceptor implements Interceptor,
-        com.d.lib.aster.interceptor.Interceptor<Interceptor.Chain, Response> {
+        IInterceptor<Interceptor.Chain, Response> {
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     public enum Level {

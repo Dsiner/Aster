@@ -15,11 +15,11 @@
  */
 package com.d.lib.aster.integration.volley.interceptor;
 
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.io.IOException;
 
-public class HttpLoggingInterceptor implements Interceptor {
+public class HttpLoggingInterceptor implements IInterceptor {
 
     @Override
     public Object intercept(Object o) throws IOException {

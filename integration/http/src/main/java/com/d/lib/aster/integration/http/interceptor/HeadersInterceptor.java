@@ -2,7 +2,8 @@ package com.d.lib.aster.integration.http.interceptor;
 
 import android.support.annotation.NonNull;
 
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -13,8 +14,8 @@ import java.util.Set;
 /**
  * Request header interception
  */
-public class HeadersInterceptor extends com.d.lib.aster.interceptor.HeadersInterceptor
-        implements Interceptor<HttpURLConnection, HttpURLConnection> {
+public class HeadersInterceptor extends IHeadersInterceptor
+        implements IInterceptor<HttpURLConnection, HttpURLConnection> {
 
     public HeadersInterceptor(Map<String, String> headers) {
         super(headers);

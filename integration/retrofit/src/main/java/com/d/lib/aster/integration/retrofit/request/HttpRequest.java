@@ -14,7 +14,7 @@ import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
 import com.d.lib.aster.integration.retrofit.func.MapFunc;
 import com.d.lib.aster.integration.retrofit.observer.ApiObserver;
 import com.d.lib.aster.integration.retrofit.observer.AsyncApiObserver;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.utils.Util;
 
 import java.util.Map;
@@ -140,13 +140,13 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, R
     }
 
     @Override
-    public HR addInterceptor(Interceptor interceptor) {
+    public HR addInterceptor(IInterceptor interceptor) {
         mConfig.addInterceptor(interceptor);
         return (HR) this;
     }
 
     @Override
-    public HR addNetworkInterceptors(Interceptor interceptor) {
+    public HR addNetworkInterceptors(IInterceptor interceptor) {
         mConfig.addNetworkInterceptors(interceptor);
         return (HR) this;
     }

@@ -3,6 +3,7 @@ package com.d.lib.aster.integration.okhttp3.interceptor;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.utils.Network;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import okhttp3.Response;
  * Offline cache interception
  */
 public class OfflineCacheInterceptor implements Interceptor,
-        com.d.lib.aster.interceptor.Interceptor<Interceptor.Chain, Response> {
+        IInterceptor<Interceptor.Chain, Response> {
     private Context mContext;
     private String mCacheControlValue;
 

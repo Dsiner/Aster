@@ -6,8 +6,8 @@ import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.volley.MediaTypes;
 import com.d.lib.aster.integration.volley.body.RequestBody;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 
 import org.json.JSONArray;
@@ -136,7 +136,7 @@ public class PostRequest extends HttpRequest<PostRequest> {
     }
 
     @Override
-    public PostRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    public PostRequest headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         return super.headers(onHeadInterceptor);
     }
 
@@ -161,12 +161,12 @@ public class PostRequest extends HttpRequest<PostRequest> {
     }
 
     @Override
-    public PostRequest addInterceptor(Interceptor interceptor) {
+    public PostRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public PostRequest addNetworkInterceptors(Interceptor interceptor) {
+    public PostRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

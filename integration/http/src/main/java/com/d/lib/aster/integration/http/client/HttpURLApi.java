@@ -10,7 +10,7 @@ import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.body.BodyWriter;
 import com.d.lib.aster.integration.http.body.MultipartBody;
 import com.d.lib.aster.integration.http.body.RequestBody;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.Task;
 import com.d.lib.aster.utils.Util;
@@ -542,11 +542,11 @@ public class HttpURLApi {
         }
 
         private void intercept(HttpURLConnection conn) throws IOException {
-            List<Interceptor> interceptors = mClient.interceptors;
+            List<IInterceptor> interceptors = mClient.interceptors;
             if (interceptors == null) {
                 return;
             }
-            for (Interceptor interceptor : interceptors) {
+            for (IInterceptor interceptor : interceptors) {
                 interceptor.intercept(conn);
             }
         }

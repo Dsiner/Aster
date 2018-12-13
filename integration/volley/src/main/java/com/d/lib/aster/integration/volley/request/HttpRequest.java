@@ -16,8 +16,8 @@ import com.d.lib.aster.integration.volley.func.ApiRetryFunc;
 import com.d.lib.aster.integration.volley.func.MapFunc;
 import com.d.lib.aster.integration.volley.observer.ApiObserver;
 import com.d.lib.aster.integration.volley.observer.AsyncApiObserver;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -126,7 +126,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, V
     }
 
     @Override
-    public HR headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    public HR headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         mConfig.headers(onHeadInterceptor);
         return (HR) this;
     }
@@ -156,13 +156,13 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IRequest<HR, V
     }
 
     @Override
-    public HR addInterceptor(Interceptor interceptor) {
+    public HR addInterceptor(IInterceptor interceptor) {
         mConfig.addInterceptor(interceptor);
         return (HR) this;
     }
 
     @Override
-    public HR addNetworkInterceptors(Interceptor interceptor) {
+    public HR addNetworkInterceptors(IInterceptor interceptor) {
         mConfig.addNetworkInterceptors(interceptor);
         return (HR) this;
     }

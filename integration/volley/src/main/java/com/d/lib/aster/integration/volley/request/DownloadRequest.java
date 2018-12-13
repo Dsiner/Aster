@@ -13,8 +13,8 @@ import com.d.lib.aster.integration.volley.VolleyClient;
 import com.d.lib.aster.integration.volley.client.ResponseBody;
 import com.d.lib.aster.integration.volley.func.ApiRetryFunc;
 import com.d.lib.aster.integration.volley.observer.DownloadObserver;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -116,7 +116,7 @@ public class DownloadRequest extends IRequest<DownloadRequest, VolleyClient> {
     }
 
     @Override
-    public DownloadRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    public DownloadRequest headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         return super.headers(onHeadInterceptor);
     }
 
@@ -141,12 +141,12 @@ public class DownloadRequest extends IRequest<DownloadRequest, VolleyClient> {
     }
 
     @Override
-    public DownloadRequest addInterceptor(Interceptor interceptor) {
+    public DownloadRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public DownloadRequest addNetworkInterceptors(Interceptor interceptor) {
+    public DownloadRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

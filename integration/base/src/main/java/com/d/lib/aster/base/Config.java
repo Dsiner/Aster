@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.utils.SSLUtil;
 import com.d.lib.aster.utils.ULog;
 
@@ -94,7 +94,7 @@ public class Config extends IConfig<Config> {
 
     public String baseUrl;
     public Map<String, String> headers = new LinkedHashMap<>();
-    public HeadersInterceptor.OnHeadInterceptor onHeadInterceptor;
+    public IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor;
 
     public long connectTimeout = -1;
     public long readTimeout = -1;
@@ -104,8 +104,8 @@ public class Config extends IConfig<Config> {
     public long retryDelayMillis = -1;
 
     public SSLSocketFactory sslSocketFactory;
-    public ArrayList<Interceptor> interceptors = new ArrayList<>();
-    public ArrayList<Interceptor> networkInterceptors = new ArrayList<>();
+    public ArrayList<IInterceptor> interceptors = new ArrayList<>();
+    public ArrayList<IInterceptor> networkInterceptors = new ArrayList<>();
     public boolean log = true;
 
     private static class Singleton {
@@ -187,7 +187,7 @@ public class Config extends IConfig<Config> {
     }
 
     @Override
-    public Config headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    public Config headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         this.onHeadInterceptor = onHeadInterceptor;
         return this;
     }
@@ -217,7 +217,7 @@ public class Config extends IConfig<Config> {
     }
 
     @Override
-    public Config addInterceptor(Interceptor interceptor) {
+    public Config addInterceptor(IInterceptor interceptor) {
         if (this.interceptors != null && interceptor != null) {
             this.interceptors.add(interceptor);
         }
@@ -225,7 +225,7 @@ public class Config extends IConfig<Config> {
     }
 
     @Override
-    public Config addNetworkInterceptors(Interceptor interceptor) {
+    public Config addNetworkInterceptors(IInterceptor interceptor) {
         if (this.networkInterceptors != null && interceptor != null) {
             this.networkInterceptors.add(interceptor);
         }
@@ -256,7 +256,7 @@ public class Config extends IConfig<Config> {
         private Context context;
         private String baseUrl;
         private Map<String, String> headers = new LinkedHashMap<>();
-        private HeadersInterceptor.OnHeadInterceptor onHeadInterceptor;
+        private IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor;
 
         private long connectTimeout = -1;
         private long readTimeout = -1;
@@ -266,8 +266,8 @@ public class Config extends IConfig<Config> {
         private long retryDelayMillis = -1;
 
         private SSLSocketFactory sslSocketFactory;
-        private ArrayList<Interceptor> interceptors = new ArrayList<>();
-        private ArrayList<Interceptor> networkInterceptors = new ArrayList<>();
+        private ArrayList<IInterceptor> interceptors = new ArrayList<>();
+        private ArrayList<IInterceptor> networkInterceptors = new ArrayList<>();
 
         public Builder() {
         }
@@ -289,7 +289,7 @@ public class Config extends IConfig<Config> {
             return this;
         }
 
-        public Builder headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+        public Builder headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
             this.onHeadInterceptor = onHeadInterceptor;
             return this;
         }
@@ -314,14 +314,14 @@ public class Config extends IConfig<Config> {
             return this;
         }
 
-        public Builder addInterceptor(Interceptor interceptor) {
+        public Builder addInterceptor(IInterceptor interceptor) {
             if (this.interceptors != null && interceptor != null) {
                 this.interceptors.add(interceptor);
             }
             return this;
         }
 
-        public Builder addNetworkInterceptors(Interceptor interceptor) {
+        public Builder addNetworkInterceptors(IInterceptor interceptor) {
             if (this.networkInterceptors != null && interceptor != null) {
                 this.networkInterceptors.add(interceptor);
             }

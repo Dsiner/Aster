@@ -5,7 +5,7 @@ import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.util.Map;
 
@@ -78,12 +78,12 @@ public class DeleteRequest extends HttpRequest<DeleteRequest> {
     }
 
     @Override
-    public DeleteRequest addInterceptor(Interceptor interceptor) {
+    public DeleteRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public DeleteRequest addNetworkInterceptors(Interceptor interceptor) {
+    public DeleteRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

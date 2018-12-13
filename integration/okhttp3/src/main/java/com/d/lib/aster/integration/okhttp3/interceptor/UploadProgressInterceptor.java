@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.io.IOException;
 
@@ -15,7 +16,7 @@ import okhttp3.Response;
  * Upload progress interception
  */
 public class UploadProgressInterceptor implements Interceptor,
-        com.d.lib.aster.interceptor.Interceptor<Interceptor.Chain, Response> {
+        IInterceptor<Interceptor.Chain, Response> {
     private ProgressCallback mCallback;
 
     public UploadProgressInterceptor(ProgressCallback callback) {

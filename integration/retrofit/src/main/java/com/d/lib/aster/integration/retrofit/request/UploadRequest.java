@@ -17,7 +17,7 @@ import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
 import com.d.lib.aster.integration.retrofit.observer.UploadObserver;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.io.File;
 import java.io.IOException;
@@ -123,12 +123,12 @@ public class UploadRequest extends IRequest<UploadRequest, RetrofitClient> {
     }
 
     @Override
-    public UploadRequest addInterceptor(Interceptor interceptor) {
+    public UploadRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public UploadRequest addNetworkInterceptors(Interceptor interceptor) {
+    public UploadRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

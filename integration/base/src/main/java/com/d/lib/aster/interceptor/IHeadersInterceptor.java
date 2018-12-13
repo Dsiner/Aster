@@ -5,11 +5,11 @@ import java.util.Map;
 /**
  * Request header interception
  */
-public abstract class HeadersInterceptor {
+public abstract class IHeadersInterceptor {
     protected Map<String, String> mHeaders;
     protected OnHeadInterceptor mOnHeadInterceptor;
 
-    protected HeadersInterceptor(Map<String, String> headers) {
+    protected IHeadersInterceptor(Map<String, String> headers) {
         this.mHeaders = headers;
     }
 
@@ -17,12 +17,12 @@ public abstract class HeadersInterceptor {
 
         /**
          * Some parameters may be dynamic, such as tokens, etc. You shoule override here
-         * builder.addHeader("token", "")
+         * heads.put("token", "");
          */
         void intercept(Map<String, String> heads);
     }
 
-    public HeadersInterceptor setOnHeadInterceptor(OnHeadInterceptor onHeadInterceptor) {
+    public IHeadersInterceptor setOnHeadInterceptor(OnHeadInterceptor onHeadInterceptor) {
         this.mOnHeadInterceptor = onHeadInterceptor;
         return this;
     }

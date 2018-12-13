@@ -2,6 +2,9 @@ package com.d.lib.aster.integration.okhttp3.interceptor;
 
 import android.support.annotation.NonNull;
 
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,8 +17,8 @@ import okhttp3.Response;
 /**
  * Request header interception
  */
-public class HeadersInterceptor extends com.d.lib.aster.interceptor.HeadersInterceptor
-        implements Interceptor, com.d.lib.aster.interceptor.Interceptor<Interceptor.Chain, Response> {
+public class HeadersInterceptor extends IHeadersInterceptor
+        implements Interceptor, IInterceptor<Interceptor.Chain, Response> {
 
     public HeadersInterceptor(Map<String, String> headers) {
         super(headers);

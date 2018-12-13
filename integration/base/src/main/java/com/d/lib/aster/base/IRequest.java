@@ -1,7 +1,7 @@
 package com.d.lib.aster.base;
 
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.util.Map;
 
@@ -52,7 +52,7 @@ public abstract class IRequest<R extends IRequest, C extends IClient> extends IC
     }
 
     @Override
-    protected R headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
+    protected R headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
         mConfig.headers(onHeadInterceptor);
         return (R) this;
     }
@@ -82,13 +82,13 @@ public abstract class IRequest<R extends IRequest, C extends IClient> extends IC
     }
 
     @Override
-    protected R addInterceptor(Interceptor interceptor) {
+    protected R addInterceptor(IInterceptor interceptor) {
         mConfig.addInterceptor(interceptor);
         return (R) this;
     }
 
     @Override
-    protected R addNetworkInterceptors(Interceptor interceptor) {
+    protected R addNetworkInterceptors(IInterceptor interceptor) {
         mConfig.addNetworkInterceptors(interceptor);
         return (R) this;
     }

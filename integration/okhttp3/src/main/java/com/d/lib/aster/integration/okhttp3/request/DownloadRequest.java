@@ -13,7 +13,7 @@ import com.d.lib.aster.integration.okhttp3.RequestManager;
 import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.integration.okhttp3.observer.DownloadObserver;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -142,12 +142,12 @@ public class DownloadRequest extends IRequest<DownloadRequest, OkHttpClient> {
     }
 
     @Override
-    public DownloadRequest addInterceptor(Interceptor interceptor) {
+    public DownloadRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public DownloadRequest addNetworkInterceptors(Interceptor interceptor) {
+    public DownloadRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

@@ -7,8 +7,8 @@ import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.integration.volley.client.OkHttpStack;
 import com.d.lib.aster.integration.volley.client.VolleyApi;
 import com.d.lib.aster.integration.volley.interceptor.HttpLoggingInterceptor;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -89,13 +89,13 @@ public class VolleyClient extends IClient {
     }
 
     private static com.d.lib.aster.integration.volley.client.VolleyClient getVolleyClient(Map<String, String> headers,
-                                                                                          HeadersInterceptor.OnHeadInterceptor onHeadInterceptor,
+                                                                                          IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor,
                                                                                           long connectTimeout,
                                                                                           long readTimeout,
                                                                                           long writeTimeout,
                                                                                           SSLSocketFactory sslSocketFactory,
-                                                                                          ArrayList<Interceptor> interceptors,
-                                                                                          ArrayList<Interceptor> networkInterceptors,
+                                                                                          ArrayList<IInterceptor> interceptors,
+                                                                                          ArrayList<IInterceptor> networkInterceptors,
                                                                                           boolean log) {
         com.d.lib.aster.integration.volley.client.VolleyClient.Builder builder
                 = new com.d.lib.aster.integration.volley.client.VolleyClient().newBuilder()
@@ -109,13 +109,13 @@ public class VolleyClient extends IClient {
         }
 
         if (headers != null && headers.size() > 0 || onHeadInterceptor != null) {
-            builder.addInterceptor((Interceptor) new com.d.lib.aster.integration.volley.interceptor.
+            builder.addInterceptor((IInterceptor) new com.d.lib.aster.integration.volley.interceptor.
                     HeadersInterceptor(headers)
                     .setOnHeadInterceptor(onHeadInterceptor));
         }
         if (interceptors != null && interceptors.size() > 0) {
-            for (Interceptor interceptor : interceptors) {
-                builder.addInterceptor((Interceptor) interceptor);
+            for (IInterceptor interceptor : interceptors) {
+                builder.addInterceptor((IInterceptor) interceptor);
             }
         }
         if (log) {
@@ -123,8 +123,8 @@ public class VolleyClient extends IClient {
         }
 
         if (networkInterceptors != null && networkInterceptors.size() > 0) {
-            for (Interceptor networkInterceptor : networkInterceptors) {
-                builder.addNetworkInterceptor((Interceptor) networkInterceptor);
+            for (IInterceptor networkInterceptor : networkInterceptors) {
+                builder.addNetworkInterceptor((IInterceptor) networkInterceptor);
             }
         }
         return builder.build();

@@ -7,8 +7,8 @@ import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.integration.http.client.HttpURLClient;
 import com.d.lib.aster.integration.http.interceptor.HttpLoggingInterceptor;
-import com.d.lib.aster.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IHeadersInterceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -88,13 +88,13 @@ public class HttpClient extends IClient {
     }
 
     private static HttpURLClient getHttpURLClient(Map<String, String> headers,
-                                                  HeadersInterceptor.OnHeadInterceptor onHeadInterceptor,
+                                                  IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor,
                                                   long connectTimeout,
                                                   long readTimeout,
                                                   long writeTimeout,
                                                   SSLSocketFactory sslSocketFactory,
-                                                  ArrayList<Interceptor> interceptors,
-                                                  ArrayList<Interceptor> networkInterceptors,
+                                                  ArrayList<IInterceptor> interceptors,
+                                                  ArrayList<IInterceptor> networkInterceptors,
                                                   boolean log) {
         HttpURLClient.Builder builder = new HttpURLClient().newBuilder()
                 .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
@@ -106,12 +106,12 @@ public class HttpClient extends IClient {
         }
 
         if (headers != null && headers.size() > 0 || onHeadInterceptor != null) {
-            builder.addInterceptor((Interceptor) new com.d.lib.aster.integration.http.interceptor
+            builder.addInterceptor((IInterceptor) new com.d.lib.aster.integration.http.interceptor
                     .HeadersInterceptor(headers)
                     .setOnHeadInterceptor(onHeadInterceptor));
         }
         if (interceptors != null && interceptors.size() > 0) {
-            for (Interceptor interceptor : interceptors) {
+            for (IInterceptor interceptor : interceptors) {
                 builder.addInterceptor(interceptor);
             }
         }
@@ -120,8 +120,8 @@ public class HttpClient extends IClient {
         }
 
         if (networkInterceptors != null && networkInterceptors.size() > 0) {
-            for (Interceptor networkInterceptor : networkInterceptors) {
-                builder.addNetworkInterceptor((Interceptor) networkInterceptor);
+            for (IInterceptor networkInterceptor : networkInterceptors) {
+                builder.addNetworkInterceptor((IInterceptor) networkInterceptor);
             }
         }
         return builder.build();

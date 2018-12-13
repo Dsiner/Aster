@@ -6,7 +6,7 @@ import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -163,12 +163,12 @@ public class PostRequest extends HttpRequest<PostRequest> {
     }
 
     @Override
-    public PostRequest addInterceptor(Interceptor interceptor) {
+    public PostRequest addInterceptor(IInterceptor interceptor) {
         return super.addInterceptor(interceptor);
     }
 
     @Override
-    public PostRequest addNetworkInterceptors(Interceptor interceptor) {
+    public PostRequest addNetworkInterceptors(IInterceptor interceptor) {
         return super.addNetworkInterceptors(interceptor);
     }
 

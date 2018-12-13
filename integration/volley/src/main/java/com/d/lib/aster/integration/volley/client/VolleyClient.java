@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.net.Proxy;
 import java.net.ProxySelector;
@@ -30,8 +30,8 @@ import javax.net.ssl.X509TrustManager;
 public class VolleyClient {
     @Nullable
     final Proxy proxy;
-    final List<Interceptor> interceptors;
-    final List<Interceptor> networkInterceptors;
+    final List<IInterceptor> interceptors;
+    final List<IInterceptor> networkInterceptors;
     final ProxySelector proxySelector;
     final SocketFactory socketFactory;
     @Nullable
@@ -123,8 +123,8 @@ public class VolleyClient {
     public static final class Builder {
         @Nullable
         Proxy proxy;
-        final List<Interceptor> interceptors = new ArrayList<>();
-        final List<Interceptor> networkInterceptors = new ArrayList<>();
+        final List<IInterceptor> interceptors = new ArrayList<>();
+        final List<IInterceptor> networkInterceptors = new ArrayList<>();
         ProxySelector proxySelector;
         SocketFactory socketFactory;
         @Nullable
@@ -188,11 +188,11 @@ public class VolleyClient {
             return this;
         }
 
-        public Builder addInterceptor(Interceptor interceptor) {
+        public Builder addInterceptor(IInterceptor interceptor) {
             return this;
         }
 
-        public Builder addNetworkInterceptor(Interceptor networkInterceptor) {
+        public Builder addNetworkInterceptor(IInterceptor networkInterceptor) {
             return this;
         }
 

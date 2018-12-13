@@ -2,6 +2,8 @@ package com.d.lib.aster.integration.okhttp3.interceptor;
 
 import android.support.annotation.NonNull;
 
+import com.d.lib.aster.interceptor.IInterceptor;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -12,7 +14,7 @@ import okhttp3.Response;
  * No cache interception
  */
 public class NoCacheInterceptor implements Interceptor,
-        com.d.lib.aster.interceptor.Interceptor<Interceptor.Chain, Response> {
+        IInterceptor<Interceptor.Chain, Response> {
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {

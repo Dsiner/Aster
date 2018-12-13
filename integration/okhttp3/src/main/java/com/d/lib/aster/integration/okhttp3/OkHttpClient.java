@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.interceptor.Interceptor;
+import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.utils.ULog;
 
 import java.util.ArrayList;
@@ -94,8 +94,8 @@ public class OkHttpClient extends IClient {
                                                         long readTimeout,
                                                         long writeTimeout,
                                                         SSLSocketFactory sslSocketFactory,
-                                                        ArrayList<Interceptor> interceptors,
-                                                        ArrayList<Interceptor> networkInterceptors,
+                                                        ArrayList<IInterceptor> interceptors,
+                                                        ArrayList<IInterceptor> networkInterceptors,
                                                         boolean log) {
         okhttp3.OkHttpClient.Builder builder = new okhttp3.OkHttpClient().newBuilder()
                 .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
@@ -111,7 +111,7 @@ public class OkHttpClient extends IClient {
                     .setOnHeadInterceptor(onHeadInterceptor));
         }
         if (interceptors != null && interceptors.size() > 0) {
-            for (Interceptor interceptor : interceptors) {
+            for (IInterceptor interceptor : interceptors) {
                 builder.addInterceptor((okhttp3.Interceptor) interceptor);
             }
         }
@@ -120,7 +120,7 @@ public class OkHttpClient extends IClient {
         }
 
         if (networkInterceptors != null && networkInterceptors.size() > 0) {
-            for (Interceptor networkInterceptor : networkInterceptors) {
+            for (IInterceptor networkInterceptor : networkInterceptors) {
                 builder.addNetworkInterceptor((okhttp3.Interceptor) networkInterceptor);
             }
         }
