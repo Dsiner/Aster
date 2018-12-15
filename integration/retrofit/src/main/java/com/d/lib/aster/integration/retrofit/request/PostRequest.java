@@ -6,12 +6,17 @@ import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
+import com.d.lib.aster.integration.retrofit.RequestManager;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiFunc;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
+import com.d.lib.aster.integration.retrofit.func.MapFunc;
+import com.d.lib.aster.integration.retrofit.observer.ApiObserver;
+import com.d.lib.aster.integration.retrofit.observer.AsyncApiObserver;
 import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.request.IPostRequest;
+import com.d.lib.aster.utils.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,6 +28,8 @@ import java.util.Map;
 import javax.net.ssl.SSLSocketFactory;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -85,18 +92,34 @@ public class PostRequest extends IPostRequest<PostRequest, RetrofitClient> {
 
     @Override
     public <T> void request(SimpleCallback<T> callback) {
-        super.request(callback);
+        prepare();
+        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+        if (mTag != null) {
+            RequestManager.getIns().add(mTag, disposableObserver);
+        }
+        mObservable.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new ApiRetryFunc(mConfig.retryCount, mConfig.retryDelayMillis))
+                .subscribe(disposableObserver);
     }
 
     @Override
     public <T, R> void request(AsyncCallback<T, R> callback) {
-        super.request(callback);
+        prepare();
+        DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
+        if (mTag != null) {
+            RequestManager.getIns().add(mTag, disposableObserver);
+        }
+        mObservable.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                .map(new MapFunc<T, R>(callback))
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new ApiRetryFunc(mConfig.retryCount, mConfig.retryDelayMillis))
+                .subscribe(disposableObserver);
     }
-
-//    @Override
-//    public <T> Observable<T> observable(Class<T> clazz) {
-//        return super.observable(clazz);
-//    }
 
     @Override
     public <T> com.d.lib.aster.scheduler.Observable.Observe<T> observable(Class<T> clazz) {
@@ -270,12 +293,35 @@ public class PostRequest extends IPostRequest<PostRequest, RetrofitClient> {
 
         @Override
         public <T> void request(SimpleCallback<T> callback) {
-            super.request(callback);
+            prepare();
+            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+            if (mTag != null) {
+                RequestManager.getIns().add(mTag, disposableObserver);
+            }
+            mObservable.subscribeOn(Schedulers.io())
+                    .unsubscribeOn(Schedulers.io())
+                    .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .retryWhen(new ApiRetryFunc(getClient().getHttpConfig().retryCount,
+                            getClient().getHttpConfig().retryDelayMillis))
+                    .subscribe(disposableObserver);
         }
 
         @Override
         public <T, R> void request(AsyncCallback<T, R> callback) {
-            super.request(callback);
+            prepare();
+            DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
+            if (mTag != null) {
+                RequestManager.getIns().add(mTag, disposableObserver);
+            }
+            mObservable.subscribeOn(Schedulers.io())
+                    .unsubscribeOn(Schedulers.io())
+                    .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                    .map(new MapFunc<T, R>(callback))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .retryWhen(new ApiRetryFunc(getClient().getHttpConfig().retryCount,
+                            getClient().getHttpConfig().retryDelayMillis))
+                    .subscribe(disposableObserver);
         }
 
         @Override

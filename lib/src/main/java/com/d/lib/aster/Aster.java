@@ -7,6 +7,7 @@ import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.AsterModule.Singleton;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.Params;
+import com.d.lib.aster.integration.retrofit.RetrofitModule;
 import com.d.lib.aster.request.IDownloadRequest;
 import com.d.lib.aster.request.IHttpRequest;
 import com.d.lib.aster.request.IPostRequest;
@@ -21,11 +22,20 @@ public class Aster {
     private volatile static AsterModule mAster;
 
     private static AsterModule getAster() {
+        if (mAster == null) {
+            synchronized (Aster.class) {
+                if (mAster == null) {
+                    mAster = RetrofitModule.factory();
+                }
+            }
+        }
         return mAster;
     }
 
     public static void init(Context context, AsterModule module) {
-        module.applyOptions(context, new Config.Builder());
+        context = context.getApplicationContext();
+        module.applyOptions(context, new Config.Builder(context));
+        module.registerComponents(context, new AsterModule.Registry(module));
         mAster = module;
     }
 

@@ -24,7 +24,7 @@ import retrofit2.Retrofit;
  */
 public class RetrofitModule extends AsterModule {
 
-    public static RetrofitModule factory(Context context) {
+    public static RetrofitModule factory() {
         return new RetrofitModule();
     }
 
@@ -33,7 +33,7 @@ public class RetrofitModule extends AsterModule {
 
     @Override
     public void applyOptions(@NonNull Context context, @NonNull Config.Builder builder) {
-
+        builder.build();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.d.aster.api;
 
-import com.d.lib.aster.Aster;
+import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.integration.volley.VolleyClient;
@@ -23,16 +23,16 @@ import java.util.Map;
  * Created by D on 2018/9/30.
  */
 public class Client {
-    public static Aster.Singleton getTypeA() {
+    public static AsterModule.Singleton getTypeA() {
         return TypeA.INSTANCE;
     }
 
-    public static Aster.Singleton getTypeB() {
+    public static AsterModule.Singleton getTypeB() {
         return TypeB.INSTANCE;
     }
 
     private static class TypeA {
-        private final static Aster.Singleton INSTANCE = new Aster.Singleton() {
+        private final static AsterModule.Singleton INSTANCE = new AsterModule.Singleton() {
             private VolleyClient clientDefault = VolleyClient.create(VolleyClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.microsoft.com/")
                             .headers(new HeadersInterceptor.OnHeadInterceptor() {
@@ -190,7 +190,7 @@ public class Client {
     }
 
     private static class TypeB {
-        private final static Aster.Singleton INSTANCE = new Aster.Singleton() {
+        private final static AsterModule.Singleton INSTANCE = new AsterModule.Singleton() {
             private VolleyClient clientDefault = VolleyClient.create(VolleyClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.baidu.com/")
                             .connectTimeout(10 * 1000)

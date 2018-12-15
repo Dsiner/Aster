@@ -7,9 +7,7 @@ import com.d.aster.App;
 import com.d.aster.R;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.retrofit.RequestManager;
-import com.d.lib.aster.integration.volley.client.ResponseBody;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
@@ -98,19 +96,7 @@ public class Upload extends Request {
                         ULog.d("dsiner_request--> onCancel");
                     }
                 })
-                .request(new SimpleCallback<ResponseBody>() {
-                    @Override
-                    public void onSuccess(ResponseBody response) {
-                        Util.printThread("dsiner_theard onSuccess -All");
-                        ULog.d("dsiner_request--> onSuccess -All");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError -All");
-                        ULog.d("dsiner_request--> onError -All");
-                    }
-                });
+                .request();
     }
 
     @Override

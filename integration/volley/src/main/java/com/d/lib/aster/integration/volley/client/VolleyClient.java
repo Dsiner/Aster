@@ -3,8 +3,9 @@ package com.d.lib.aster.integration.volley.client;
 import android.support.annotation.Nullable;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.Volley;
-import com.d.lib.aster.base.IClient;
+import com.d.lib.aster.base.Config;
 import com.d.lib.aster.interceptor.IInterceptor;
 
 import java.net.Proxy;
@@ -43,7 +44,7 @@ public class VolleyClient {
     final int readTimeout;
     final int writeTimeout;
     final int pingInterval;
-    final OkHttpStack okHttpStack;
+    final HurlStack httpStack;
 
     volatile RequestQueue mRequestQueue;
 
@@ -52,7 +53,7 @@ public class VolleyClient {
     }
 
     VolleyClient(Builder builder) {
-        this.okHttpStack = builder.okHttpStack;
+        this.httpStack = builder.httpStack;
         this.proxy = builder.proxy;
         this.interceptors = builder.interceptors;
         this.networkInterceptors = builder.networkInterceptors;
@@ -79,10 +80,13 @@ public class VolleyClient {
         if (mRequestQueue == null) {
             synchronized (this) {
                 if (mRequestQueue == null) {
-                    if (okHttpStack != null) {
-                        mRequestQueue = Volley.newRequestQueue(IClient.getContext(), okHttpStack);
+                    if (Config.getDefault().getContext() == null) {
+                        throw new NullPointerException("The ApplicationContext must not be null.");
+                    }
+                    if (httpStack != null) {
+                        mRequestQueue = Volley.newRequestQueue(Config.getDefault().getContext(), httpStack);
                     } else {
-                        mRequestQueue = Volley.newRequestQueue(IClient.getContext());
+                        mRequestQueue = Volley.newRequestQueue(Config.getDefault().getContext());
                     }
                 }
             }
@@ -136,7 +140,7 @@ public class VolleyClient {
         int readTimeout;
         int writeTimeout;
         int pingInterval;
-        OkHttpStack okHttpStack;
+        HurlStack httpStack;
 
         public Builder() {
             proxySelector = ProxySelector.getDefault();
@@ -151,7 +155,7 @@ public class VolleyClient {
         }
 
         Builder(VolleyClient volleyClient) {
-            this.okHttpStack = volleyClient.okHttpStack;
+            this.httpStack = volleyClient.httpStack;
             this.proxy = volleyClient.proxy;
             this.interceptors.addAll(volleyClient.interceptors);
             this.networkInterceptors.addAll(volleyClient.networkInterceptors);
@@ -167,8 +171,8 @@ public class VolleyClient {
             this.pingInterval = volleyClient.pingInterval;
         }
 
-        public Builder setHurlStack(OkHttpStack okHttpStack) {
-            this.okHttpStack = okHttpStack;
+        public Builder setHurlStack(HurlStack httpStack) {
+            this.httpStack = httpStack;
             return this;
         }
 

@@ -1,7 +1,5 @@
 package com.d.lib.aster.base;
 
-import android.app.Application;
-import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 
@@ -27,8 +25,6 @@ public class IClient {
     public final static int TYPE_DOWNLOAD = 1;
     public final static int TYPE_UPLOAD = 2;
 
-    private static Application mContext;
-
     @IntDef({TYPE_NORMAL, TYPE_DOWNLOAD, TYPE_UPLOAD})
     @Target({ElementType.PARAMETER})
     @Retention(RetentionPolicy.SOURCE)
@@ -42,14 +38,6 @@ public class IClient {
     protected IClient(@State int type, @NonNull Config config) {
         this.mType = type;
         this.mConfig = config;
-    }
-
-    public static void setContext(Context context) {
-        mContext = (Application) context.getApplicationContext();
-    }
-
-    public static Context getContext() {
-        return mContext.getApplicationContext();
     }
 
     public int getType() {

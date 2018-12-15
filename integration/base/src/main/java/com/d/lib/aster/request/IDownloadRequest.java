@@ -42,6 +42,11 @@ public abstract class IDownloadRequest<HR extends IDownloadRequest, C extends IC
     }
 
     @Override
+    public HR tag(Object tag) {
+        return super.tag(tag);
+    }
+
+    @Override
     public HR baseUrl(String baseUrl) {
         return super.baseUrl(baseUrl);
     }
@@ -116,6 +121,11 @@ public abstract class IDownloadRequest<HR extends IDownloadRequest, C extends IC
         @SuppressWarnings("ConstantConditions")
         public void request(@NonNull final String path, @NonNull final String name,
                             @NonNull final ProgressCallback callback) {
+        }
+
+        @Override
+        public HRF tag(Object tag) {
+            return super.tag(tag);
         }
     }
 }

@@ -13,18 +13,33 @@ import com.d.lib.aster.request.IUploadRequest;
  * Created by D on 2018/12/13.
  **/
 public abstract class AsterModule {
+    private static Registry REGISTRY;
+
     public abstract void applyOptions(@NonNull Context context, @NonNull Config.Builder builder);
 
     public void registerComponents(@NonNull Context context,
-                                      @NonNull Registry registry) {
+                                   @NonNull Registry registry) {
+
     }
 
-    class Registry {
+    public static class Registry {
+        AsterModule module;
+
+        protected Registry() {
+        }
+
+        public Registry(@NonNull AsterModule module) {
+            this.module = module;
+        }
 
         @NonNull
-        public Registry replace() {
-            return this;
+        public void replace(Registry registry) {
+            REGISTRY = registry;
         }
+    }
+
+    public static Registry getRegistry() {
+        return REGISTRY;
     }
 
     public abstract Singleton getDefault();

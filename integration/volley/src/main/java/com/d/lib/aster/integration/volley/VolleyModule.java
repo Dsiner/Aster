@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.Params;
+import com.d.lib.aster.integration.volley.client.OkHttpStack;
 import com.d.lib.aster.integration.volley.request.DeleteRequest;
 import com.d.lib.aster.integration.volley.request.DownloadRequest;
 import com.d.lib.aster.integration.volley.request.GetRequest;
@@ -21,13 +22,18 @@ import com.d.lib.aster.integration.volley.request.UploadRequest;
  */
 public class VolleyModule extends AsterModule {
 
-    public static VolleyModule factory(Context context) {
+    public static VolleyModule factory() {
         return new VolleyModule();
     }
 
     @Override
     public void applyOptions(@NonNull Context context, @NonNull Config.Builder builder) {
+        builder.build();
+    }
 
+    @Override
+    public void registerComponents(@NonNull Context context, @NonNull Registry registry) {
+        registry.replace(VolleyRegistry.factory());
     }
 
     public Singleton getDefault() {

@@ -36,6 +36,11 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
     }
 
     @Override
+    public HR tag(Object tag) {
+        return super.tag(tag);
+    }
+
+    @Override
     public HR baseUrl(String baseUrl) {
         return super.baseUrl(baseUrl);
     }
@@ -140,6 +145,11 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
         protected abstract void prepare();
 
         public void request() {
+        }
+
+        @Override
+        public HRF tag(Object tag) {
+            return super.tag(tag);
         }
 
         public HRF addParam(String paramKey, String paramValue) {

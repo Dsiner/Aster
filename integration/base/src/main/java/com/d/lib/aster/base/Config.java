@@ -1,7 +1,9 @@
 package com.d.lib.aster.base;
 
+import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
@@ -92,6 +94,7 @@ public class Config extends IConfig<Config> {
         BODY
     }
 
+    private static Application context;
     public String baseUrl;
     public Map<String, String> headers = new LinkedHashMap<>();
     public IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor;
@@ -129,6 +132,7 @@ public class Config extends IConfig<Config> {
         private synchronized static void setDefault(@NonNull Builder builder) {
             Config config = new Config();
 
+            context = builder.context;
             config.baseUrl = !TextUtils.isEmpty(builder.baseUrl) ? builder.baseUrl : Default.BASE_URL;
             config.headers = builder.headers;
             config.onHeadInterceptor = builder.onHeadInterceptor;
@@ -169,6 +173,11 @@ public class Config extends IConfig<Config> {
                 .retryCount(config.retryCount)
                 .retryDelayMillis(config.retryDelayMillis)
                 .sslSocketFactory(config.sslSocketFactory);
+    }
+
+    @Nullable
+    public Context getContext() {
+        return context;
     }
 
     @Override
@@ -253,8 +262,7 @@ public class Config extends IConfig<Config> {
     }
 
     public static class Builder {
-        private Context context;
-        private Object module;
+        private Application context;
         private String baseUrl;
         private Map<String, String> headers = new LinkedHashMap<>();
         private IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor;
@@ -274,12 +282,7 @@ public class Config extends IConfig<Config> {
         }
 
         public Builder(Context context) {
-            this.context = context.getApplicationContext();
-        }
-
-        public Builder module(Object module) {
-            this.module = module;
-            return this;
+            this.context = (Application) context.getApplicationContext();
         }
 
         public Builder baseUrl(String baseUrl) {
@@ -356,7 +359,6 @@ public class Config extends IConfig<Config> {
         }
 
         public void build() {
-            IClient.setContext(context);
             Singleton.setDefault(this);
         }
     }

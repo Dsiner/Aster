@@ -21,13 +21,13 @@ import com.d.lib.aster.integration.okhttp3.request.UploadRequest;
  */
 public class OkHttpModule extends AsterModule {
 
-    public static OkHttpModule factory(Context context) {
+    public static OkHttpModule factory() {
         return new OkHttpModule();
     }
 
     @Override
     public void applyOptions(@NonNull Context context, @NonNull Config.Builder builder) {
-
+        builder.build();
     }
 
     public Singleton getDefault() {

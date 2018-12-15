@@ -21,13 +21,13 @@ import com.d.lib.aster.integration.http.request.UploadRequest;
  */
 public class HttpModule extends AsterModule {
 
-    public static HttpModule factory(Context context) {
+    public static HttpModule factory() {
         return new HttpModule();
     }
 
     @Override
     public void applyOptions(@NonNull Context context, @NonNull Config.Builder builder) {
-
+        builder.build();
     }
 
     public Singleton getDefault() {

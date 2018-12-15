@@ -2,9 +2,9 @@ package com.d.lib.aster.integration.volley;
 
 import android.support.annotation.NonNull;
 
+import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.integration.volley.client.OkHttpStack;
 import com.d.lib.aster.integration.volley.client.VolleyApi;
 import com.d.lib.aster.integration.volley.interceptor.HttpLoggingInterceptor;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
@@ -99,10 +99,15 @@ public class VolleyClient extends IClient {
                                                                                           boolean log) {
         com.d.lib.aster.integration.volley.client.VolleyClient.Builder builder
                 = new com.d.lib.aster.integration.volley.client.VolleyClient().newBuilder()
-                .setHurlStack(new OkHttpStack())
                 .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS);
+
+        AsterModule.Registry registry = AsterModule.getRegistry();
+        if (registry != null
+                && registry instanceof VolleyRegistry) {
+            builder.setHurlStack(((VolleyRegistry) registry).getHttpStack());
+        }
 
         if (sslSocketFactory != null) {
             builder.sslSocketFactory(sslSocketFactory);

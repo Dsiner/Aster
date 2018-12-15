@@ -6,8 +6,8 @@ import android.os.Environment;
 import com.d.aster.api.API;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.base.Config;
+import com.d.lib.aster.integration.http.HttpModule;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RetrofitModule;
 import com.d.lib.aster.utils.SSLUtil;
 
 import java.util.HashMap;
@@ -24,13 +24,10 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Aster.init(getApplicationContext(),
-                RetrofitModule.factory(getApplicationContext()));
-
-//        init();
+        Aster.init(getApplicationContext(), HttpModule.factory());
     }
 
+    @Deprecated
     private void init() {
         Map<String, String> headers = new HashMap<>();
         headers.put(API.CommonHeader.platform, "Android");
