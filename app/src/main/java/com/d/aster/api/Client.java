@@ -2,18 +2,19 @@ package com.d.aster.api;
 
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Config;
+import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
-import com.d.lib.aster.integration.volley.VolleyClient;
-import com.d.lib.aster.integration.volley.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.volley.request.DeleteRequest;
-import com.d.lib.aster.integration.volley.request.DownloadRequest;
-import com.d.lib.aster.integration.volley.request.GetRequest;
-import com.d.lib.aster.integration.volley.request.HeadRequest;
-import com.d.lib.aster.integration.volley.request.OptionRequest;
-import com.d.lib.aster.integration.volley.request.PatchRequest;
-import com.d.lib.aster.integration.volley.request.PostRequest;
-import com.d.lib.aster.integration.volley.request.PutRequest;
-import com.d.lib.aster.integration.volley.request.UploadRequest;
+import com.d.lib.aster.integration.okhttp3.OkHttpClient;
+import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
+import com.d.lib.aster.integration.okhttp3.request.DeleteRequest;
+import com.d.lib.aster.integration.okhttp3.request.DownloadRequest;
+import com.d.lib.aster.integration.okhttp3.request.GetRequest;
+import com.d.lib.aster.integration.okhttp3.request.HeadRequest;
+import com.d.lib.aster.integration.okhttp3.request.OptionRequest;
+import com.d.lib.aster.integration.okhttp3.request.PatchRequest;
+import com.d.lib.aster.integration.okhttp3.request.PostRequest;
+import com.d.lib.aster.integration.okhttp3.request.PutRequest;
+import com.d.lib.aster.integration.okhttp3.request.UploadRequest;
 import com.d.lib.aster.utils.SSLUtil;
 
 import java.util.Map;
@@ -33,7 +34,7 @@ public class Client {
 
     private static class TypeA {
         private final static AsterModule.Singleton INSTANCE = new AsterModule.Singleton() {
-            private VolleyClient clientDefault = VolleyClient.create(VolleyClient.TYPE_NORMAL,
+            private OkHttpClient clientDefault = OkHttpClient.create(IClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.microsoft.com/")
                             .headers(new HeadersInterceptor.OnHeadInterceptor() {
                                 @Override
@@ -49,7 +50,7 @@ public class Client {
                             .retryDelayMillis(2 * 1000)
                             .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                             .log(true));
-            private VolleyClient clientTransfer = VolleyClient.create(VolleyClient.TYPE_NORMAL,
+            private OkHttpClient clientTransfer = OkHttpClient.create(IClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.microsoft.com/")
                             .connectTimeout(10 * 1000)
                             .readTimeout(10 * 1000)
@@ -59,11 +60,11 @@ public class Client {
                             .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                             .log(false));
 
-            private VolleyClient getClientDefault() {
+            private OkHttpClient getClientDefault() {
                 return clientDefault;
             }
 
-            private VolleyClient getClientTransfer() {
+            private OkHttpClient getClientTransfer() {
                 return clientTransfer;
             }
 
@@ -71,7 +72,7 @@ public class Client {
             public GetRequest.Singleton get(String url) {
                 return new GetRequest.Singleton(url) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -81,7 +82,7 @@ public class Client {
             public GetRequest.Singleton get(String url, Params params) {
                 return new GetRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -91,7 +92,7 @@ public class Client {
             public PostRequest.Singleton post(String url) {
                 return new PostRequest.Singleton(url) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -101,7 +102,7 @@ public class Client {
             public PostRequest.Singleton post(String url, Params params) {
                 return new PostRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -111,7 +112,7 @@ public class Client {
             public HeadRequest.Singleton head(String url, Params params) {
                 return new HeadRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -121,7 +122,7 @@ public class Client {
             public OptionRequest.Singleton options(String url, Params params) {
                 return new OptionRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -131,7 +132,7 @@ public class Client {
             public PutRequest.Singleton put(String url, Params params) {
                 return new PutRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -141,7 +142,7 @@ public class Client {
             public PatchRequest.Singleton patch(String url, Params params) {
                 return new PatchRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -151,7 +152,7 @@ public class Client {
             public DeleteRequest.Singleton delete(String url, Params params) {
                 return new DeleteRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -161,7 +162,7 @@ public class Client {
             public DownloadRequest.Singleton download(String url) {
                 return new DownloadRequest.Singleton(url) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientTransfer();
                     }
                 };
@@ -171,7 +172,7 @@ public class Client {
             public DownloadRequest.Singleton download(String url, Params params) {
                 return new DownloadRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientTransfer();
                     }
                 };
@@ -181,7 +182,7 @@ public class Client {
             public UploadRequest.Singleton upload(String url) {
                 return new UploadRequest.Singleton(url) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientTransfer();
                     }
                 };
@@ -191,7 +192,7 @@ public class Client {
 
     private static class TypeB {
         private final static AsterModule.Singleton INSTANCE = new AsterModule.Singleton() {
-            private VolleyClient clientDefault = VolleyClient.create(VolleyClient.TYPE_NORMAL,
+            private OkHttpClient clientDefault = OkHttpClient.create(IClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.baidu.com/")
                             .connectTimeout(10 * 1000)
                             .readTimeout(10 * 1000)
@@ -200,7 +201,7 @@ public class Client {
                             .retryDelayMillis(2 * 1000)
                             .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                             .log(true));
-            private VolleyClient clientTransfer = VolleyClient.create(VolleyClient.TYPE_NORMAL,
+            private OkHttpClient clientTransfer = OkHttpClient.create(IClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.baidu.com/")
                             .connectTimeout(10 * 1000)
                             .readTimeout(10 * 1000)
@@ -210,11 +211,11 @@ public class Client {
                             .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                             .log(false));
 
-            private VolleyClient getClientDefault() {
+            private OkHttpClient getClientDefault() {
                 return clientDefault;
             }
 
-            private VolleyClient getClientTransfer() {
+            private OkHttpClient getClientTransfer() {
                 return clientTransfer;
             }
 
@@ -222,7 +223,7 @@ public class Client {
             public GetRequest.Singleton get(String url) {
                 return new GetRequest.Singleton(url) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -232,7 +233,7 @@ public class Client {
             public GetRequest.Singleton get(String url, Params params) {
                 return new GetRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -242,7 +243,7 @@ public class Client {
             public PostRequest.Singleton post(String url) {
                 return new PostRequest.Singleton(url) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -252,7 +253,7 @@ public class Client {
             public PostRequest.Singleton post(String url, Params params) {
                 return new PostRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -262,7 +263,7 @@ public class Client {
             public HeadRequest.Singleton head(String url, Params params) {
                 return new HeadRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -272,7 +273,7 @@ public class Client {
             public OptionRequest.Singleton options(String url, Params params) {
                 return new OptionRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -282,7 +283,7 @@ public class Client {
             public PutRequest.Singleton put(String url, Params params) {
                 return new PutRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -292,7 +293,7 @@ public class Client {
             public PatchRequest.Singleton patch(String url, Params params) {
                 return new PatchRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -302,7 +303,7 @@ public class Client {
             public DeleteRequest.Singleton delete(String url, Params params) {
                 return new DeleteRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientDefault();
                     }
                 };
@@ -312,7 +313,7 @@ public class Client {
             public DownloadRequest.Singleton download(String url) {
                 return new DownloadRequest.Singleton(url) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientTransfer();
                     }
                 };
@@ -322,7 +323,7 @@ public class Client {
             public DownloadRequest.Singleton download(String url, Params params) {
                 return new DownloadRequest.Singleton(url, params) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientTransfer();
                     }
                 };
@@ -332,7 +333,7 @@ public class Client {
             public UploadRequest.Singleton upload(String url) {
                 return new UploadRequest.Singleton(url) {
                     @Override
-                    protected VolleyClient getClient() {
+                    protected OkHttpClient getClient() {
                         return getClientTransfer();
                     }
                 };

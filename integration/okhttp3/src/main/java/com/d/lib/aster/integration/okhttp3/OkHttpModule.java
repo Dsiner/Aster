@@ -34,9 +34,6 @@ public class OkHttpModule extends AsterModule {
         return Default.INSTANCE;
     }
 
-    private OkHttpModule() {
-    }
-
     public GetRequest get(String url) {
         return new GetRequest(url);
     }

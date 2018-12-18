@@ -28,9 +28,6 @@ public class RetrofitModule extends AsterModule {
         return new RetrofitModule();
     }
 
-    private RetrofitModule() {
-    }
-
     @Override
     public void applyOptions(@NonNull Context context, @NonNull Config.Builder builder) {
         builder.build();

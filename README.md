@@ -2,11 +2,9 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![API](https://img.shields.io/badge/API-9%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=9)
-[![Download](https://api.bintray.com/packages/dsiner/maven/aster/images/download.svg) ](https://bintray.com/dsiner/maven/aster/_latestVersion)
-[![Wiki-Guide](https://img.shields.io/badge/Wiki-Guide-brightgreen.svg)](https://github.com/Dsiner/Aster/wiki)
 [![Readme](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-brightgreen.svg)](https://github.com/Dsiner/Aster/blob/master/README-zh.md)
 
-> A network request library based on `OkHttp3` + `Retrofit2` + `RxJava2`
+> A network request library based on `HttpURLConnection` + `OkHttp3` + `Volley` + `Retrofit2` + `RxJava2`
 
 ## Features
 - A chain, full chain call `.func0().func1().func2()...` , `adaptive`, `simple`
@@ -20,6 +18,15 @@
 - [x] Support for adding fixed headers, dynamic headers
 - [x] Support failure retry mechanism, you can specify the number of retries, retry interval
 - [x] Support Tag, Cancel Request, Unsubscribe
+
+## Integration libraries
+* HttpURLConnection
+* OkHttp3
+* Volley
+    * HttpURLConnection
+    * HttpClient
+    * OkHttp3
+* Retrofit
 
 ## Getting Started
 Maven:

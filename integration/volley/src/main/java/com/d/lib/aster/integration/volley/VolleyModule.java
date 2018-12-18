@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.Params;
-import com.d.lib.aster.integration.volley.client.OkHttpStack;
 import com.d.lib.aster.integration.volley.request.DeleteRequest;
 import com.d.lib.aster.integration.volley.request.DownloadRequest;
 import com.d.lib.aster.integration.volley.request.GetRequest;
@@ -38,9 +37,6 @@ public class VolleyModule extends AsterModule {
 
     public Singleton getDefault() {
         return Default.INSTANCE;
-    }
-
-    private VolleyModule() {
     }
 
     public GetRequest get(String url) {

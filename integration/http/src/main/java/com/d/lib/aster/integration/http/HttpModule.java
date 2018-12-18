@@ -34,9 +34,6 @@ public class HttpModule extends AsterModule {
         return Default.INSTANCE;
     }
 
-    private HttpModule() {
-    }
-
     public GetRequest get(String url) {
         return new GetRequest(url);
     }
