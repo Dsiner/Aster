@@ -28,47 +28,6 @@
 - [x] Support failure retry mechanism, you can specify the number of retries, retry interval
 - [x] Support Tag, Cancel Request, Unsubscribe
 
-## Getting Started
-Maven:
-```xml
-<dependency>
-  <groupId>com.dsiner.lib</groupId>
-  <artifactId>aster</artifactId>
-  <version>1.2.0</version>
-</dependency>
-```
-or Gradle:
-```groovy
-compile 'com.dsiner.lib:aster:1.2.1'
-```
-
-or If you need or would prefer to use a different version of the library you should exclude "xx.xx.xx" from your dependency in your build.gradle file.
-</br></br>For example:
-
-```groovy
-dependencies {
-    implementation('com.dsiner.lib:aster:1.2.1', {
-        exclude group: 'com.google.code.gson', module: 'gson'
-        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
-        exclude group: 'com.squareup.okhttp3', module: 'logging-interceptor'
-        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
-        exclude group: 'io.reactivex.rxjava2', module: 'rxandroid'
-        exclude group: 'com.squareup.retrofit2', module: 'retrofit'
-        exclude group: 'com.squareup.retrofit2', module: 'adapter-rxjava2'
-        exclude group: 'com.squareup.retrofit2', module: 'converter-gson'
-        exclude group: 'com.squareup.retrofit2', module: 'converter-scalars'
-    })
-    implementation 'com.google.code.gson:gson:2.7'
-    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
-}
-```
 
 ### How do I use Aster?
 
