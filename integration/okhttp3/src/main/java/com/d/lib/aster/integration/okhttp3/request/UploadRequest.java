@@ -30,6 +30,7 @@ import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -44,6 +45,7 @@ import okio.Source;
  */
 public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
     protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
+    protected Call mCall;
     protected Observable<ResponseBody> mObservable;
 
     public UploadRequest(String url) {
@@ -79,7 +81,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
 
     public void request(@Nullable SimpleCallback<ResponseBody> callback) {
         prepare();
-        requestImpl(mObservable, getClient().getHttpConfig(), mTag, callback);
+        requestImpl(mObservable, getClient().getHttpConfig(), mTag, mCall, callback);
     }
 
     @Override
@@ -140,8 +142,9 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
     private static void requestImpl(final Observable<ResponseBody> observable,
                                     final Config config,
                                     final Object tag,
+                                    final Call call,
                                     final SimpleCallback<ResponseBody> callback) {
-        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, callback);
+        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, call, callback);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
@@ -289,6 +292,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
      */
     public static class Singleton extends IUploadRequest.Singleton<Singleton, OkHttpClient> {
         protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
+        protected Call mCall;
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
@@ -322,7 +326,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
 
         public void request(@Nullable SimpleCallback<ResponseBody> callback) {
             prepare();
-            requestImpl(mObservable, getClient().getHttpConfig(), mTag, callback);
+            requestImpl(mObservable, getClient().getHttpConfig(), mTag, mCall, callback);
         }
 
         @Override

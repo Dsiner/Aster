@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Config;
+import com.d.lib.aster.base.IRequestManager;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.integration.http.request.DeleteRequest;
 import com.d.lib.aster.integration.http.request.DownloadRequest;
@@ -28,6 +29,11 @@ public class HttpModule extends AsterModule {
     @Override
     public void applyOptions(@NonNull Context context, @NonNull Config.Builder builder) {
         builder.build();
+    }
+
+    @Override
+    public IRequestManager getManager() {
+        return RequestManagerImpl.getIns();
     }
 
     public Singleton getDefault() {

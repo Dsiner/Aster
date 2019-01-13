@@ -26,12 +26,14 @@ import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import okhttp3.Call;
 import okhttp3.ResponseBody;
 
 /**
  * Created by D on 2017/10/24.
  */
 public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<HR, OkHttpClient> {
+    protected Call mCall;
     protected Observable<ResponseBody> mObservable;
 
     public HttpRequest(String url) {

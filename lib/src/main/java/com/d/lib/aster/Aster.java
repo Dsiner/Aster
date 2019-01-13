@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.AsterModule.Singleton;
 import com.d.lib.aster.base.Config;
+import com.d.lib.aster.base.IRequestManager;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.integration.retrofit.RetrofitModule;
 import com.d.lib.aster.request.IDownloadRequest;
@@ -104,5 +105,9 @@ public class Aster {
 
     public static IUploadRequest upload(String url) {
         return getAster().upload(url);
+    }
+
+    public static IRequestManager manager() {
+        return getAster().getManager();
     }
 }

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
+import com.d.lib.aster.base.IRequestManager;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.integration.retrofit.request.DeleteRequest;
 import com.d.lib.aster.integration.retrofit.request.DownloadRequest;
@@ -31,6 +32,11 @@ public class RetrofitModule extends AsterModule {
     @Override
     public void applyOptions(@NonNull Context context, @NonNull Config.Builder builder) {
         builder.build();
+    }
+
+    @Override
+    public IRequestManager getManager() {
+        return RequestManagerImpl.getIns();
     }
 
     @Override

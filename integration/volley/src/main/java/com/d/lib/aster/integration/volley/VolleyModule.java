@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Config;
+import com.d.lib.aster.base.IRequestManager;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.integration.volley.request.DeleteRequest;
 import com.d.lib.aster.integration.volley.request.DownloadRequest;
@@ -33,6 +34,11 @@ public class VolleyModule extends AsterModule {
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Registry registry) {
         registry.replace(VolleyRegistry.factory());
+    }
+
+    @Override
+    public IRequestManager getManager() {
+        return RequestManagerImpl.getIns();
     }
 
     public Singleton getDefault() {

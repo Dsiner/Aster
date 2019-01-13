@@ -22,6 +22,8 @@ public abstract class AsterModule {
 
     }
 
+    public abstract IRequestManager getManager();
+
     public static class Registry {
         AsterModule module;
 

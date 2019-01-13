@@ -1,6 +1,5 @@
 package com.d.lib.aster.integration.okhttp3.request;
 
-import android.accounts.NetworkErrorException;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -8,6 +7,7 @@ import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
+import com.d.lib.aster.integration.okhttp3.OkHttpApi;
 import com.d.lib.aster.integration.okhttp3.OkHttpClient;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
@@ -17,25 +17,22 @@ import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.request.IDownloadRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
-import com.d.lib.aster.scheduler.callback.Task;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.Util;
 
-import java.io.IOException;
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.Call;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
  * Created by D on 2017/10/24.
  */
 public class DownloadRequest extends IDownloadRequest<DownloadRequest, OkHttpClient> {
-    protected Observable<ResponseBody> mObservable;
     protected Call mCall;
+    protected Observable<ResponseBody> mObservable;
 
     public DownloadRequest(String url) {
         super(url, null);
@@ -56,26 +53,14 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, OkHttpCli
 
     @Override
     protected void prepare() {
-        final Call call;
+        final OkHttpApi.Callable callable;
         if (mParams == null || mParams.size() <= 0) {
-            call = getClient().create().downloadImp(mUrl);
+            callable = getClient().create().download(mUrl);
         } else {
-            call = getClient().create().downloadImp(mUrl, mParams);
+            callable = getClient().create().download(mUrl, mParams);
         }
-        mCall = call;
-        mObservable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
-                }
-            }
-        });
+        mCall = callable.call;
+        mObservable = callable.observable;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -207,26 +192,14 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, OkHttpCli
 
         @Override
         protected void prepare() {
-            final Call call;
+            final OkHttpApi.Callable callable;
             if (mParams == null || mParams.size() <= 0) {
-                call = getClient().create().downloadImp(mUrl);
+                callable = getClient().create().download(mUrl);
             } else {
-                call = getClient().create().downloadImp(mUrl, mParams);
+                callable = getClient().create().download(mUrl, mParams);
             }
-            mCall = call;
-            mObservable = Observable.create(new Task<ResponseBody>() {
-                @Override
-                public ResponseBody run() throws Exception {
-                    try {
-                        Response response = call.execute();
-                        int code = response.code();
-                        return response.body();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw new NetworkErrorException("Request error.");
-                    }
-                }
-            });
+            mCall = callable.call;
+            mObservable = callable.observable;
         }
 
         @SuppressWarnings("ConstantConditions")
