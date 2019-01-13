@@ -205,6 +205,10 @@ public class OkHttpApi {
         });
     }
 
+    public Observable<ResponseBody> download(final String url, final Params params) {
+        return download(url + "?" + params.getRequestParamsString());
+    }
+
     public Observable<ResponseBody> download(final String url) {
         return Observable.create(new Task<ResponseBody>() {
             @Override
@@ -221,8 +225,12 @@ public class OkHttpApi {
         });
     }
 
-    public Observable<ResponseBody> download(final String url, final Params params) {
-        return download(url + "?" + params.getRequestParamsString());
+    public Call downloadImp(String url) {
+        return getImp().downloadImp(url);
+    }
+
+    public Call downloadImp(String url, Params params) {
+        return getImp().downloadImp(url + "?" + params.getRequestParamsString());
     }
 
     public Observable<ResponseBody> upload(final String url, final List<MultipartBody.Part> multipartBodyParts) {

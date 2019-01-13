@@ -7,7 +7,7 @@ import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.integration.volley.RequestManager;
+import com.d.lib.aster.integration.volley.RequestManagerImpl;
 import com.d.lib.aster.integration.volley.VolleyClient;
 import com.d.lib.aster.integration.volley.client.ResponseBody;
 import com.d.lib.aster.integration.volley.func.ApiFunc;
@@ -56,7 +56,7 @@ public abstract class HttpRequest<HR extends HttpRequest>
         prepare();
         DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .map(new ApiFunc<T>(Util.getFirstCls(callback)))
@@ -80,7 +80,7 @@ public abstract class HttpRequest<HR extends HttpRequest>
         prepare();
         DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .map(new ApiFunc<T>(Util.getFirstCls(callback)))
@@ -202,7 +202,7 @@ public abstract class HttpRequest<HR extends HttpRequest>
             prepare();
             DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .map(new ApiFunc<T>(Util.getFirstCls(callback)))
@@ -226,7 +226,7 @@ public abstract class HttpRequest<HR extends HttpRequest>
             prepare();
             DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .map(new ApiFunc<T>(Util.getFirstCls(callback)))

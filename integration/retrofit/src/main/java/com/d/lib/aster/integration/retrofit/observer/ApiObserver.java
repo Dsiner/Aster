@@ -1,7 +1,7 @@
 package com.d.lib.aster.integration.retrofit.observer;
 
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 
 /**
  * Observer with Sync Callback
@@ -21,14 +21,14 @@ public class ApiObserver<R> extends AbsObserver<R> {
 
     @Override
     public void onNext(R r) {
-        RequestManager.getIns().cancel(mTag);
+        RequestManagerImpl.getIns().cancel(mTag);
         this.mData = r;
         mCallback.onSuccess(r);
     }
 
     @Override
     public void onError(Throwable e) {
-        RequestManager.getIns().cancel(mTag);
+        RequestManagerImpl.getIns().cancel(mTag);
         super.onError(e);
         mCallback.onError(e);
     }

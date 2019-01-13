@@ -10,7 +10,7 @@ import com.d.lib.aster.base.MediaTypes;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.HttpClient;
-import com.d.lib.aster.integration.http.RequestManager;
+import com.d.lib.aster.integration.http.RequestManagerImpl;
 import com.d.lib.aster.integration.http.body.BodyWriter;
 import com.d.lib.aster.integration.http.body.MultipartBody;
 import com.d.lib.aster.integration.http.body.RequestBody;
@@ -140,7 +140,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
                                     final SimpleCallback<ResponseBody> callback) {
         DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, callback);
         if (tag != null) {
-            RequestManager.getIns().add(tag, disposableObserver);
+            RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.mainThread())

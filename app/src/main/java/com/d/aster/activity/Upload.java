@@ -7,7 +7,7 @@ import com.d.aster.App;
 import com.d.aster.R;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
@@ -224,7 +224,7 @@ public class Upload extends Request {
 
     @Override
     protected void onDestroy() {
-        RequestManager.getIns().cancel(mUrl);
+        RequestManagerImpl.getIns().cancel(mUrl);
         super.onDestroy();
     }
 }

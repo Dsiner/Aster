@@ -1,7 +1,7 @@
 package com.d.lib.aster.integration.okhttp3.observer;
 
 import com.d.lib.aster.callback.AsyncCallback;
-import com.d.lib.aster.integration.okhttp3.RequestManager;
+import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 
 /**
  * Observer with Async Callback
@@ -21,14 +21,14 @@ public class AsyncApiObserver<T, R> extends AbsObserver<R> {
 
     @Override
     public void onNext(R r) {
-        RequestManager.getIns().cancel(mTag);
+        RequestManagerImpl.getIns().cancel(mTag);
         this.mData = r;
         mCallback.onSuccess(r);
     }
 
     @Override
     public void onError(Throwable e) {
-        RequestManager.getIns().cancel(mTag);
+        RequestManagerImpl.getIns().cancel(mTag);
         super.onError(e);
         mCallback.onError(e);
     }

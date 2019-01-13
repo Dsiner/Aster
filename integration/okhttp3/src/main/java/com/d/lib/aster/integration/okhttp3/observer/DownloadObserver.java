@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.integration.okhttp3.RequestManager;
+import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.utils.Util;
 
 import java.io.File;
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
+import okhttp3.Call;
 import okhttp3.ResponseBody;
 
 /**
@@ -25,14 +26,18 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     private final String mPath;
     private final String mName;
     private final Object mTag;
+    private final Call mCall;
     private final DownloadModel mDownModel = new DownloadModel();
     private final ProgressCallback mCallback;
 
-    public DownloadObserver(final String path, final String name, @Nullable final Object tag,
+    public DownloadObserver(final String path, final String name,
+                            @Nullable final Object tag,
+                            @Nullable final Call call,
                             @Nullable ProgressCallback callback) {
         this.mPath = path;
         this.mName = name;
         this.mTag = tag;
+        this.mCall = call;
         this.mCallback = callback;
     }
 
@@ -47,8 +52,10 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     }
 
     public void cancel() {
-        // TODO: @dsiner imp... 2018/12/6
-        // dispose();
+        dispose();
+        if (mCall != null && !mCall.isCanceled()) {
+            mCall.cancel();
+        }
         if (mCallback == null) {
             return;
         }
@@ -102,7 +109,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
             onSuccessImp();
         } catch (IOException e) {
             e.printStackTrace();
-            RequestManager.getIns().remove(mTag);
+            RequestManagerImpl.getIns().remove(mTag);
         } finally {
             okhttp3.internal.Util.closeQuietly(inputStream);
             okhttp3.internal.Util.closeQuietly(outputStream);
@@ -123,7 +130,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     }
 
     private void onErrorImp(final Throwable e) {
-        RequestManager.getIns().remove(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         if (mCallback == null) {
             return;
         }
@@ -136,7 +143,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     }
 
     private void onSuccessImp() {
-        RequestManager.getIns().remove(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         if (mCallback == null) {
             return;
         }

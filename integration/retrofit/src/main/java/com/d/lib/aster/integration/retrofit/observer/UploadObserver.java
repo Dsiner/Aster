@@ -3,7 +3,7 @@ package com.d.lib.aster.integration.retrofit.observer;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.utils.Util;
 
 import okhttp3.ResponseBody;
@@ -36,7 +36,7 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
 
     @Override
     public void onNext(ResponseBody o) {
-        RequestManager.getIns().remove(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         Util.printThread("Aster_thread uploadOnNext");
         if (mCallback == null) {
             return;
@@ -46,7 +46,7 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
 
     @Override
     public void onError(Throwable e) {
-        RequestManager.getIns().remove(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         super.onError(e);
         if (mCallback == null) {
             return;

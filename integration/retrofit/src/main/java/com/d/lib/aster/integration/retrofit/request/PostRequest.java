@@ -6,7 +6,7 @@ import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiFunc;
@@ -95,7 +95,7 @@ public class PostRequest extends IPostRequest<PostRequest, RetrofitClient> {
         prepare();
         DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -110,7 +110,7 @@ public class PostRequest extends IPostRequest<PostRequest, RetrofitClient> {
         prepare();
         DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -296,7 +296,7 @@ public class PostRequest extends IPostRequest<PostRequest, RetrofitClient> {
             prepare();
             DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
@@ -312,7 +312,7 @@ public class PostRequest extends IPostRequest<PostRequest, RetrofitClient> {
             prepare();
             DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())

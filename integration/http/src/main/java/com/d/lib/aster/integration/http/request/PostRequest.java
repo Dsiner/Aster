@@ -9,7 +9,7 @@ import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.HttpClient;
-import com.d.lib.aster.integration.http.RequestManager;
+import com.d.lib.aster.integration.http.RequestManagerImpl;
 import com.d.lib.aster.integration.http.body.RequestBody;
 import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.integration.http.func.ApiFunc;
@@ -94,7 +94,7 @@ public class PostRequest extends IPostRequest<PostRequest, HttpClient> {
         prepare();
         DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .map(new ApiFunc<T>(Util.getFirstCls(callback)))
@@ -118,7 +118,7 @@ public class PostRequest extends IPostRequest<PostRequest, HttpClient> {
         prepare();
         DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .map(new ApiFunc<T>(Util.getFirstCls(callback)))
@@ -302,7 +302,7 @@ public class PostRequest extends IPostRequest<PostRequest, HttpClient> {
             prepare();
             DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .map(new ApiFunc<T>(Util.getFirstCls(callback)))
@@ -326,7 +326,7 @@ public class PostRequest extends IPostRequest<PostRequest, HttpClient> {
             prepare();
             DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .map(new ApiFunc<T>(Util.getFirstCls(callback)))

@@ -10,7 +10,7 @@ import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
 import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
@@ -147,7 +147,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
                                     final SimpleCallback<ResponseBody> callback) {
         DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, callback);
         if (tag != null) {
-            RequestManager.getIns().add(tag, disposableObserver);
+            RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

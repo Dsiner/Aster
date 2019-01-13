@@ -1,37 +1,43 @@
-package com.d.lib.aster.integration.volley;
+package com.d.lib.aster.integration.retrofit;
 
 import android.support.annotation.Nullable;
 
-import com.d.lib.aster.scheduler.callback.Observer;
+import com.d.lib.aster.base.IRequestManager;
+import com.d.lib.aster.integration.retrofit.observer.DownloadObserver;
+import com.d.lib.aster.integration.retrofit.observer.UploadObserver;
 
 import java.util.HashMap;
 import java.util.Set;
 
+import io.reactivex.disposables.Disposable;
+
 /**
  * Request management to facilitate mid-way cancellation of requests
  */
-public class RequestManager {
-    private HashMap<Object, Observer> mHashMap;
+public class RequestManagerImpl implements IRequestManager<Disposable> {
+    private HashMap<Object, Disposable> mHashMap;
 
     private static class Singleton {
-        private final static RequestManager INSTANCE = new RequestManager();
+        private final static RequestManagerImpl INSTANCE = new RequestManagerImpl();
     }
 
-    public static RequestManager getIns() {
+    public static RequestManagerImpl getIns() {
         return Singleton.INSTANCE;
     }
 
-    private RequestManager() {
+    private RequestManagerImpl() {
         mHashMap = new HashMap<>();
     }
 
-    public synchronized void add(Object tag, Observer disposable) {
+    @Override
+    public synchronized void add(Object tag, Disposable disposable) {
         if (tag == null || disposable == null) {
             return;
         }
         mHashMap.put(tag, disposable);
     }
 
+    @Override
     public synchronized void remove(Object tag) {
         if (mHashMap.isEmpty() || tag == null) {
             return;
@@ -39,6 +45,7 @@ public class RequestManager {
         mHashMap.remove(tag);
     }
 
+    @Override
     public synchronized void removeAll() {
         if (mHashMap.isEmpty()) {
             return;
@@ -46,6 +53,7 @@ public class RequestManager {
         mHashMap.clear();
     }
 
+    @Override
     public synchronized boolean canceled(Object tag) {
         if (tag == null) {
             return false;
@@ -55,32 +63,33 @@ public class RequestManager {
         return canceled;
     }
 
+    @Override
     public synchronized void cancel(Object tag) {
         if (tag == null) {
             return;
         }
-        Observer value = mHashMap.remove(tag);
+        Disposable value = mHashMap.remove(tag);
         cancelImp(value);
     }
 
-    private void cancelImp(@Nullable Observer value) {
-        // TODO: @dsiner imp... 2018/12/6
-//        if (value != null && !value.isDisposed()) {
-//            if (value instanceof DownloadObserver) {
-//                ((DownloadObserver) value).cancel();
-//            } else if (value instanceof UploadObserver) {
-//                ((UploadObserver) value).cancel();
-//            } else {
-//                value.dispose();
-//            }
-//        }
+    private void cancelImp(@Nullable Disposable value) {
+        if (value != null && !value.isDisposed()) {
+            if (value instanceof DownloadObserver) {
+                ((DownloadObserver) value).cancel();
+            } else if (value instanceof UploadObserver) {
+                ((UploadObserver) value).cancel();
+            } else {
+                value.dispose();
+            }
+        }
     }
 
+    @Override
     public synchronized void cancelAll() {
         if (mHashMap.isEmpty()) {
             return;
         }
-        HashMap<Object, Observer> temp = new HashMap<>(mHashMap);
+        HashMap<Object, Disposable> temp = new HashMap<>(mHashMap);
         mHashMap.clear();
         Set<Object> keys = temp.keySet();
         for (Object k : keys) {

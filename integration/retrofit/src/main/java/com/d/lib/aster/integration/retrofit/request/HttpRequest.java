@@ -6,7 +6,7 @@ import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiFunc;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
@@ -61,7 +61,7 @@ public abstract class HttpRequest<HR extends HttpRequest>
         prepare();
         DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -76,7 +76,7 @@ public abstract class HttpRequest<HR extends HttpRequest>
         prepare();
         DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -200,7 +200,7 @@ public abstract class HttpRequest<HR extends HttpRequest>
             prepare();
             DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
@@ -216,7 +216,7 @@ public abstract class HttpRequest<HR extends HttpRequest>
             prepare();
             DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())

@@ -3,9 +3,10 @@ package com.d.lib.aster.integration.okhttp3.observer;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.integration.okhttp3.RequestManager;
+import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.utils.Util;
 
+import okhttp3.Call;
 import okhttp3.ResponseBody;
 
 /**
@@ -14,16 +15,22 @@ import okhttp3.ResponseBody;
  */
 public class UploadObserver extends AbsObserver<ResponseBody> {
     private final Object mTag;
+    private final Call mCall;
     private final SimpleCallback<ResponseBody> mCallback;
 
-    public UploadObserver(Object tag, @Nullable SimpleCallback<ResponseBody> callback) {
+    public UploadObserver(Object tag,
+                          @Nullable final Call call,
+                          @Nullable SimpleCallback<ResponseBody> callback) {
         this.mTag = tag;
+        this.mCall = call;
         this.mCallback = callback;
     }
 
     public void cancel() {
-        // TODO: @dsiner imp... 2018/12/6
-        // dispose();
+        dispose();
+        if (mCall != null && !mCall.isCanceled()) {
+            mCall.cancel();
+        }
         if (mCallback == null) {
             return;
         }
@@ -37,7 +44,7 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
 
     @Override
     public void onNext(ResponseBody o) {
-        RequestManager.getIns().remove(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         Util.printThread("Aster_thread uploadOnNext");
         if (mCallback == null) {
             return;
@@ -47,7 +54,7 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
 
     @Override
     public void onError(Throwable e) {
-        RequestManager.getIns().remove(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         super.onError(e);
         if (mCallback == null) {
             return;

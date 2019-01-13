@@ -8,7 +8,7 @@ import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
-import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
@@ -91,7 +91,7 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, RetrofitC
         }
         DisposableObserver<ResponseBody> disposableObserver = new DownloadObserver(path, name, tag, callback);
         if (tag != null) {
-            RequestManager.getIns().add(tag, disposableObserver);
+            RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

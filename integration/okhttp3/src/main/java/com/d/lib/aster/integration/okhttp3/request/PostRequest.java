@@ -8,7 +8,7 @@ import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
 import com.d.lib.aster.integration.okhttp3.OkHttpClient;
-import com.d.lib.aster.integration.okhttp3.RequestManager;
+import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.func.ApiFunc;
 import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
 import com.d.lib.aster.integration.okhttp3.func.MapFunc;
@@ -95,7 +95,7 @@ public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
         prepare();
         DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .map(new ApiFunc<T>(Util.getFirstCls(callback)))
@@ -119,7 +119,7 @@ public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
         prepare();
         DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
         if (mTag != null) {
-            RequestManager.getIns().add(mTag, disposableObserver);
+            RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
         mObservable.subscribeOn(Schedulers.io())
                 .map(new ApiFunc<T>(Util.getFirstCls(callback)))
@@ -308,7 +308,7 @@ public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
             prepare();
             DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .map(new ApiFunc<T>(Util.getFirstCls(callback)))
@@ -332,7 +332,7 @@ public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
             prepare();
             DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
             if (mTag != null) {
-                RequestManager.getIns().add(mTag, disposableObserver);
+                RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
             mObservable.subscribeOn(Schedulers.io())
                     .map(new ApiFunc<T>(Util.getFirstCls(callback)))

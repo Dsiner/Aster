@@ -6,7 +6,7 @@ import com.d.aster.App;
 import com.d.aster.R;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.integration.retrofit.RequestManager;
+import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
@@ -141,8 +141,8 @@ public class Download extends Request {
 
     @Override
     protected void onDestroy() {
-        RequestManager.getIns().cancel(mUrl1);
-        RequestManager.getIns().cancel(mUrl2);
+        RequestManagerImpl.getIns().cancel(mUrl1);
+        RequestManagerImpl.getIns().cancel(mUrl2);
         super.onDestroy();
     }
 }

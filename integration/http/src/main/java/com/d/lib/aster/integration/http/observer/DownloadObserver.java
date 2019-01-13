@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.integration.http.RequestManager;
+import com.d.lib.aster.integration.http.RequestManagerImpl;
 import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.utils.Util;
 
@@ -46,8 +46,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     }
 
     public void cancel() {
-        // TODO: @dsiner imp... 2018/12/6
-        // dispose();
+        dispose();
         if (mCallback == null) {
             return;
         }
@@ -101,7 +100,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
             onSuccessImp();
         } catch (IOException e) {
             e.printStackTrace();
-            RequestManager.getIns().remove(mTag);
+            RequestManagerImpl.getIns().remove(mTag);
         } finally {
             Util.closeQuietly(inputStream);
             Util.closeQuietly(outputStream);
@@ -122,7 +121,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     }
 
     private void onErrorImp(final Throwable e) {
-        RequestManager.getIns().remove(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         if (mCallback == null) {
             return;
         }
@@ -135,7 +134,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     }
 
     private void onSuccessImp() {
-        RequestManager.getIns().remove(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         if (mCallback == null) {
             return;
         }

@@ -7,7 +7,7 @@ import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.integration.volley.RequestManager;
+import com.d.lib.aster.integration.volley.RequestManagerImpl;
 import com.d.lib.aster.integration.volley.VolleyClient;
 import com.d.lib.aster.integration.volley.client.ResponseBody;
 import com.d.lib.aster.integration.volley.func.ApiRetryFunc;
@@ -89,7 +89,7 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, VolleyCli
         }
         DisposableObserver<ResponseBody> disposableObserver = new DownloadObserver(path, name, tag, callback);
         if (tag != null) {
-            RequestManager.getIns().add(tag, disposableObserver);
+            RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())

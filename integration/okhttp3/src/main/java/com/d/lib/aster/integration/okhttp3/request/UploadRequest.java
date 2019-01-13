@@ -9,7 +9,7 @@ import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
 import com.d.lib.aster.integration.okhttp3.OkHttpClient;
-import com.d.lib.aster.integration.okhttp3.RequestManager;
+import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
 import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
@@ -143,7 +143,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
                                     final SimpleCallback<ResponseBody> callback) {
         DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, callback);
         if (tag != null) {
-            RequestManager.getIns().add(tag, disposableObserver);
+            RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.mainThread())
