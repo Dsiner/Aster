@@ -4,10 +4,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 public class Params extends LinkedHashMap<String, String> {
-    private String rtp = "";
+    public final String rtp;
 
     public Params() {
         super();
+        this.rtp = "";
     }
 
     public Params(String rtp) {
