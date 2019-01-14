@@ -13,7 +13,7 @@ public abstract class DisposableObserver<T> implements Observer<T> {
         return disposed.get();
     }
 
-    public final void dispose() {
+    public void dispose() {
         disposed.set(true);
     }
 }

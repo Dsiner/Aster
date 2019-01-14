@@ -15,7 +15,6 @@ import okhttp3.ResponseBody;
  */
 public class UploadObserver extends AbsObserver<ResponseBody> {
     private final Object mTag;
-    private final Call mCall;
     private final SimpleCallback<ResponseBody> mCallback;
 
     public UploadObserver(Object tag,
@@ -28,9 +27,6 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
 
     public void cancel() {
         dispose();
-        if (mCall != null && !mCall.isCanceled()) {
-            mCall.cancel();
-        }
         if (mCallback == null) {
             return;
         }

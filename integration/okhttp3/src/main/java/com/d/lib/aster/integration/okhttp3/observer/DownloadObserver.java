@@ -26,7 +26,6 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     private final String mPath;
     private final String mName;
     private final Object mTag;
-    private final Call mCall;
     private final DownloadModel mDownModel = new DownloadModel();
     private final ProgressCallback mCallback;
 
@@ -53,9 +52,6 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
 
     public void cancel() {
         dispose();
-        if (mCall != null && !mCall.isCanceled()) {
-            mCall.cancel();
-        }
         if (mCallback == null) {
             return;
         }

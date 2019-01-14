@@ -21,14 +21,14 @@ public class ApiObserver<R> extends AbsObserver<R> {
 
     @Override
     public void onNext(R r) {
-        RequestManagerImpl.getIns().cancel(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         this.mData = r;
         mCallback.onSuccess(r);
     }
 
     @Override
     public void onError(Throwable e) {
-        RequestManagerImpl.getIns().cancel(mTag);
+        RequestManagerImpl.getIns().remove(mTag);
         super.onError(e);
         mCallback.onError(e);
     }
