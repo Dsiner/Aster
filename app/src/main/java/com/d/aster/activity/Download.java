@@ -6,7 +6,6 @@ import com.d.aster.App;
 import com.d.aster.R;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
@@ -42,8 +41,8 @@ public class Download extends Request {
 
     @Override
     protected void requestSingleton() {
-        Aster.getDefault().download(mUrl1)
-                .tag(mUrl1)
+        Aster.getDefault().download(mUrl2)
+                .tag(mUrl2)
                 .request(App.FILE_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
                     @Override
                     public void onStart() {
@@ -141,8 +140,8 @@ public class Download extends Request {
 
     @Override
     protected void onDestroy() {
-        RequestManagerImpl.getIns().cancel(mUrl1);
-        RequestManagerImpl.getIns().cancel(mUrl2);
+        Aster.getManager().cancel(mUrl1);
+        Aster.getManager().cancel(mUrl2);
         super.onDestroy();
     }
 }

@@ -1,7 +1,5 @@
 package com.d.lib.aster.base;
 
-import com.d.lib.aster.base.MediaType;
-
 /**
  * MediaType
  */

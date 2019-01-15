@@ -3,21 +3,20 @@ package com.d.aster.activity;
 import com.d.aster.api.API;
 import com.d.aster.model.MovieInfo;
 import com.d.lib.aster.Aster;
+import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
+import com.d.lib.aster.integration.retrofit.RetrofitModule;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 import com.google.gson.Gson;
-
-import java.io.IOException;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
@@ -131,7 +130,12 @@ public class Post extends Request {
 
     @Override
     protected void requestRetrofit() {
-        Aster.getRetrofit().create(RetrofitAPI.class)
+        AsterModule aster = Aster.getAster();
+        if (!(aster instanceof RetrofitModule)) {
+            return;
+        }
+        RetrofitModule retrofit = (RetrofitModule) aster;
+        retrofit.getRetrofit().create(RetrofitAPI.class)
                 .post(mUrl)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, MovieInfo>() {

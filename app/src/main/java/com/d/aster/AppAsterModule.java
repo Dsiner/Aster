@@ -39,7 +39,7 @@ public class AppAsterModule extends RetrofitModule {
                 .retryCount(3)
                 .retryDelayMillis(2 * 1000)
                 .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
-                .log("RetrofitLog Back = ", Config.Level.BODY)
+                .log("AsterLog Back = ", Config.Level.BODY)
                 .debug(true)
                 .build();
     }

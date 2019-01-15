@@ -1,7 +1,6 @@
 package com.d.lib.aster.integration.retrofit.request;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
@@ -81,9 +80,11 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
         request(null);
     }
 
-    public void request(@Nullable SimpleCallback<ResponseBody> callback) {
+    @Override
+    public <R> void request(SimpleCallback<R> callback) {
         prepare();
-        requestImpl(mObservable, getClient().getHttpConfig(), mTag, callback);
+        requestImpl(mObservable, getClient().getHttpConfig(),
+                mTag, mMultipartBodyParts, (SimpleCallback<ResponseBody>) callback);
     }
 
     @Override
@@ -144,8 +145,9 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
     private static void requestImpl(final Observable<ResponseBody> observable,
                                     final Config config,
                                     final Object tag,
+                                    final List<MultipartBody.Part> multipartBodyParts,
                                     final SimpleCallback<ResponseBody> callback) {
-        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, callback);
+        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, multipartBodyParts, callback);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
@@ -285,7 +287,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
      * Singleton
      */
     public static class Singleton extends IUploadRequest.Singleton<Singleton, RetrofitClient> {
-        protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
+        protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
@@ -305,11 +307,11 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
                 while (entryIterator.hasNext()) {
                     entry = entryIterator.next();
                     if (entry != null) {
-                        multipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
+                        mMultipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
                     }
                 }
             }
-            mObservable = getClient().getClient().create(RetrofitAPI.class).upload(mUrl, multipartBodyParts);
+            mObservable = getClient().getClient().create(RetrofitAPI.class).upload(mUrl, mMultipartBodyParts);
         }
 
         @Override
@@ -317,9 +319,11 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
             request(null);
         }
 
-        public void request(@Nullable SimpleCallback<ResponseBody> callback) {
+        @Override
+        public <R> void request(SimpleCallback<R> callback) {
             prepare();
-            requestImpl(mObservable, getClient().getHttpConfig(), mTag, callback);
+            requestImpl(mObservable, getClient().getHttpConfig(),
+                    mTag, mMultipartBodyParts, (SimpleCallback<ResponseBody>) callback);
         }
 
         @Override
@@ -344,10 +348,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }
@@ -365,10 +369,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }
@@ -385,10 +389,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }
@@ -405,10 +409,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }

@@ -105,7 +105,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
             onSuccessImp();
         } catch (IOException e) {
             e.printStackTrace();
-            RequestManagerImpl.getIns().remove(mTag);
+            onErrorImp(e);
         } finally {
             okhttp3.internal.Util.closeQuietly(inputStream);
             okhttp3.internal.Util.closeQuietly(outputStream);
@@ -127,6 +127,9 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
 
     private void onErrorImp(final Throwable e) {
         RequestManagerImpl.getIns().remove(mTag);
+        if (isDisposed()) {
+            return;
+        }
         if (mCallback == null) {
             return;
         }

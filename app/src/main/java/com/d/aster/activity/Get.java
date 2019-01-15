@@ -3,10 +3,12 @@ package com.d.aster.activity;
 import com.d.aster.api.API;
 import com.d.aster.model.MovieInfo;
 import com.d.lib.aster.Aster;
+import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
+import com.d.lib.aster.integration.retrofit.RetrofitModule;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
@@ -143,7 +145,12 @@ public class Get extends Request {
 
     @Override
     protected void requestRetrofit() {
-        Aster.getRetrofit().create(RetrofitAPI.class)
+        AsterModule aster = Aster.getAster();
+        if (!(aster instanceof RetrofitModule)) {
+            return;
+        }
+        RetrofitModule retrofit = (RetrofitModule) aster;
+        retrofit.getRetrofit().create(RetrofitAPI.class)
                 .get(mUrl)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, ArrayList<Boolean>>() {

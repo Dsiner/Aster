@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.util.Map;
 
 /**
@@ -44,7 +43,6 @@ public class BodyWriter {
         sb.append(LINE_END);
         return sb.toString();
     }
-
 
 
     public static void writeFile(File file, String fileKey, String fileType,

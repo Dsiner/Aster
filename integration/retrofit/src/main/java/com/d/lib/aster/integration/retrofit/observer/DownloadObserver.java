@@ -107,6 +107,9 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
         } catch (IOException e) {
             e.printStackTrace();
             RequestManagerImpl.getIns().remove(mTag);
+            if (!isDisposed()) {
+                onErrorImp(e);
+            }
         } finally {
             okhttp3.internal.Util.closeQuietly(inputStream);
             okhttp3.internal.Util.closeQuietly(outputStream);

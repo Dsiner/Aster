@@ -8,6 +8,7 @@ import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -27,6 +28,7 @@ public class UploadProgressRequestBody extends RequestBody {
     private RequestBody mRequestBody;
     private ProgressCallback mCallback;
     private long mLastTime;
+    private AtomicBoolean disposed = new AtomicBoolean(false);
 
     public UploadProgressRequestBody(@NonNull RequestBody requestBody,
                                      @NonNull ProgressCallback callback) {
@@ -78,6 +80,12 @@ public class UploadProgressRequestBody extends RequestBody {
     }
 
     private void onErrorImp(final Throwable e) {
+        if (isDisposed()) {
+            if (mCallback != null) {
+                mCallback.onCancel();
+            }
+            return;
+        }
         if (mCallback == null) {
             return;
         }
@@ -99,6 +107,14 @@ public class UploadProgressRequestBody extends RequestBody {
                 mCallback.onSuccess();
             }
         });
+    }
+
+    public final boolean isDisposed() {
+        return disposed.get();
+    }
+
+    public void dispose() {
+        disposed.set(true);
     }
 
     private final class CountingSink extends ForwardingSink {

@@ -8,6 +8,7 @@ import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
+import com.d.lib.aster.integration.okhttp3.OkHttpApi;
 import com.d.lib.aster.integration.okhttp3.OkHttpClient;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
@@ -72,16 +73,21 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
                 }
             }
         }
-        mObservable = getClient().create().upload(mUrl, mMultipartBodyParts);
+        OkHttpApi.Callable callable = getClient().create().upload(mUrl, mMultipartBodyParts);
+        mCall = callable.call;
+        mObservable = callable.observable;
     }
 
+    @Override
     public void request() {
         request(null);
     }
 
-    public void request(@Nullable SimpleCallback<ResponseBody> callback) {
+    @Override
+    public <R> void request(@Nullable SimpleCallback<R> callback) {
         prepare();
-        requestImpl(mObservable, getClient().getHttpConfig(), mTag, mCall, callback);
+        requestImpl(mObservable, getClient().getHttpConfig(),
+                mTag, mMultipartBodyParts, mCall, (SimpleCallback<ResponseBody>) callback);
     }
 
     @Override
@@ -142,9 +148,13 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
     private static void requestImpl(final Observable<ResponseBody> observable,
                                     final Config config,
                                     final Object tag,
+                                    final List<MultipartBody.Part> multipartBodyParts,
                                     final Call call,
                                     final SimpleCallback<ResponseBody> callback) {
-        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, call, callback);
+        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag,
+                multipartBodyParts,
+                call,
+                callback);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
@@ -291,7 +301,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
      * Singleton
      */
     public static class Singleton extends IUploadRequest.Singleton<Singleton, OkHttpClient> {
-        protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
+        protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
         protected Call mCall;
         protected Observable<ResponseBody> mObservable;
 
@@ -312,11 +322,13 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
                 while (entryIterator.hasNext()) {
                     entry = entryIterator.next();
                     if (entry != null) {
-                        multipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
+                        mMultipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
                     }
                 }
             }
-            mObservable = getClient().create().upload(mUrl, multipartBodyParts);
+            OkHttpApi.Callable callable = getClient().create().upload(mUrl, mMultipartBodyParts);
+            mCall = callable.call;
+            mObservable = callable.observable;
         }
 
         @Override
@@ -324,9 +336,11 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
             request(null);
         }
 
-        public void request(@Nullable SimpleCallback<ResponseBody> callback) {
+        @Override
+        public <R> void request(SimpleCallback<R> callback) {
             prepare();
-            requestImpl(mObservable, getClient().getHttpConfig(), mTag, mCall, callback);
+            requestImpl(mObservable, getClient().getHttpConfig(),
+                    mTag, mMultipartBodyParts, mCall, (SimpleCallback<ResponseBody>) callback);
         }
 
         @Override
@@ -351,10 +365,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }
@@ -373,10 +387,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }
@@ -395,10 +409,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }
@@ -417,10 +431,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }

@@ -14,15 +14,13 @@ import com.d.lib.aster.request.IHttpRequest;
 import com.d.lib.aster.request.IPostRequest;
 import com.d.lib.aster.request.IUploadRequest;
 
-import retrofit2.Retrofit;
-
 /**
  * Created by D on 2017/10/24.
  */
 public class Aster {
     private volatile static AsterModule mAster;
 
-    private static AsterModule getAster() {
+    public static AsterModule getAster() {
         if (mAster == null) {
             synchronized (Aster.class) {
                 if (mAster == null) {
@@ -48,12 +46,12 @@ public class Aster {
         return new Config.Builder(context);
     }
 
-    public static Singleton getDefault() {
-        return getAster().getDefault();
+    public static IRequestManager getManager() {
+        return getAster().getManager();
     }
 
-    public static Retrofit getRetrofit() {
-        return null;
+    public static Singleton getDefault() {
+        return getAster().getDefault();
     }
 
     private Aster() {
@@ -105,9 +103,5 @@ public class Aster {
 
     public static IUploadRequest upload(String url) {
         return getAster().upload(url);
-    }
-
-    public static IRequestManager manager() {
-        return getAster().getManager();
     }
 }

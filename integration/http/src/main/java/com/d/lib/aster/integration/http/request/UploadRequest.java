@@ -70,13 +70,15 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
         mObservable = getClient().create().upload(mUrl, mMultipartBodyParts);
     }
 
+    @Override
     public void request() {
         request(null);
     }
 
-    public void request(@Nullable SimpleCallback<ResponseBody> callback) {
+    @Override
+    public <R> void request(@Nullable SimpleCallback<R> callback) {
         prepare();
-        requestImpl(mObservable, getClient().getHttpConfig(), mTag, callback);
+        requestImpl(mObservable, getClient().getHttpConfig(), mTag, (SimpleCallback<ResponseBody>) callback);
     }
 
     @Override
@@ -311,9 +313,11 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
             request(null);
         }
 
-        public void request(@Nullable SimpleCallback<ResponseBody> callback) {
+        @Override
+        public <R> void request(SimpleCallback<R> callback) {
             prepare();
-            requestImpl(mObservable, getClient().getHttpConfig(), mTag, callback);
+            requestImpl(mObservable, getClient().getHttpConfig(),
+                    mTag, (SimpleCallback<ResponseBody>) callback);
         }
 
         @Override

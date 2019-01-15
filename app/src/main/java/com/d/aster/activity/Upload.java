@@ -7,7 +7,7 @@ import com.d.aster.App;
 import com.d.aster.R;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
+import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
@@ -96,7 +96,19 @@ public class Upload extends Request {
                         ULog.d("dsiner_request--> onCancel");
                     }
                 })
-                .request();
+                .request(new SimpleCallback() {
+                    @Override
+                    public void onSuccess(Object response) {
+                        Util.printThread("dsiner_theard onComplete / All");
+                        ULog.d("dsiner_request--> onComplete / All");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Util.printThread("dsiner_theard onError / All");
+                        ULog.d("dsiner_request--> onError / All: " + e.getMessage());
+                    }
+                });
     }
 
     @Override
@@ -140,7 +152,20 @@ public class Upload extends Request {
                         Util.printThread("dsiner_theard onCancel");
                         ULog.d("dsiner_request--> onCancel");
                     }
-                }).request();
+                })
+                .request(new SimpleCallback() {
+                    @Override
+                    public void onSuccess(Object response) {
+                        Util.printThread("dsiner_theard onComplete / All");
+                        ULog.d("dsiner_request--> onComplete / All");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Util.printThread("dsiner_theard onError / All");
+                        ULog.d("dsiner_request--> onError / All: " + e.getMessage());
+                    }
+                });
     }
 
     @SuppressLint("CheckResult")
@@ -224,7 +249,7 @@ public class Upload extends Request {
 
     @Override
     protected void onDestroy() {
-        RequestManagerImpl.getIns().cancel(mUrl);
+        Aster.getManager().cancel(mUrl);
         super.onDestroy();
     }
 }

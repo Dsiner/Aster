@@ -227,20 +227,14 @@ public class OkHttpApi {
         return new Callable(call, observable);
     }
 
-    public Call downloadImp(String url) {
-        return getImp().downloadImp(url);
-    }
-
-    public Call downloadImp(String url, Params params) {
-        return getImp().downloadImp(url + "?" + params.getRequestParamsString());
-    }
-
-    public Observable<ResponseBody> upload(final String url, final List<MultipartBody.Part> multipartBodyParts) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable upload(final String url,
+                           final List<MultipartBody.Part> multipartBodyParts) {
+        final Call call = getImp().uploadImp(url, multipartBodyParts);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().uploadImp(url, multipartBodyParts).execute();
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
@@ -249,6 +243,7 @@ public class OkHttpApi {
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
     public static final class Callable {

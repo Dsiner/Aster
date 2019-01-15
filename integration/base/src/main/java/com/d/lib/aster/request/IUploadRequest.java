@@ -1,10 +1,13 @@
 package com.d.lib.aster.request;
 
+import android.support.annotation.Nullable;
+
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
+import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
 
@@ -33,6 +36,9 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
     protected abstract void prepare();
 
     public void request() {
+    }
+
+    public <R> void request(@Nullable SimpleCallback<R> callback) {
     }
 
     @Override
@@ -145,6 +151,9 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
         protected abstract void prepare();
 
         public void request() {
+        }
+
+        public <R> void request(@Nullable SimpleCallback<R> callback) {
         }
 
         @Override

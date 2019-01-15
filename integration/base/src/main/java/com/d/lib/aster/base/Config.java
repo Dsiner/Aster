@@ -24,7 +24,7 @@ import javax.net.ssl.SSLSocketFactory;
 public class Config extends IConfig<Config> {
 
     public static class Default {
-        public static String TAG_LOG = "RetrofitLog Back = ";
+        public static String TAG_LOG = "AsterLog Back = ";
         public static Level LOG_LEVEL = Level.BODY;
 
         /****************** Default ******************/
