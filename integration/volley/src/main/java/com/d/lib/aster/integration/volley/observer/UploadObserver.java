@@ -46,6 +46,9 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
     @Override
     public void onError(Throwable e) {
         RequestManagerImpl.getIns().remove(mTag);
+        if (isDisposed()) {
+            return;
+        }
         super.onError(e);
         if (mCallback == null) {
             return;

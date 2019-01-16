@@ -139,7 +139,7 @@ public class HttpURLApi {
                     return response.body();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.Environment;
 
 import com.d.lib.aster.Aster;
+import com.d.lib.aster.integration.http.HttpModule;
 import com.d.lib.aster.integration.okhttp3.OkHttpModule;
 
 /**
@@ -21,8 +22,8 @@ public class App extends Application {
 //        Aster.init(getApplicationContext(), new AppAsterModule());
 
         // Or
-        // Aster.init(getApplicationContext(), HttpModule.factory());
-         Aster.init(getApplicationContext(), OkHttpModule.factory());
+         Aster.init(getApplicationContext(), HttpModule.factory());
+//         Aster.init(getApplicationContext(), OkHttpModule.factory());
         // Aster.init(getApplicationContext(), VolleyModule.factory());
         // Aster.init(getApplicationContext(), RetrofitModule.factory());
     }

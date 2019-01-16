@@ -22,6 +22,9 @@ public class ApiObserver<R> extends AbsObserver<R> {
     @Override
     public void onNext(R r) {
         RequestManagerImpl.getIns().remove(mTag);
+        if (isDisposed()) {
+            return;
+        }
         this.mData = r;
         mCallback.onSuccess(r);
     }
@@ -29,6 +32,9 @@ public class ApiObserver<R> extends AbsObserver<R> {
     @Override
     public void onError(Throwable e) {
         RequestManagerImpl.getIns().remove(mTag);
+        if (isDisposed()) {
+            return;
+        }
         super.onError(e);
         mCallback.onError(e);
     }

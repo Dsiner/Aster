@@ -56,7 +56,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
     @Override
     public <T> void request(final SimpleCallback<T> callback) {
         prepare();
-        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, mCall, callback);
         if (mTag != null) {
             RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
@@ -80,7 +80,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
     @Override
     public <T, R> void request(final AsyncCallback<T, R> callback) {
         prepare();
-        DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
+        DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, mCall, callback);
         if (mTag != null) {
             RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
@@ -180,6 +180,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
      */
     public static abstract class Singleton<HRF extends Singleton>
             extends IHttpRequest.Singleton<HRF, OkHttpClient> {
+        protected Call mCall;
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
@@ -202,7 +203,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
         @Override
         public <T> void request(final SimpleCallback<T> callback) {
             prepare();
-            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, mCall, callback);
             if (mTag != null) {
                 RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
@@ -226,7 +227,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
         @Override
         public <T, R> void request(final AsyncCallback<T, R> callback) {
             prepare();
-            DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
+            DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, mCall, callback);
             if (mTag != null) {
                 RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }

@@ -8,16 +8,16 @@ import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitModule;
+import com.d.lib.aster.scheduler.callback.Observer;
+import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 import com.google.gson.Gson;
 
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import java.io.IOException;
+
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
 /**
@@ -101,31 +101,27 @@ public class Post extends Request {
                 });
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void requestObservable() {
-//        Aster.getDefault().post(mUrl)
-//                .observable(ResponseBody.class)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new DisposableObserver<ResponseBody>() {
-//                    @Override
-//                    public void onNext(@NonNull ResponseBody response) {
-//                        try {
-//                            formatPrinting(response.string());
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(@NonNull Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
+        Aster.getDefault().post(mUrl)
+                .observable(ResponseBody.class)
+                .observeOn(Schedulers.mainThread())
+                .subscribe(new Observer<ResponseBody>() {
+                    @Override
+                    public void onNext(@NonNull ResponseBody response) {
+                        try {
+                            formatPrinting(response.string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 
     @Override
@@ -137,15 +133,15 @@ public class Post extends Request {
         RetrofitModule retrofit = (RetrofitModule) aster;
         retrofit.getRetrofit().create(RetrofitAPI.class)
                 .post(mUrl)
-                .subscribeOn(Schedulers.io())
-                .map(new Function<ResponseBody, MovieInfo>() {
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .map(new io.reactivex.functions.Function<ResponseBody, MovieInfo>() {
                     @Override
                     public MovieInfo apply(ResponseBody responseBody) throws Exception {
                         return new Gson().fromJson(responseBody.string(), MovieInfo.class);
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<MovieInfo>() {
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new io.reactivex.Observer<MovieInfo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 

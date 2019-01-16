@@ -7,6 +7,7 @@ import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
+import com.d.lib.aster.integration.okhttp3.OkHttpApi;
 import com.d.lib.aster.integration.okhttp3.OkHttpClient;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.func.ApiFunc;
@@ -31,6 +32,7 @@ import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -39,6 +41,7 @@ import okhttp3.ResponseBody;
  * Created by D on 2017/10/24.
  */
 public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
+    protected Call mCall;
     protected Observable<ResponseBody> mObservable;
     private Map<String, Object> mForms = new LinkedHashMap<>();
     private RequestBody mRequestBody;
@@ -71,29 +74,39 @@ public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
                     }
                 }
             }
-            mObservable = getClient().create().postForm(mUrl, mForms);
+            final OkHttpApi.Callable callable = getClient().create().postForm(mUrl, mForms);
+            mCall = callable.call;
+            mObservable = callable.observable;
             return;
         }
         if (mRequestBody != null) {
-            mObservable = getClient().create().postBody(mUrl, mRequestBody);
+            final OkHttpApi.Callable callable = getClient().create().postBody(mUrl, mRequestBody);
+            mCall = callable.call;
+            mObservable = callable.observable;
             return;
         }
         if (mContent != null && mMediaType != null) {
             mRequestBody = RequestBody.create(mMediaType, mContent);
-            mObservable = getClient().create().postBody(mUrl, mRequestBody);
+            final OkHttpApi.Callable callable = getClient().create().postBody(mUrl, mRequestBody);
+            mCall = callable.call;
+            mObservable = callable.observable;
             return;
         }
         if (mParams != null && mParams.size() > 0) {
-            mObservable = getClient().create().post(mUrl, mParams);
+            final OkHttpApi.Callable callable = getClient().create().post(mUrl, mParams);
+            mCall = callable.call;
+            mObservable = callable.observable;
             return;
         }
-        mObservable = getClient().create().post(mUrl);
+        final OkHttpApi.Callable callable = getClient().create().post(mUrl);
+        mCall = callable.call;
+        mObservable = callable.observable;
     }
 
     @Override
     public <T> void request(final SimpleCallback<T> callback) {
         prepare();
-        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, mCall, callback);
         if (mTag != null) {
             RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
@@ -117,7 +130,7 @@ public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
     @Override
     public <T, R> void request(final AsyncCallback<T, R> callback) {
         prepare();
-        DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
+        DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, mCall, callback);
         if (mTag != null) {
             RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
@@ -252,6 +265,7 @@ public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
      * Singleton
      */
     public static class Singleton extends IPostRequest.Singleton<Singleton, OkHttpClient> {
+        protected Call mCall;
         protected Observable<ResponseBody> mObservable;
         private Map<String, Object> mForms = new LinkedHashMap<>();
         private RequestBody mRequestBody;
@@ -284,29 +298,39 @@ public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
                         }
                     }
                 }
-                mObservable = getClient().create().postForm(mUrl, mForms);
+                final OkHttpApi.Callable callable = getClient().create().postForm(mUrl, mForms);
+                mCall = callable.call;
+                mObservable = callable.observable;
                 return;
             }
             if (mRequestBody != null) {
-                mObservable = getClient().create().postBody(mUrl, mRequestBody);
+                final OkHttpApi.Callable callable = getClient().create().postBody(mUrl, mRequestBody);
+                mCall = callable.call;
+                mObservable = callable.observable;
                 return;
             }
             if (mContent != null && mMediaType != null) {
                 mRequestBody = RequestBody.create(mMediaType, mContent);
-                mObservable = getClient().create().postBody(mUrl, mRequestBody);
+                final OkHttpApi.Callable callable = getClient().create().postBody(mUrl, mRequestBody);
+                mCall = callable.call;
+                mObservable = callable.observable;
                 return;
             }
             if (mParams != null && mParams.size() > 0) {
-                mObservable = getClient().create().post(mUrl, mParams);
+                final OkHttpApi.Callable callable = getClient().create().post(mUrl, mParams);
+                mCall = callable.call;
+                mObservable = callable.observable;
                 return;
             }
-            mObservable = getClient().create().post(mUrl);
+            final OkHttpApi.Callable callable = getClient().create().post(mUrl);
+            mCall = callable.call;
+            mObservable = callable.observable;
         }
 
         @Override
         public <T> void request(final SimpleCallback<T> callback) {
             prepare();
-            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, mCall, callback);
             if (mTag != null) {
                 RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }
@@ -330,7 +354,7 @@ public class PostRequest extends IPostRequest<PostRequest, OkHttpClient> {
         @Override
         public <T, R> void request(final AsyncCallback<T, R> callback) {
             prepare();
-            DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, callback);
+            DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(mTag, mCall, callback);
             if (mTag != null) {
                 RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }

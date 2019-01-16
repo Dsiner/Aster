@@ -1,6 +1,5 @@
 package com.d.lib.aster.integration.okhttp3;
 
-import android.accounts.NetworkErrorException;
 import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.Params;
@@ -37,172 +36,192 @@ public class OkHttpApi {
         return mImp;
     }
 
-    public Observable<ResponseBody> get(String url, Params params) {
+    public Callable get(String url, Params params) {
         return get(url + "?" + params.getRequestParamsString());
     }
 
-    public Observable<ResponseBody> get(final String url) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable get(final String url) {
+        final Call call = getImp().getImp(url);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().getImp(url).execute();
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
-    public Observable<ResponseBody> post(final String url) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable post(final String url) {
+        final Call call = getImp().postImp(url, null);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().post(url);
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
-    public Observable<ResponseBody> post(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable post(final String url, final Params params) {
+        final Call call = getImp().postImp(url, params);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().post(url, params);
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
-    public Observable<ResponseBody> postForm(final String url, final Map<String, Object> forms) {
+    public Callable postForm(final String url, final Map<String, Object> forms) {
         final FormBody.Builder builder = new FormBody.Builder();
         for (Map.Entry<String, Object> entry : forms.entrySet()) {
             builder.add(entry.getKey(), String.valueOf(entry.getValue()));
         }
-        return Observable.create(new Task<ResponseBody>() {
+        final Call call = getImp().postBodyImp(url, builder.build());
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().postBody(url, builder.build());
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
-    public Observable<ResponseBody> postBody(final String url, final RequestBody requestBody) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable postBody(final String url, final RequestBody requestBody) {
+        final Call call = getImp().postBodyImp(url, requestBody);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().postBodyImp(url, requestBody).execute();
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
-    public Observable<ResponseBody> put(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable put(final String url, final Params params) {
+        final Call call = getImp().putImp(url, params);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().putImp(url, params).execute();
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
-    public Observable<ResponseBody> patch(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable patch(final String url, final Params params) {
+        final Call call = getImp().patchImp(url, params);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().putImp(url, params).execute();
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
-    public Observable<ResponseBody> options(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable options(final String url, final Params params) {
+        final Call call = getImp().optionsImp(url, params);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().options(url, params);
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
-    public Observable<ResponseBody> head(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable head(final String url, final Params params) {
+        final Call call = getImp().headImp(url, params);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().head(url, params);
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
-    public Observable<ResponseBody> delete(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Callable delete(final String url, final Params params) {
+        final Call call = getImp().deleteImp(url, params);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    Response response = getImp().delete(url, params);
+                    Response response = call.execute();
                     int code = response.code();
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
+        return new Callable(call, observable);
     }
 
     public Callable download(final String url, final Params params) {
@@ -220,7 +239,7 @@ public class OkHttpApi {
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
@@ -239,7 +258,7 @@ public class OkHttpApi {
                     return response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new NetworkErrorException("Request error.");
+                    throw e;
                 }
             }
         });
@@ -439,7 +458,5 @@ public class OkHttpApi {
                 }
             });
         }
-
-
     }
 }

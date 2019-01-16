@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
+import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
 import java.util.List;
@@ -34,16 +35,8 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
     }
 
     public void cancel() {
+        ULog.e("Request cancelled.");
         dispose();
-        if (mCallback == null) {
-            return;
-        }
-        Util.executeMain(new Runnable() {
-            @Override
-            public void run() {
-                mCallback.onError(new Exception("Request cancelled."));
-            }
-        });
     }
 
     @Override

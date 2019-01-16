@@ -122,6 +122,9 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
 
     private void onErrorImp(final Throwable e) {
         RequestManagerImpl.getIns().remove(mTag);
+        if (isDisposed()) {
+            return;
+        }
         if (mCallback == null) {
             return;
         }

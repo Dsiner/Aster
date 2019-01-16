@@ -1,5 +1,7 @@
 package com.d.aster.activity;
 
+import android.support.annotation.NonNull;
+
 import com.d.aster.api.API;
 import com.d.aster.model.MovieInfo;
 import com.d.lib.aster.Aster;
@@ -9,16 +11,14 @@ import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitModule;
+import com.d.lib.aster.scheduler.callback.Function;
+import com.d.lib.aster.scheduler.callback.Observer;
+import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
 import java.util.ArrayList;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
 /**
@@ -94,53 +94,49 @@ public class Get extends Request {
                 });
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void requestObservable() {
-//        Params params = new Params(mUrl);
-//        params.addParam(API.MovieTop.start, "1");
-//        params.addParam(API.MovieTop.count, "10");
-//        Aster.getDefault().get(API.MovieTop.rtpType, params)
-//                .observable(MovieInfo.class)
-//                .map(new Function<MovieInfo, MovieInfo>() {
-//                    @Override
-//                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-//                        Util.printThread("dsiner_theard apply");
-//                        return info;
-//                    }
-//                })
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .map(new Function<MovieInfo, MovieInfo>() {
-//                    @Override
-//                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-//                        Util.printThread("dsiner_theard apply");
-//                        return info;
-//                    }
-//                })
-//                .observeOn(Schedulers.io())
-//                .map(new Function<MovieInfo, MovieInfo>() {
-//                    @Override
-//                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-//                        Util.printThread("dsiner_theard apply");
-//                        return info;
-//                    }
-//                })
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new DisposableObserver<MovieInfo>() {
-//                    @Override
-//                    public void onNext(@NonNull MovieInfo info) {
-//                        Util.printThread("dsiner_theard onNext");
-//                    }
-//
-//                    @Override
-//                    public void onError(@NonNull Throwable e) {
-//                        Util.printThread("dsiner_theard onError");
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        Util.printThread("dsiner_theard onComplete");
-//                    }
-//                });
+        Params params = new Params(mUrl);
+        params.addParam(API.MovieTop.start, "1");
+        params.addParam(API.MovieTop.count, "10");
+        Aster.getDefault().get(API.MovieTop.rtpType, params)
+                .observable(MovieInfo.class)
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        Util.printThread("dsiner_theard apply");
+                        return info;
+                    }
+                })
+                .observeOn(Schedulers.mainThread())
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        Util.printThread("dsiner_theard apply");
+                        return info;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        Util.printThread("dsiner_theard apply");
+                        return info;
+                    }
+                })
+                .observeOn(Schedulers.mainThread())
+                .subscribe(new Observer() {
+                    @Override
+                    public void onNext(@NonNull Object result) {
+                        Util.printThread("dsiner_theard onNext");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Util.printThread("dsiner_theard onError");
+                    }
+                });
     }
 
     @Override
@@ -152,15 +148,15 @@ public class Get extends Request {
         RetrofitModule retrofit = (RetrofitModule) aster;
         retrofit.getRetrofit().create(RetrofitAPI.class)
                 .get(mUrl)
-                .subscribeOn(Schedulers.io())
-                .map(new Function<ResponseBody, ArrayList<Boolean>>() {
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .map(new io.reactivex.functions.Function<ResponseBody, ArrayList<Boolean>>() {
                     @Override
                     public ArrayList<Boolean> apply(@NonNull ResponseBody info) throws Exception {
                         return new ArrayList<>();
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ArrayList<Boolean>>() {
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new io.reactivex.observers.DisposableObserver<ArrayList<Boolean>>() {
                     @Override
                     public void onNext(ArrayList<Boolean> booleans) {
 

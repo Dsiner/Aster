@@ -100,7 +100,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
             onSuccessImp();
         } catch (IOException e) {
             e.printStackTrace();
-            RequestManagerImpl.getIns().remove(mTag);
+            onErrorImp(e);
         } finally {
             Util.closeQuietly(inputStream);
             Util.closeQuietly(outputStream);
@@ -122,6 +122,9 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
 
     private void onErrorImp(final Throwable e) {
         RequestManagerImpl.getIns().remove(mTag);
+        if (isDisposed()) {
+            return;
+        }
         if (mCallback == null) {
             return;
         }

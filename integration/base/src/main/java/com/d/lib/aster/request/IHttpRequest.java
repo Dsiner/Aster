@@ -53,6 +53,11 @@ public abstract class IHttpRequest<HR extends IHttpRequest, C extends IClient>
     }
 
     @Override
+    public HR tag(Object tag) {
+        return super.tag(tag);
+    }
+
+    @Override
     public HR baseUrl(String baseUrl) {
         mConfig.baseUrl(baseUrl);
         return (HR) this;
@@ -154,6 +159,11 @@ public abstract class IHttpRequest<HR extends IHttpRequest, C extends IClient>
 
         public <T> Observable.Observe<T> observable(Class<T> clazz) {
             return null;
+        }
+
+        @Override
+        public HRF tag(Object tag) {
+            return super.tag(tag);
         }
     }
 }
