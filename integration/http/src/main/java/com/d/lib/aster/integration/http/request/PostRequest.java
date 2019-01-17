@@ -11,6 +11,7 @@ import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.HttpClient;
 import com.d.lib.aster.integration.http.RequestManagerImpl;
 import com.d.lib.aster.integration.http.body.RequestBody;
+import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.integration.http.func.ApiFunc;
 import com.d.lib.aster.integration.http.func.ApiRetryFunc;
@@ -28,6 +29,7 @@ import com.d.lib.aster.utils.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,6 +40,7 @@ import javax.net.ssl.SSLSocketFactory;
  * Created by D on 2017/10/24.
  */
 public class PostRequest extends IPostRequest<PostRequest, HttpClient> {
+    protected HttpURLConnection mConn;
     protected Observable<ResponseBody> mObservable;
     private Map<String, Object> mForms = new LinkedHashMap<>();
     private RequestBody mRequestBody;
@@ -70,29 +73,39 @@ public class PostRequest extends IPostRequest<PostRequest, HttpClient> {
                     }
                 }
             }
-            mObservable = getClient().create().postForm(mUrl, mForms);
+            final HttpURLApi.Callable callable = getClient().create().postForm(mUrl, mForms);
+            mConn = callable.conn;
+            mObservable = callable.observable;
             return;
         }
         if (mRequestBody != null) {
-            mObservable = getClient().create().postBody(mUrl, mRequestBody);
+            final HttpURLApi.Callable callable = getClient().create().postBody(mUrl, mRequestBody);
+            mConn = callable.conn;
+            mObservable = callable.observable;
             return;
         }
         if (mContent != null && mMediaType != null) {
             mRequestBody = RequestBody.create(mMediaType, mContent);
-            mObservable = getClient().create().postBody(mUrl, mRequestBody);
+            final HttpURLApi.Callable callable = getClient().create().postBody(mUrl, mRequestBody);
+            mConn = callable.conn;
+            mObservable = callable.observable;
             return;
         }
         if (mParams != null && mParams.size() > 0) {
-            mObservable = getClient().create().post(mUrl, mParams);
+            final HttpURLApi.Callable callable = getClient().create().post(mUrl, mParams);
+            mConn = callable.conn;
+            mObservable = callable.observable;
             return;
         }
-        mObservable = getClient().create().post(mUrl);
+        final HttpURLApi.Callable callable = getClient().create().post(mUrl);
+        mConn = callable.conn;
+        mObservable = callable.observable;
     }
 
     @Override
     public <T> void request(final SimpleCallback<T> callback) {
         prepare();
-        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, mConn, callback);
         if (mTag != null) {
             RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
@@ -246,6 +259,7 @@ public class PostRequest extends IPostRequest<PostRequest, HttpClient> {
      * Singleton
      */
     public static class Singleton extends IPostRequest.Singleton<Singleton, HttpClient> {
+        protected HttpURLConnection mConn;
         protected Observable<ResponseBody> mObservable;
         private Map<String, Object> mForms = new LinkedHashMap<>();
         private RequestBody mRequestBody;
@@ -278,29 +292,39 @@ public class PostRequest extends IPostRequest<PostRequest, HttpClient> {
                         }
                     }
                 }
-                mObservable = getClient().create().postForm(mUrl, mForms);
+                final HttpURLApi.Callable callable = getClient().create().postForm(mUrl, mForms);
+                mConn = callable.conn;
+                mObservable = callable.observable;
                 return;
             }
             if (mRequestBody != null) {
-                mObservable = getClient().create().postBody(mUrl, mRequestBody);
+                final HttpURLApi.Callable callable = getClient().create().postBody(mUrl, mRequestBody);
+                mConn = callable.conn;
+                mObservable = callable.observable;
                 return;
             }
             if (mContent != null && mMediaType != null) {
                 mRequestBody = RequestBody.create(mMediaType, mContent);
-                mObservable = getClient().create().postBody(mUrl, mRequestBody);
+                final HttpURLApi.Callable callable = getClient().create().postBody(mUrl, mRequestBody);
+                mConn = callable.conn;
+                mObservable = callable.observable;
                 return;
             }
             if (mParams != null && mParams.size() > 0) {
-                mObservable = getClient().create().post(mUrl, mParams);
+                final HttpURLApi.Callable callable = getClient().create().post(mUrl, mParams);
+                mConn = callable.conn;
+                mObservable = callable.observable;
                 return;
             }
-            mObservable = getClient().create().post(mUrl);
+            final HttpURLApi.Callable callable = getClient().create().post(mUrl);
+            mConn = callable.conn;
+            mObservable = callable.observable;
         }
 
         @Override
         public <T> void request(final SimpleCallback<T> callback) {
             prepare();
-            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, mConn, callback);
             if (mTag != null) {
                 RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }

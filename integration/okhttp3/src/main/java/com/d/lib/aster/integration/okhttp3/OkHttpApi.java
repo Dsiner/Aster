@@ -1,6 +1,8 @@
 package com.d.lib.aster.integration.okhttp3;
 
+import android.accounts.NetworkErrorException;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.SimpleCallback;
@@ -263,6 +265,14 @@ public class OkHttpApi {
             }
         });
         return new Callable(call, observable);
+    }
+
+    private void checkSuccessful(@NonNull Response response) throws Exception {
+        if (!response.isSuccessful()) {
+            throw new NetworkErrorException(!TextUtils.isEmpty(response.message()) ?
+                    "Request is not successful for " + response.message()
+                    : "Request is not successful.");
+        }
     }
 
     public static final class Callable {

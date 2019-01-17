@@ -39,6 +39,7 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
+@Deprecated
 public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
     protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
     protected Observable<ResponseBody> mObservable;

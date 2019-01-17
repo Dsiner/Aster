@@ -3,6 +3,7 @@ package com.d.lib.aster.integration.http.request;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
@@ -23,7 +24,9 @@ public class PutRequest extends HttpRequest<PutRequest> {
 
     @Override
     protected void prepare() {
-        mObservable = getClient().create().put(mUrl, mParams);
+        final HttpURLApi.Callable callable = getClient().create().put(mUrl, mParams);
+        mConn = callable.conn;
+        mObservable = callable.observable;
     }
 
     @Override
@@ -107,7 +110,9 @@ public class PutRequest extends HttpRequest<PutRequest> {
 
         @Override
         protected void prepare() {
-            mObservable = getClient().create().put(mUrl, mParams);
+            final HttpURLApi.Callable callable = getClient().create().put(mUrl, mParams);
+            mConn = callable.conn;
+            mObservable = callable.observable;
         }
 
         @Override

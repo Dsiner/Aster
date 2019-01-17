@@ -3,6 +3,7 @@ package com.d.lib.aster.integration.http.request;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
@@ -27,9 +28,13 @@ public class GetRequest extends HttpRequest<GetRequest> {
     @Override
     protected void prepare() {
         if (mParams == null || mParams.size() <= 0) {
-            mObservable = getClient().create().get(mUrl);
+            final HttpURLApi.Callable callable = getClient().create().get(mUrl);
+            mConn = callable.conn;
+            mObservable = callable.observable;
         } else {
-            mObservable = getClient().create().get(mUrl, mParams);
+            final HttpURLApi.Callable callable = getClient().create().get(mUrl, mParams);
+            mConn = callable.conn;
+            mObservable = callable.observable;
         }
     }
 
@@ -119,9 +124,13 @@ public class GetRequest extends HttpRequest<GetRequest> {
         @Override
         protected void prepare() {
             if (mParams == null || mParams.size() <= 0) {
-                mObservable = getClient().create().get(mUrl);
+                final HttpURLApi.Callable callable = getClient().create().get(mUrl);
+                mConn = callable.conn;
+                mObservable = callable.observable;
             } else {
-                mObservable = getClient().create().get(mUrl, mParams);
+                final HttpURLApi.Callable callable = getClient().create().get(mUrl, mParams);
+                mConn = callable.conn;
+                mObservable = callable.observable;
             }
         }
 

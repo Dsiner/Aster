@@ -3,6 +3,7 @@ package com.d.lib.aster.integration.http.request;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
@@ -22,7 +23,9 @@ public class OptionRequest extends HttpRequest<OptionRequest> {
 
     @Override
     protected void prepare() {
-        mObservable = getClient().create().options(mUrl, mParams);
+        final HttpURLApi.Callable callable = getClient().create().options(mUrl, mParams);
+        mConn = callable.conn;
+        mObservable = callable.observable;
     }
 
     @Override
@@ -106,7 +109,9 @@ public class OptionRequest extends HttpRequest<OptionRequest> {
 
         @Override
         protected void prepare() {
-            mObservable = getClient().create().options(mUrl, mParams);
+            final HttpURLApi.Callable callable = getClient().create().options(mUrl, mParams);
+            mConn = callable.conn;
+            mObservable = callable.observable;
         }
 
         @Override

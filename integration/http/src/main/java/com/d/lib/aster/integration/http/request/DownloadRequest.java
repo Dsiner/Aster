@@ -9,6 +9,7 @@ import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.http.HttpClient;
 import com.d.lib.aster.integration.http.RequestManagerImpl;
+import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.integration.http.func.ApiRetryFunc;
 import com.d.lib.aster.integration.http.observer.DownloadObserver;
@@ -20,6 +21,7 @@ import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.Util;
 
+import java.net.HttpURLConnection;
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
@@ -28,6 +30,7 @@ import javax.net.ssl.SSLSocketFactory;
  * Created by D on 2017/10/24.
  */
 public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClient> {
+    protected HttpURLConnection mConn;
     protected Observable<ResponseBody> mObservable;
 
     public DownloadRequest(String url) {
@@ -50,9 +53,13 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
     @Override
     protected void prepare() {
         if (mParams == null || mParams.size() <= 0) {
-            mObservable = getClient().create().download(mUrl);
+            final HttpURLApi.Callable callable = getClient().create().download(mUrl);
+            mConn = callable.conn;
+            mObservable = callable.observable;
         } else {
-            mObservable = getClient().create().download(mUrl, mParams);
+            final HttpURLApi.Callable callable = getClient().create().download(mUrl, mParams);
+            mConn = callable.conn;
+            mObservable = callable.observable;
         }
     }
 
@@ -70,13 +77,15 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
             throw new NullPointerException("This callback must not be null!");
         }
         prepare();
-        requestImpl(mObservable, getClient().getHttpConfig(), mTag, path, name, callback);
+        requestImpl(mObservable, getClient().getHttpConfig(), path, name,
+                mTag, mConn, callback);
     }
 
     private static void requestImpl(final Observable<ResponseBody> observable,
                                     final Config config,
-                                    final Object tag,
                                     final String path, final String name,
+                                    final Object tag,
+                                    final HttpURLConnection conn,
                                     final ProgressCallback callback) {
         if (callback != null) {
             Util.executeMain(new Runnable() {
@@ -87,7 +96,10 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
                 }
             });
         }
-        DisposableObserver<ResponseBody> disposableObserver = new DownloadObserver(path, name, tag, callback);
+        DisposableObserver<ResponseBody> disposableObserver = new DownloadObserver(path, name,
+                tag,
+                conn,
+                callback);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
@@ -164,6 +176,7 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
      * Singleton
      */
     public static class Singleton extends IDownloadRequest.Singleton<Singleton, HttpClient> {
+        protected HttpURLConnection mConn;
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
@@ -182,9 +195,13 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
         @Override
         protected void prepare() {
             if (mParams == null || mParams.size() <= 0) {
-                mObservable = getClient().create().download(mUrl);
+                final HttpURLApi.Callable callable = getClient().create().download(mUrl);
+                mConn = callable.conn;
+                mObservable = callable.observable;
             } else {
-                mObservable = getClient().create().download(mUrl, mParams);
+                final HttpURLApi.Callable callable = getClient().create().download(mUrl, mParams);
+                mConn = callable.conn;
+                mObservable = callable.observable;
             }
         }
 
@@ -201,7 +218,8 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
                 throw new NullPointerException("This callback must not be null!");
             }
             prepare();
-            requestImpl(mObservable, getClient().getHttpConfig(), mTag, path, name, callback);
+            requestImpl(mObservable, getClient().getHttpConfig(), path, name,
+                    mTag, mConn, callback);
         }
     }
 }

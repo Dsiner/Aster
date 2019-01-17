@@ -23,6 +23,7 @@ import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.Util;
 
+import java.net.HttpURLConnection;
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
@@ -31,6 +32,7 @@ import javax.net.ssl.SSLSocketFactory;
  * Created by D on 2017/10/24.
  */
 public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<HR, HttpClient> {
+    protected HttpURLConnection mConn;
     protected Observable<ResponseBody> mObservable;
 
     public HttpRequest(String url) {
@@ -57,7 +59,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
 
     public <T> void request(final SimpleCallback<T> callback) {
         prepare();
-        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+        DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, mConn, callback);
         if (mTag != null) {
             RequestManagerImpl.getIns().add(mTag, disposableObserver);
         }
@@ -179,6 +181,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
      */
     public static abstract class Singleton<HRF extends Singleton>
             extends IHttpRequest.Singleton<HRF, HttpClient> {
+        protected HttpURLConnection mConn;
         protected Observable<ResponseBody> mObservable;
 
         public Singleton(String url) {
@@ -205,7 +208,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
 
         public <T> void request(final SimpleCallback<T> callback) {
             prepare();
-            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, callback);
+            DisposableObserver<T> disposableObserver = new ApiObserver<T>(mTag, mConn, callback);
             if (mTag != null) {
                 RequestManagerImpl.getIns().add(mTag, disposableObserver);
             }

@@ -27,6 +27,7 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
+@Deprecated
 public class DownloadRequest extends IDownloadRequest<DownloadRequest, VolleyClient> {
     protected Observable<ResponseBody> mObservable;
 

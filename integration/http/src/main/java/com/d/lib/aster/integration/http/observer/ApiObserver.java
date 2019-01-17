@@ -1,7 +1,12 @@
 package com.d.lib.aster.integration.http.observer;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.RequestManagerImpl;
+
+import java.net.HttpURLConnection;
 
 /**
  * Observer with Sync Callback
@@ -11,11 +16,14 @@ public class ApiObserver<R> extends AbsObserver<R> {
     private Object mTag; // Request tag
     private SimpleCallback<R> mCallback;
 
-    public ApiObserver(Object tag, SimpleCallback<R> callback) {
+    public ApiObserver(@Nullable Object tag,
+                       @Nullable final HttpURLConnection conn,
+                       @NonNull SimpleCallback<R> callback) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null!");
         }
         this.mTag = tag;
+        this.mConn = conn;
         this.mCallback = callback;
     }
 

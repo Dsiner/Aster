@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
 
 /**
  * Observer with Download Callback
@@ -27,11 +28,14 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     private final DownloadModel mDownModel = new DownloadModel();
     private final ProgressCallback mCallback;
 
-    public DownloadObserver(final String path, final String name, @Nullable final Object tag,
+    public DownloadObserver(final String path, final String name,
+                            @Nullable final Object tag,
+                            @Nullable final HttpURLConnection conn,
                             @Nullable ProgressCallback callback) {
         this.mPath = path;
         this.mName = name;
         this.mTag = tag;
+        this.mConn = conn;
         this.mCallback = callback;
     }
 
