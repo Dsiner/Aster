@@ -67,7 +67,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     @Override
     public void onError(Throwable e) {
         super.onError(e);
-        onErrorImp(e);
+        onErrorImpl(e);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
 
             mDownModel.totalLength = resp.contentLength();
 
-            onProgressImp(mDownModel.currentLength, mDownModel.totalLength);
+            onProgressImpl(mDownModel.currentLength, mDownModel.totalLength);
 
             while ((readLen = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, readLen);
@@ -100,15 +100,15 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - lastTime >= MIN_DELAY_TIME || lastTime == 0) {
                     lastTime = currentTime;
-                    onProgressImp(mDownModel.currentLength, mDownModel.totalLength);
+                    onProgressImpl(mDownModel.currentLength, mDownModel.totalLength);
                 }
             }
-            onSuccessImp();
+            onSuccessImpl();
         } catch (IOException e) {
             e.printStackTrace();
             RequestManagerImpl.getIns().remove(mTag);
             if (!isDisposed()) {
-                onErrorImp(e);
+                onErrorImpl(e);
             }
         } finally {
             okhttp3.internal.Util.closeQuietly(inputStream);
@@ -117,7 +117,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
         }
     }
 
-    private void onProgressImp(final long currentLength, final long totalLength) {
+    private void onProgressImpl(final long currentLength, final long totalLength) {
         if (mCallback == null) {
             return;
         }
@@ -129,7 +129,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
         });
     }
 
-    private void onErrorImp(final Throwable e) {
+    private void onErrorImpl(final Throwable e) {
         RequestManagerImpl.getIns().remove(mTag);
         if (mCallback == null) {
             return;
@@ -142,7 +142,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
         });
     }
 
-    private void onSuccessImp() {
+    private void onSuccessImpl() {
         RequestManagerImpl.getIns().remove(mTag);
         if (mCallback == null) {
             return;

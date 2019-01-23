@@ -49,7 +49,7 @@ public class Upload extends Request {
             @Override
             public void run() {
                 setDialogProgress(0, 1, false);
-                requestImp(TYPE_SINGLETON);
+                requestImpl(TYPE_SINGLETON);
             }
         });
     }

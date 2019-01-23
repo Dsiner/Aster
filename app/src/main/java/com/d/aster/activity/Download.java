@@ -36,7 +36,7 @@ public class Download extends Request {
     @Override
     protected void request() {
         Util.deleteFile(new File(App.FILE_PATH));
-        requestImp(TYPE_SINGLETON);
+        requestImpl(TYPE_SINGLETON);
     }
 
     @Override

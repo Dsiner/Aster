@@ -48,23 +48,23 @@ public interface RetrofitAPI {
     @POST()
     Observable<ResponseBody> postBody(@Url String url, @Body RequestBody requestBody);
 
+    @FormUrlEncoded
+    @PUT()
+    Observable<ResponseBody> put(@Url String url, @FieldMap Map<String, String> params);
+
     @HEAD()
     Observable<ResponseBody> head(@Url String url, @QueryMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @DELETE()
+    Observable<ResponseBody> delete(@Url String url, @FieldMap Map<String, String> params);
 
     @OPTIONS()
     Observable<ResponseBody> options(@Url String url, @QueryMap Map<String, String> params);
 
     @FormUrlEncoded
-    @PUT()
-    Observable<ResponseBody> put(@Url String url, @FieldMap Map<String, String> params);
-
-    @FormUrlEncoded
     @PATCH()
     Observable<ResponseBody> patch(@Url String url, @FieldMap Map<String, String> params);
-
-    @FormUrlEncoded
-    @DELETE()
-    Observable<ResponseBody> delete(@Url String url, @FieldMap Map<String, String> params);
 
     @Streaming
     @GET()

@@ -35,7 +35,7 @@ public class Post extends Request {
 
     @Override
     protected void request() {
-        requestImp(TYPE_SINGLETON);
+        requestImpl(TYPE_SINGLETON);
     }
 
     @Override

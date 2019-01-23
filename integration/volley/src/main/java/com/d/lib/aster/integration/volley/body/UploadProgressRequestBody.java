@@ -44,18 +44,18 @@ public class UploadProgressRequestBody extends RequestBody {
 
     @Override
     public void writeTo(@NonNull DataOutputStream sink) throws IOException {
-        onStartImp();
+        onStartImpl();
         try {
             mRequestBody.writeAll(new CountingSink(sink));
-            onSuccessImp();
+            onSuccessImpl();
         } catch (final Throwable e) {
             e.printStackTrace();
-            onErrorImp(e);
+            onErrorImpl(e);
             throw e;
         }
     }
 
-    private void onStartImp() {
+    private void onStartImpl() {
         if (mCallback == null) {
             return;
         }
@@ -67,7 +67,7 @@ public class UploadProgressRequestBody extends RequestBody {
         });
     }
 
-    private void onErrorImp(final Throwable e) {
+    private void onErrorImpl(final Throwable e) {
         if (mCallback == null) {
             return;
         }
@@ -79,7 +79,7 @@ public class UploadProgressRequestBody extends RequestBody {
         });
     }
 
-    private void onSuccessImp() {
+    private void onSuccessImpl() {
         if (mCallback == null) {
             return;
         }

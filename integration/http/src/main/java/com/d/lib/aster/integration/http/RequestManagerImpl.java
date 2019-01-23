@@ -69,10 +69,10 @@ public class RequestManagerImpl implements IRequestManager<Observer> {
             return;
         }
         Observer value = mHashMap.remove(tag);
-        cancelImp(value);
+        cancelImpl(value);
     }
 
-    private void cancelImp(@Nullable Observer value) {
+    private void cancelImpl(@Nullable Observer value) {
         if (value == null || !(value instanceof DisposableObserver)) {
             return;
         }
@@ -97,7 +97,7 @@ public class RequestManagerImpl implements IRequestManager<Observer> {
         mHashMap.clear();
         Set<Object> keys = temp.keySet();
         for (Object k : keys) {
-            cancelImp(temp.get(k));
+            cancelImpl(temp.get(k));
         }
     }
 }

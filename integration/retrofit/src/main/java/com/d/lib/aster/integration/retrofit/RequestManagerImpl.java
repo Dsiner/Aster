@@ -69,10 +69,10 @@ public class RequestManagerImpl implements IRequestManager<Disposable> {
             return;
         }
         Disposable value = mHashMap.remove(tag);
-        cancelImp(value);
+        cancelImpl(value);
     }
 
-    private void cancelImp(@Nullable Disposable value) {
+    private void cancelImpl(@Nullable Disposable value) {
         if (value != null && !value.isDisposed()) {
             if (value instanceof DownloadObserver) {
                 ((DownloadObserver) value).cancel();
@@ -93,7 +93,7 @@ public class RequestManagerImpl implements IRequestManager<Disposable> {
         mHashMap.clear();
         Set<Object> keys = temp.keySet();
         for (Object k : keys) {
-            cancelImp(temp.get(k));
+            cancelImpl(temp.get(k));
         }
     }
 }

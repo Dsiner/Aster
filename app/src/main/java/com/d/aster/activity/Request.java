@@ -71,7 +71,7 @@ public abstract class Request extends AppCompatActivity {
         tvContent.setText(gson.toJson(jsonObject));
     }
 
-    protected final void requestImp(@State int type) {
+    protected final void requestImpl(@State int type) {
         switch (type) {
             case TYPE_SINGLETON:
                 requestSingleton();

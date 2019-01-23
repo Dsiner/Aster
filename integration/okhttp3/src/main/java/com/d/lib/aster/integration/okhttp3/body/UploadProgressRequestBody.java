@@ -53,21 +53,21 @@ public class UploadProgressRequestBody extends RequestBody {
 
     @Override
     public void writeTo(@NonNull BufferedSink sink) throws IOException {
-        onStartImp();
+        onStartImpl();
         BufferedSink bufferedSink;
         try {
             bufferedSink = Okio.buffer(new CountingSink(sink));
             mRequestBody.writeTo(bufferedSink);
             bufferedSink.flush();
-            onSuccessImp();
+            onSuccessImpl();
         } catch (final Throwable e) {
             e.printStackTrace();
-            onErrorImp(e);
+            onErrorImpl(e);
             throw e;
         }
     }
 
-    private void onStartImp() {
+    private void onStartImpl() {
         if (mCallback == null) {
             return;
         }
@@ -79,7 +79,7 @@ public class UploadProgressRequestBody extends RequestBody {
         });
     }
 
-    private void onErrorImp(final Throwable e) {
+    private void onErrorImpl(final Throwable e) {
         if (isDisposed()) {
             if (mCallback != null) {
                 mCallback.onCancel();
@@ -97,7 +97,7 @@ public class UploadProgressRequestBody extends RequestBody {
         });
     }
 
-    private void onSuccessImp() {
+    private void onSuccessImpl() {
         if (mCallback == null) {
             return;
         }
