@@ -41,8 +41,8 @@ public class Download extends Request {
 
     @Override
     protected void requestSingleton() {
-        Aster.getDefault().download(mUrl2)
-                .tag(mUrl2)
+        Aster.getDefault().download(mUrl1)
+                .tag(mUrl1)
                 .request(App.FILE_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
                     @Override
                     public void onStart() {
