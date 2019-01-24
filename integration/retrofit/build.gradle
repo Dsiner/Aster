@@ -18,6 +18,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -28,8 +32,8 @@ dependencies {
 
     compileOnly 'com.android.support:support-annotations:27.1.1'
 
-    api project(':integration:base')
-    api project(':integration:okhttp3')
+    compileOnly project(':integration:base')
+    compileOnly project(':integration:okhttp3')
 
     api 'io.reactivex.rxjava2:rxjava:2.1.0'
     api 'io.reactivex.rxjava2:rxandroid:2.0.1'

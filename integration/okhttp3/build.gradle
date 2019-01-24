@@ -18,6 +18,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -26,7 +30,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     compileOnly 'com.android.support:support-annotations:27.1.1'
-    api project(':integration:base')
+    compileOnly project(':integration:base')
     api 'com.squareup.okhttp3:okhttp:3.8.0'
     api 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 }

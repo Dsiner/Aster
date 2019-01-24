@@ -8,7 +8,6 @@ import com.d.lib.aster.base.AsterModule.Singleton;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IRequestManager;
 import com.d.lib.aster.base.Params;
-import com.d.lib.aster.integration.http.HttpModule;
 import com.d.lib.aster.request.IDownloadRequest;
 import com.d.lib.aster.request.IHttpRequest;
 import com.d.lib.aster.request.IPostRequest;
@@ -24,11 +23,47 @@ public class Aster {
         if (mAster == null) {
             synchronized (Aster.class) {
                 if (mAster == null) {
-                    mAster = HttpModule.factory();
+                    mAster = getDefaultAsterModule();
                 }
             }
         }
         return mAster;
+    }
+
+    private static AsterModule getDefaultAsterModule() {
+        AsterModule result = null;
+        try {
+            result = (AsterModule) Class.forName("com.d.lib.aster.integration.okhttp3.OkHttpModule").
+                    getDeclaredConstructor().newInstance();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        if (result != null) {
+            return result;
+        }
+
+        try {
+            result = (AsterModule) Class.forName("com.d.lib.aster.integration.retrofit.RetrofitModule").
+                    getDeclaredConstructor().newInstance();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        if (result != null) {
+            return result;
+        }
+
+        try {
+            result = (AsterModule) Class.forName("com.d.lib.aster.integration.http.HttpModule").
+                    getDeclaredConstructor().newInstance();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        if (result != null) {
+            return result;
+        }
+
+        throw new RuntimeException("Not find the default adapter, such as OkHttpModule,"
+                + " you need to integrate one");
     }
 
     public static void init(Context context, AsterModule module) {
