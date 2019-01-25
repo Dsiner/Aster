@@ -6,6 +6,23 @@
 
 > A network request library based on `HttpURLConnection` + `OkHttp3` + `Volley` + `Retrofit2` + `RxJava2`
 
+## Set up
+Maven:
+```xml
+<dependency>
+  <groupId>com.dsiner.lib</groupId>
+  <artifactId>aster</artifactId>
+  <version>1.0.1</version>
+</dependency>
+```
+or Gradle:
+```groovy
+    implementation 'com.dsiner.lib:aster:1.0.1'
+    implementation 'com.dsiner.lib:aster-adapter-http:1.0.2'
+    implementation 'com.dsiner.lib:aster-adapter-okhttp3:1.0.3'
+    implementation 'com.dsiner.lib:aster-adapter-retrofit:1.0.2'
+```
+
 ## Integration libraries
 * HttpURLConnection
 * OkHttp3
