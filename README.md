@@ -22,6 +22,22 @@ or Gradle:
     implementation 'com.dsiner.lib:aster-adapter-okhttp3:1.0.3'
     implementation 'com.dsiner.lib:aster-adapter-retrofit:1.0.2'
 ```
+or Gradle(OkHttp3 lite):
+```groovy
+    implementation 'com.dsiner.lib:aster:1.0.1'
+    implementation 'com.dsiner.lib:aster-adapter-okhttp3:1.0.3'
+```
+or Gradle(Retrofit2 lite):
+```groovy
+    implementation 'com.dsiner.lib:aster:1.0.1'
+    implementation 'com.dsiner.lib:aster-adapter-okhttp3:1.0.3'
+    implementation 'com.dsiner.lib:aster-adapter-retrofit:1.0.2'
+```
+or Gradle(HttpURLConnection lite):
+```groovy
+    implementation 'com.dsiner.lib:aster:1.0.1'
+    implementation 'com.dsiner.lib:aster-adapter-http:1.0.2'
+```
 
 ## Integration libraries
 * HttpURLConnection
