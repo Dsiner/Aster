@@ -16,18 +16,18 @@
 * Retrofit
 
 ## Features
-- A chain, full chain call `.func0().func1().func2()...` , `adaptive`, `simple`
-- Two client forms (`Singleton` global configuration, `New instance` fully custom configuration)
-- Three chain forms, fully extended
+- You can switch clients from HttpURLConnection or OkHttp3 or Volley or Retrofit2.
+- A chain, full chain call `.func0().func1().func2()...` , `adaptive`, `simple`.
+- Two client forms (`Singleton` global configuration, `New instance` fully custom configuration).
+- Three chain forms, fully extended.
 
 ## Support
-- [x] Support Get, Post, Head, Options, Put, Patch, Delete request protocol
-- [x] Support file download, progress callback
-- [x] Support file upload, progress callback
-- [x] Support for adding fixed headers, dynamic headers
-- [x] Support failure retry mechanism, you can specify the number of retries, retry interval
-- [x] Support Tag, Cancel Request, Unsubscribe
-
+- [x] Support Get, Post, Head, Options, Put, Patch, Delete request protocol.
+- [x] Support file download, progress callback.
+- [x] Support file upload, progress callback.
+- [x] Support for adding fixed headers, dynamic headers.
+- [x] Support failure retry mechanism, you can specify the number of retries, retry interval.
+- [x] Support Tag, Cancel Request, Unsubscribe.
 
 ### How do I use Aster?
 
@@ -38,7 +38,7 @@ Simple use cases will look something like this:
         Params params = new Params("https://api.douban.com/v2/movie/top250");
         params.addParam("start", "0");
         params.addParam("count", "10");
-        Aster.get("https://api.douban.com/v2/movie/top250", params)
+        Aster.get(params.rtp, params)
                 .request(new SimpleCallback<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo response) {

@@ -34,8 +34,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     compileOnly 'com.android.support:support-annotations:27.1.1'
     api project(':integration:base')
-    compileOnly project(':integration:http')
-    compileOnly project(':integration:okhttp3')
-    compileOnly project(':integration:volley')
-    compileOnly project(':integration:retrofit')
 }

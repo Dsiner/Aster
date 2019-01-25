@@ -33,8 +33,8 @@ public class Aster {
     private static AsterModule getDefaultAsterModule() {
         AsterModule result = null;
         try {
-            result = (AsterModule) Class.forName("com.d.lib.aster.integration.okhttp3.OkHttpModule").
-                    getDeclaredConstructor().newInstance();
+            result = (AsterModule) Class.forName("com.d.lib.aster.integration.okhttp3.OkHttpModule")
+                    .getDeclaredConstructor().newInstance();
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -43,8 +43,8 @@ public class Aster {
         }
 
         try {
-            result = (AsterModule) Class.forName("com.d.lib.aster.integration.retrofit.RetrofitModule").
-                    getDeclaredConstructor().newInstance();
+            result = (AsterModule) Class.forName("com.d.lib.aster.integration.retrofit.RetrofitModule")
+                    .getDeclaredConstructor().newInstance();
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -53,8 +53,8 @@ public class Aster {
         }
 
         try {
-            result = (AsterModule) Class.forName("com.d.lib.aster.integration.http.HttpModule").
-                    getDeclaredConstructor().newInstance();
+            result = (AsterModule) Class.forName("com.d.lib.aster.integration.http.HttpModule")
+                    .getDeclaredConstructor().newInstance();
         } catch (Throwable e) {
             e.printStackTrace();
         }
