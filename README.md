@@ -2,8 +2,9 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![API](https://img.shields.io/badge/API-9%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=9)
-[ ![Download](https://api.bintray.com/packages/dsiner/maven/aster/images/download.svg) ](https://bintray.com/dsiner/maven/aster/_latestVersion)
+[![Download](https://api.bintray.com/packages/dsiner/maven/aster/images/download.svg) ](https://bintray.com/dsiner/maven/aster/_latestVersion)
 [![Readme](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-brightgreen.svg)](https://github.com/Dsiner/Aster/blob/master/README-zh.md)
+[![Wiki-Guide](https://img.shields.io/badge/Wiki-Guide-brightgreen.svg)](https://github.com/Dsiner/Aster/wiki)
 
 > A network request library based on `HttpURLConnection` + `OkHttp3` + `Volley` + `Retrofit2` + `RxJava2`
 
@@ -13,31 +14,31 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>aster</artifactId>
-  <version>1.0.2</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-    implementation 'com.dsiner.lib:aster:1.0.2'
-    implementation 'com.dsiner.lib:aster-adapter-http:1.0.2'
-    implementation 'com.dsiner.lib:aster-adapter-okhttp3:1.0.3'
-    implementation 'com.dsiner.lib:aster-adapter-retrofit:1.0.2'
+    implementation 'com.dsiner.lib:aster:2.0.0'
+    implementation 'com.dsiner.lib:aster-adapter-http:2.0.0'
+    implementation 'com.dsiner.lib:aster-adapter-okhttp3:2.0.0'
+    implementation 'com.dsiner.lib:aster-adapter-retrofit:2.0.0'
 ```
 or Gradle(OkHttp3 lite):
 ```groovy
-    implementation 'com.dsiner.lib:aster:1.0.2'
-    implementation 'com.dsiner.lib:aster-adapter-okhttp3:1.0.3'
+    implementation 'com.dsiner.lib:aster:2.0.0'
+    implementation 'com.dsiner.lib:aster-adapter-okhttp3:2.0.0'
 ```
 or Gradle(Retrofit2 lite):
 ```groovy
-    implementation 'com.dsiner.lib:aster:1.0.2'
-    implementation 'com.dsiner.lib:aster-adapter-okhttp3:1.0.3'
-    implementation 'com.dsiner.lib:aster-adapter-retrofit:1.0.2'
+    implementation 'com.dsiner.lib:aster:2.0.0'
+    implementation 'com.dsiner.lib:aster-adapter-okhttp3:2.0.0'
+    implementation 'com.dsiner.lib:aster-adapter-retrofit:2.0.0'
 ```
 or Gradle(HttpURLConnection lite):
 ```groovy
-    implementation 'com.dsiner.lib:aster:1.0.2'
-    implementation 'com.dsiner.lib:aster-adapter-http:1.0.2'
+    implementation 'com.dsiner.lib:aster:2.0.0'
+    implementation 'com.dsiner.lib:aster-adapter-http:2.0.0'
 ```
 
 ## Integration libraries
