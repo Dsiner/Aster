@@ -32,7 +32,7 @@ public class Config extends IConfig<Config> {
         public static final long CONNECT_TIMEOUT = 10 * 1000;
         public static final long READ_TIMEOUT = 10 * 1000;
         public static final long WRITE_TIMEOUT = 10 * 1000;
-        public static final int RETRY_COUNT = 3; // Default retries
+        public static final int RETRY_COUNT = 0; // Default retries
         public static final long RETRY_DELAY_MILLIS = 3 * 1000; // Default retry interval (ms)
     }
 
