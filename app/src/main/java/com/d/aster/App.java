@@ -10,8 +10,11 @@ import com.d.lib.aster.Aster;
  * Created by D on 2017/10/27.
  */
 public class App extends Application {
-    public final static String FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Aster/test/";
-    public final static String PIC_NAME = "1.jpg";
+    public final static String PICTURE_PATH = Environment.getExternalStorageDirectory().getPath()
+            + "/Aster/pictures/";
+    public final static String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath()
+            + "/Aster/download/";
+    public final static String PIC_NAME = "young.jpg";
 
     @Override
     public void onCreate() {

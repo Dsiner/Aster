@@ -9,8 +9,6 @@ import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
-import java.io.File;
-
 /**
  * Request --> Download
  * Created by D on 2017/10/26.
@@ -35,7 +33,6 @@ public class Download extends Request {
 
     @Override
     protected void request() {
-        Util.deleteFile(new File(App.FILE_PATH));
         requestImpl(TYPE_SINGLETON);
     }
 
@@ -43,7 +40,7 @@ public class Download extends Request {
     protected void requestSingleton() {
         Aster.getDefault().download(mUrl1)
                 .tag(mUrl1)
-                .request(App.FILE_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
+                .request(App.DOWNLOAD_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
                     @Override
                     public void onStart() {
                         Util.printThread("dsiner_theard onStart");
@@ -88,7 +85,7 @@ public class Download extends Request {
                 .retryCount(3)
                 .retryDelayMillis(1000)
                 .tag(mUrl2)
-                .request(App.FILE_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
+                .request(App.DOWNLOAD_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
                     @Override
                     public void onStart() {
                         Util.printThread("dsiner_theard onStart");

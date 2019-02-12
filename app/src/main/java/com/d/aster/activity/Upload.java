@@ -226,7 +226,7 @@ public class Upload extends Request {
     }
 
     private File getFile(String name) {
-        File dir = new File(App.FILE_PATH);
+        File dir = new File(App.PICTURE_PATH);
         if (!dir.exists()) {
             dir.mkdirs();
         }

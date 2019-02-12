@@ -9,9 +9,6 @@ import com.d.aster.activity.Download;
 import com.d.aster.activity.Get;
 import com.d.aster.activity.Post;
 import com.d.aster.activity.Upload;
-import com.d.lib.aster.utils.Util;
-
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bindView();
-        wipeCache();
     }
 
     private void bindView() {
@@ -48,14 +44,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, Upload.class));
             }
         });
-    }
-
-    private void wipeCache() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Util.deleteFile(new File(App.FILE_PATH + App.PIC_NAME));
-            }
-        }).run();
     }
 }
