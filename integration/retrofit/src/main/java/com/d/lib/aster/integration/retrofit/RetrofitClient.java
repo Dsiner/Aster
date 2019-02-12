@@ -142,7 +142,22 @@ public class RetrofitClient extends IClient {
                 ULog.d(Config.Default.TAG_LOG + s);
             }
         });
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        loggingInterceptor.setLevel(getLoggingLevel());
         return loggingInterceptor;
+    }
+
+    @NonNull
+    private static HttpLoggingInterceptor.Level getLoggingLevel() {
+        HttpLoggingInterceptor.Level level;
+        if (Config.Level.BODY == Config.Default.LOG_LEVEL) {
+            level = HttpLoggingInterceptor.Level.BODY;
+        } else if (Config.Level.HEADERS == Config.Default.LOG_LEVEL) {
+            level = HttpLoggingInterceptor.Level.HEADERS;
+        } else if (Config.Level.BASIC == Config.Default.LOG_LEVEL) {
+            level = HttpLoggingInterceptor.Level.BASIC;
+        } else {
+            level = HttpLoggingInterceptor.Level.NONE;
+        }
+        return level;
     }
 }
