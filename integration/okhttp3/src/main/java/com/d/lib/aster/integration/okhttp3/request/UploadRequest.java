@@ -13,9 +13,7 @@ import com.d.lib.aster.integration.okhttp3.OkHttpClient;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
 import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
-import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.integration.okhttp3.observer.UploadObserver;
-import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.request.IUploadRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
@@ -28,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -62,18 +58,21 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
         return OkHttpClient.create(IClient.TYPE_UPLOAD, mConfig.log(false));
     }
 
+    @Override
     protected void prepare() {
         if (mParams != null && mParams.size() > 0) {
+            List<MultipartBody.Part> formParts = new ArrayList<>();
             Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
             Map.Entry<String, String> entry;
             while (entryIterator.hasNext()) {
                 entry = entryIterator.next();
                 if (entry != null) {
-                    mMultipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
+                    formParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
                 }
             }
+            mMultipartBodyParts.addAll(0, formParts);
         }
-        OkHttpApi.Callable callable = getClient().create().upload(mUrl, mMultipartBodyParts);
+        final OkHttpApi.Callable callable = getClient().create().upload(mUrl, mMultipartBodyParts);
         mCall = callable.call;
         mObservable = callable.observable;
     }
@@ -88,61 +87,6 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
         prepare();
         requestImpl(mObservable, getClient().getHttpConfig(),
                 mTag, mMultipartBodyParts, mCall, (SimpleCallback<ResponseBody>) callback);
-    }
-
-    @Override
-    public UploadRequest baseUrl(String baseUrl) {
-        return super.baseUrl(baseUrl);
-    }
-
-    @Override
-    public UploadRequest headers(Map<String, String> headers) {
-        return super.headers(headers);
-    }
-
-    @Override
-    public UploadRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
-        return super.headers(onHeadInterceptor);
-    }
-
-    @Override
-    public UploadRequest connectTimeout(long timeout) {
-        return super.connectTimeout(timeout);
-    }
-
-    @Override
-    public UploadRequest readTimeout(long timeout) {
-        return super.readTimeout(timeout);
-    }
-
-    @Override
-    public UploadRequest writeTimeout(long timeout) {
-        return super.writeTimeout(timeout);
-    }
-
-    @Override
-    public UploadRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
-        return super.sslSocketFactory(sslSocketFactory);
-    }
-
-    @Override
-    public UploadRequest addInterceptor(IInterceptor interceptor) {
-        return super.addInterceptor(interceptor);
-    }
-
-    @Override
-    public UploadRequest addNetworkInterceptors(IInterceptor interceptor) {
-        return super.addNetworkInterceptors(interceptor);
-    }
-
-    @Override
-    public UploadRequest retryCount(int retryCount) {
-        return super.retryCount(retryCount);
-    }
-
-    @Override
-    public UploadRequest retryDelayMillis(long retryDelayMillis) {
-        return super.retryDelayMillis(retryDelayMillis);
     }
 
     private static void requestImpl(final Observable<ResponseBody> observable,
@@ -297,6 +241,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
         };
     }
 
+
     /**
      * Singleton
      */
@@ -317,16 +262,18 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
         @Override
         protected void prepare() {
             if (mParams != null && mParams.size() > 0) {
+                List<MultipartBody.Part> formParts = new ArrayList<>();
                 Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
                 Map.Entry<String, String> entry;
                 while (entryIterator.hasNext()) {
                     entry = entryIterator.next();
                     if (entry != null) {
-                        mMultipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
+                        formParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
                     }
                 }
+                mMultipartBodyParts.addAll(0, formParts);
             }
-            OkHttpApi.Callable callable = getClient().create().upload(mUrl, mMultipartBodyParts);
+            final OkHttpApi.Callable callable = getClient().create().upload(mUrl, mMultipartBodyParts);
             mCall = callable.call;
             mObservable = callable.observable;
         }

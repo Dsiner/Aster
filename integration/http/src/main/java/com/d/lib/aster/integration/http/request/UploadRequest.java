@@ -19,8 +19,6 @@ import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.integration.http.func.ApiRetryFunc;
 import com.d.lib.aster.integration.http.observer.UploadObserver;
-import com.d.lib.aster.interceptor.IHeadersInterceptor;
-import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.request.IUploadRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
@@ -35,8 +33,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Created by D on 2017/10/24.
@@ -59,16 +55,19 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
         return HttpClient.create(IClient.TYPE_UPLOAD, mConfig.log(false));
     }
 
+    @Override
     protected void prepare() {
         if (mParams != null && mParams.size() > 0) {
+            List<MultipartBody.Part> formParts = new ArrayList<>();
             Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
             Map.Entry<String, String> entry;
             while (entryIterator.hasNext()) {
                 entry = entryIterator.next();
                 if (entry != null) {
-                    mMultipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
+                    formParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
                 }
             }
+            mMultipartBodyParts.addAll(0, formParts);
         }
         final HttpURLApi.Callable callable = getClient().create().upload(mUrl, mMultipartBodyParts);
         mConn = callable.conn;
@@ -85,61 +84,6 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
         prepare();
         requestImpl(mObservable, getClient().getHttpConfig(),
                 mTag, mConn, (SimpleCallback<ResponseBody>) callback);
-    }
-
-    @Override
-    public UploadRequest baseUrl(String baseUrl) {
-        return super.baseUrl(baseUrl);
-    }
-
-    @Override
-    public UploadRequest headers(Map<String, String> headers) {
-        return super.headers(headers);
-    }
-
-    @Override
-    public UploadRequest headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
-        return super.headers(onHeadInterceptor);
-    }
-
-    @Override
-    public UploadRequest connectTimeout(long timeout) {
-        return super.connectTimeout(timeout);
-    }
-
-    @Override
-    public UploadRequest readTimeout(long timeout) {
-        return super.readTimeout(timeout);
-    }
-
-    @Override
-    public UploadRequest writeTimeout(long timeout) {
-        return super.writeTimeout(timeout);
-    }
-
-    @Override
-    public UploadRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
-        return super.sslSocketFactory(sslSocketFactory);
-    }
-
-    @Override
-    public UploadRequest addInterceptor(IInterceptor interceptor) {
-        return super.addInterceptor(interceptor);
-    }
-
-    @Override
-    public UploadRequest addNetworkInterceptors(IInterceptor interceptor) {
-        return super.addNetworkInterceptors(interceptor);
-    }
-
-    @Override
-    public UploadRequest retryCount(int retryCount) {
-        return super.retryCount(retryCount);
-    }
-
-    @Override
-    public UploadRequest retryDelayMillis(long retryDelayMillis) {
-        return super.retryDelayMillis(retryDelayMillis);
     }
 
     private static void requestImpl(final Observable<ResponseBody> observable,
@@ -284,11 +228,12 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
         };
     }
 
+
     /**
      * Singleton
      */
     public static class Singleton extends IUploadRequest.Singleton<Singleton, HttpClient> {
-        protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
+        protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
         protected HttpURLConnection mConn;
         protected Observable<ResponseBody> mObservable;
 
@@ -304,16 +249,18 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
         @Override
         protected void prepare() {
             if (mParams != null && mParams.size() > 0) {
+                List<MultipartBody.Part> formParts = new ArrayList<>();
                 Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
                 Map.Entry<String, String> entry;
                 while (entryIterator.hasNext()) {
                     entry = entryIterator.next();
                     if (entry != null) {
-                        multipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
+                        formParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
                     }
                 }
+                mMultipartBodyParts.addAll(0, formParts);
             }
-            final HttpURLApi.Callable callable = getClient().create().upload(mUrl, multipartBodyParts);
+            final HttpURLApi.Callable callable = getClient().create().upload(mUrl, mMultipartBodyParts);
             mConn = callable.conn;
             mObservable = callable.observable;
         }
@@ -352,10 +299,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }
@@ -374,10 +321,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }
@@ -396,10 +343,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }
@@ -418,10 +365,10 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
             if (callback != null) {
                 UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             } else {
                 MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-                this.multipartBodyParts.add(part);
+                this.mMultipartBodyParts.add(part);
             }
             return this;
         }

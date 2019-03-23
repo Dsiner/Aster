@@ -1,23 +1,29 @@
 package com.d.lib.aster.utils;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.support.annotation.NonNull;
-
 import java.io.Closeable;
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Util
  * Created by D on 2017/10/25.
  */
 public class Util {
-    public static final Charset UTF_8 = Charset.forName("UTF-8");
+    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
-    private static Handler mainHandler = new Handler(Looper.getMainLooper());
+    public static final Charset UTF_8 = Charset.forName("UTF-8");
+    public static final Charset UTF_16_BE = Charset.forName("UTF-16BE");
+    public static final Charset UTF_16_LE = Charset.forName("UTF-16LE");
+    public static final Charset UTF_32_BE = Charset.forName("UTF-32BE");
+    public static final Charset UTF_32_LE = Charset.forName("UTF-32LE");
+
+    private Util() {
+    }
 
     /**
      * Print the thread information of the current code
@@ -60,6 +66,13 @@ public class Util {
     }
 
     /**
+     * Returns an immutable copy of {@code list}.
+     */
+    public static <T> List<T> immutableList(List<T> list) {
+        return Collections.unmodifiableList(new ArrayList<>(list));
+    }
+
+    /**
      * Closes {@code closeable}, ignoring any checked exceptions. Does nothing if {@code closeable} is
      * null.
      */
@@ -72,9 +85,5 @@ public class Util {
             } catch (Exception ignored) {
             }
         }
-    }
-
-    public static void executeMain(@NonNull Runnable r) {
-        mainHandler.post(r);
     }
 }

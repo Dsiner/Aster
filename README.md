@@ -66,7 +66,7 @@ or Gradle(HttpURLConnection lite):
 
 ### How do I use Aster?
 
-See the [wiki](https://github.com/Dsiner/Aster/wiki).
+See the [Wiki](https://github.com/Dsiner/Aster/wiki) [Wiki](https://github.com/Dsiner/Aster/wiki) [Wiki](https://github.com/Dsiner/Aster/wiki).
 
 Simple use cases will look something like this:
 ```java

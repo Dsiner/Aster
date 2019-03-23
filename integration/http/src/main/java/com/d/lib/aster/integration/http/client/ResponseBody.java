@@ -91,6 +91,8 @@ public class ResponseBody implements Closeable {
     @Override
     public void close() throws IOException {
         Util.closeQuietly(source);
-        conn.disconnect();
+        if (conn != null) {
+            conn.disconnect();
+        }
     }
 }

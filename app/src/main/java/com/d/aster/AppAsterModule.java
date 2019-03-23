@@ -30,14 +30,14 @@ public class AppAsterModule extends RetrofitModule {
                     @Override
                     public void intercept(Map<String, String> heads) {
                         // Add a dynamic request header such as token
-                        heads.put("token", "008");
+                        heads.put(API.ACCESS_TOKEN, "008");
                     }
                 })
                 .connectTimeout(10 * 1000)
                 .readTimeout(10 * 1000)
                 .writeTimeout(10 * 1000)
-                .retryCount(3)
-                .retryDelayMillis(2 * 1000)
+                .retryCount(0)
+                .retryDelayMillis(3 * 1000)
                 .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                 .log("AsterLog Back = ", Config.Level.BODY)
                 .debug(true)

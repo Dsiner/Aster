@@ -2,20 +2,22 @@ package com.d.lib.aster.integration.volley.client;
 
 import android.accounts.NetworkErrorException;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.RequestFuture;
+import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.base.Params;
-import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.integration.volley.body.FormBody;
 import com.d.lib.aster.integration.volley.body.MultipartBody;
 import com.d.lib.aster.integration.volley.body.RequestBody;
 import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.Task;
+import com.d.lib.aster.utils.Util;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +45,7 @@ public class VolleyApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().get(url);
+                    RequestFuture<RealResponse> requestFuture = getImpl().getImpl(url);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
@@ -63,14 +65,14 @@ public class VolleyApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().post(url);
+                    RequestFuture<RealResponse> requestFuture = getImpl().postImpl(url);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
                     RealResponse response = requestFuture.get();
                     checkSuccessful(response);
                     return response.body();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
                 }
@@ -83,34 +85,14 @@ public class VolleyApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().post(url, params);
+                    RequestFuture<RealResponse> requestFuture = getImpl().postImpl(url, params);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
                     RealResponse response = requestFuture.get();
                     checkSuccessful(response);
                     return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
-    }
-
-    public Observable<ResponseBody> postForm(final String url, final Map<String, Object> forms) {
-        return Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().postBody(url, null);
-                    if (requestFuture.isCancelled()) {
-                        throw new NetworkErrorException("Request cancelled.");
-                    }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
                 }
@@ -123,7 +105,7 @@ public class VolleyApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().postBody(url, requestBody);
+                    RequestFuture<RealResponse> requestFuture = getImpl().postBodyImpl(url, requestBody);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
@@ -136,6 +118,10 @@ public class VolleyApi {
                 }
             }
         });
+    }
+
+    public Observable<ResponseBody> put(final String url) {
+        return put(url, null);
     }
 
     public Observable<ResponseBody> put(final String url, final Params params) {
@@ -143,7 +129,7 @@ public class VolleyApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().put(url, params);
+                    RequestFuture<RealResponse> requestFuture = getImpl().putImpl(url, params);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
@@ -158,24 +144,48 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> head(final String url, final Params params) {
+    public Observable<ResponseBody> putBody(final String url, final RequestBody requestBody) {
         return Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().head(url, params);
+                    RequestFuture<RealResponse> requestFuture = getImpl().putBodyImpl(url, requestBody);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
                     RealResponse response = requestFuture.get();
                     checkSuccessful(response);
                     return response.body();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
                 }
             }
         });
+    }
+
+    public Observable<ResponseBody> head(final String url) {
+        return Observable.create(new Task<ResponseBody>() {
+            @Override
+            public ResponseBody run() throws Exception {
+                try {
+                    RequestFuture<RealResponse> requestFuture = getImpl().headImpl(url);
+                    if (requestFuture.isCancelled()) {
+                        throw new NetworkErrorException("Request cancelled.");
+                    }
+                    RealResponse response = requestFuture.get();
+                    checkSuccessful(response);
+                    return response.body();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        });
+    }
+
+    public Observable<ResponseBody> delete(final String url) {
+        return delete(url, null);
     }
 
     public Observable<ResponseBody> delete(final String url, final Params params) {
@@ -183,19 +193,43 @@ public class VolleyApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().delete(url, params);
+                    RequestFuture<RealResponse> requestFuture = getImpl().deleteImpl(url, params);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
                     RealResponse response = requestFuture.get();
                     checkSuccessful(response);
                     return response.body();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
                 }
             }
         });
+    }
+
+    public Observable<ResponseBody> deleteBody(final String url, final RequestBody requestBody) {
+        return Observable.create(new Task<ResponseBody>() {
+            @Override
+            public ResponseBody run() throws Exception {
+                try {
+                    RequestFuture<RealResponse> requestFuture = getImpl().deleteBodyImpl(url, requestBody);
+                    if (requestFuture.isCancelled()) {
+                        throw new NetworkErrorException("Request cancelled.");
+                    }
+                    RealResponse response = requestFuture.get();
+                    checkSuccessful(response);
+                    return response.body();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        });
+    }
+
+    public Observable<ResponseBody> options(final String url) {
+        return options(url, null);
     }
 
     public Observable<ResponseBody> options(final String url, final Params params) {
@@ -203,14 +237,14 @@ public class VolleyApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().options(url, params);
+                    RequestFuture<RealResponse> requestFuture = getImpl().optionsImpl(url, params);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
                     RealResponse response = requestFuture.get();
                     checkSuccessful(response);
                     return response.body();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
                 }
@@ -218,12 +252,56 @@ public class VolleyApi {
         });
     }
 
+    public Observable<ResponseBody> optionsBody(final String url, final RequestBody requestBody) {
+        return Observable.create(new Task<ResponseBody>() {
+            @Override
+            public ResponseBody run() throws Exception {
+                try {
+                    RequestFuture<RealResponse> requestFuture = getImpl().optionsBodyImpl(url, requestBody);
+                    if (requestFuture.isCancelled()) {
+                        throw new NetworkErrorException("Request cancelled.");
+                    }
+                    RealResponse response = requestFuture.get();
+                    checkSuccessful(response);
+                    return response.body();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        });
+    }
+
+    public Observable<ResponseBody> patch(final String url) {
+        return patch(url, null);
+    }
+
     public Observable<ResponseBody> patch(final String url, final Params params) {
         return Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().patch(url, params);
+                    RequestFuture<RealResponse> requestFuture = getImpl().patchImpl(url, params);
+                    if (requestFuture.isCancelled()) {
+                        throw new NetworkErrorException("Request cancelled.");
+                    }
+                    RealResponse response = requestFuture.get();
+                    checkSuccessful(response);
+                    return response.body();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        });
+    }
+
+    public Observable<ResponseBody> patchBody(final String url, final RequestBody requestBody) {
+        return Observable.create(new Task<ResponseBody>() {
+            @Override
+            public ResponseBody run() throws Exception {
+                try {
+                    RequestFuture<RealResponse> requestFuture = getImpl().patchBodyImpl(url, requestBody);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
@@ -243,7 +321,7 @@ public class VolleyApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().download(url);
+                    RequestFuture<RealResponse> requestFuture = getImpl().downloadImpl(url);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
@@ -267,7 +345,7 @@ public class VolleyApi {
             @Override
             public ResponseBody run() throws Exception {
                 try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().upload(url, multipartBodyParts);
+                    RequestFuture<RealResponse> requestFuture = getImpl().uploadImpl(url, multipartBodyParts);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
@@ -297,175 +375,186 @@ public class VolleyApi {
     static class Impl {
         private VolleyClient mClient;
 
-        public Impl(VolleyClient client) {
+        private Impl(VolleyClient client) {
             this.mClient = client;
         }
 
-        public RequestFuture<RealResponse> get(String url, Params params) {
-            return get(url + "?" + params.getRequestParamsString());
+        private RequestFuture<RealResponse> getImpl(final String url)
+                throws IOException {
+            return getImpl(url, null);
         }
 
-        public RequestFuture<RealResponse> get(String url) {
-            return getImpl(url);
-        }
-
-        private RequestFuture<RealResponse> getImpl(String url) {
+        private RequestFuture<RealResponse> getImpl(final String url, final Params params)
+                throws IOException {
+            final String realUrl = params != null ? url + "?" + params.getRequestParamsString() : url;
             final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
-            ResponseRequest request = new ResponseRequest(Request.Method.GET, url,
+            ResponseRequest request = new ResponseRequest(Request.Method.GET, realUrl,
                     requestFuture, requestFuture);
+            intercept(request);
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;
         }
 
-
-        public RequestFuture<RealResponse> post(String url) throws IOException {
+        private RequestFuture<RealResponse> postImpl(final String url)
+                throws IOException {
             return postImpl(url, null);
         }
 
-        public void post(String url, final SimpleCallback<Response> callback) {
-            enqueue(postImpl(url, null), callback);
-        }
-
-        public RequestFuture<RealResponse> post(String url, Params params) throws IOException {
-            return postImpl(url, params);
-        }
-
-        public void post(String url, Params params, final SimpleCallback<Response> callback) {
-            enqueue(postImpl(url, params), callback);
-        }
-
-        private RequestFuture<RealResponse> postImpl(String url, Params params) {
-            final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
-            ResponseRequest request = new ResponseRequest(Request.Method.POST, url,
-                    requestFuture, requestFuture);
-            requestFuture.setRequest(request);
-            mClient.getRequestQueue().add(request);
-            return requestFuture;
-        }
-
-        public RequestFuture<RealResponse> postBody(String url, RequestBody requestBody) throws IOException {
+        private RequestFuture<RealResponse> postImpl(final String url, final Params params)
+                throws IOException {
+            final RequestBody requestBody = getRequestBody(params);
             return postBodyImpl(url, requestBody);
         }
 
-        public void postBody(String url, RequestBody requestBody,
-                             final SimpleCallback<Response> callback) {
-            enqueue(postBodyImpl(url, requestBody), callback);
-        }
-
-        private RequestFuture<RealResponse> postBodyImpl(String url, RequestBody requestBody) {
+        private RequestFuture<RealResponse> postBodyImpl(final String url, final RequestBody requestBody)
+                throws IOException {
             final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
             ResponseRequest request = new ResponseRequest(Request.Method.POST, url,
                     requestFuture, requestFuture);
+            request.setRequestBody(requestBody);
+            intercept(request);
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;
         }
 
-        public RequestFuture<RealResponse> put(String url, Params params) {
-            return putImpl(url, params);
+        private RequestFuture<RealResponse> putImpl(final String url, final Params params)
+                throws IOException {
+            final RequestBody requestBody = getRequestBody(params);
+            return putBodyImpl(url, requestBody);
         }
 
-        private RequestFuture<RealResponse> putImpl(String url, Params params) {
+        private RequestFuture<RealResponse> putBodyImpl(final String url, final RequestBody requestBody)
+                throws IOException {
             final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
             ResponseRequest request = new ResponseRequest(Request.Method.PUT, url,
                     requestFuture, requestFuture);
+            request.setRequestBody(requestBody);
+            intercept(request);
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;
         }
 
-        public RequestFuture<RealResponse> head(String url, Params params) throws IOException {
-            return headImpl(url, params);
-        }
-
-        private RequestFuture<RealResponse> headImpl(String url, Params params) {
+        private RequestFuture<RealResponse> headImpl(final String url)
+                throws IOException {
             final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
             ResponseRequest request = new ResponseRequest(Request.Method.HEAD, url,
                     requestFuture, requestFuture);
+            intercept(request);
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;
         }
 
-        public RequestFuture<RealResponse> delete(String url, Params params) throws IOException {
-            return deleteImpl(url, params);
+        private RequestFuture<RealResponse> deleteImpl(final String url, final Params params)
+                throws IOException {
+            final RequestBody requestBody = getRequestBody(params);
+            return deleteBodyImpl(url, requestBody);
         }
 
-        private RequestFuture<RealResponse> deleteImpl(String url, Params params) {
+        private RequestFuture<RealResponse> deleteBodyImpl(final String url, final RequestBody requestBody)
+                throws IOException {
             final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
             ResponseRequest request = new ResponseRequest(Request.Method.DELETE, url,
                     requestFuture, requestFuture);
+            request.setRequestBody(requestBody);
+            intercept(request);
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;
         }
 
-        public RequestFuture<RealResponse> options(String url, Params params) throws IOException {
-            return optionsImpl(url, params);
+        private RequestFuture<RealResponse> optionsImpl(final String url, final Params params)
+                throws IOException {
+            final RequestBody requestBody = getRequestBody(params);
+            return optionsBodyImpl(url, requestBody);
         }
 
-        private RequestFuture<RealResponse> optionsImpl(String url, Params params) {
+        private RequestFuture<RealResponse> optionsBodyImpl(final String url, final RequestBody requestBody)
+                throws IOException {
             final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
             ResponseRequest request = new ResponseRequest(Request.Method.OPTIONS, url,
                     requestFuture, requestFuture);
+            request.setRequestBody(requestBody);
+            intercept(request);
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;
         }
 
-        public RequestFuture<RealResponse> patch(String url, Params params) {
-            return patchImpl(url, params);
+        private RequestFuture<RealResponse> patchImpl(final String url, final Params params)
+                throws IOException {
+            final RequestBody requestBody = getRequestBody(params);
+            return patchBodyImpl(url, requestBody);
         }
 
-        private RequestFuture<RealResponse> patchImpl(String url, Params params) {
+        private RequestFuture<RealResponse> patchBodyImpl(final String url, final RequestBody requestBody)
+                throws IOException {
             final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
             ResponseRequest request = new ResponseRequest(Request.Method.PATCH, url,
                     requestFuture, requestFuture);
+            request.setRequestBody(requestBody);
+            intercept(request);
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;
         }
 
-        public RequestFuture<RealResponse> download(String url) {
-            return downloadImpl(url);
-        }
-
-        private RequestFuture<RealResponse> downloadImpl(String url) {
+        private RequestFuture<RealResponse> downloadImpl(final String url)
+                throws IOException {
             final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
             ResponseRequest request = new ResponseRequest(Request.Method.GET, url,
                     requestFuture, requestFuture);
+            intercept(request);
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;
         }
 
-        public RequestFuture<RealResponse> upload(String url, List<MultipartBody.Part> multipartBodyParts) {
-            return uploadImpl(url, multipartBodyParts);
-        }
-
-        private RequestFuture<RealResponse> uploadImpl(String url, List<MultipartBody.Part> multipartBodyParts) {
+        private RequestFuture<RealResponse> uploadImpl(final String url,
+                                                       final List<MultipartBody.Part> multipartBodyParts)
+                throws IOException {
             final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
             ResponseRequest request = new ResponseRequest(Request.Method.POST, url,
                     requestFuture, requestFuture);
+            intercept(request);
+            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            for (MultipartBody.Part part : multipartBodyParts) {
+                builder.addPart(part);
+            }
+            RequestBody requestBody = builder.build();
+            MediaType contentType = requestBody.contentType();
+            if (contentType != null
+                    && !TextUtils.isEmpty(contentType.toString())) {
+                request.addHeader("Content-Type", contentType.toString());
+            }
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;
         }
 
-        private void intercept(HttpURLConnection conn) throws IOException {
+        @NonNull
+        private RequestBody getRequestBody(@Nullable Params params) {
+            if (params == null) {
+                return RequestBody.create(null, Util.EMPTY_BYTE_ARRAY);
+            }
+            FormBody.Builder builder = new FormBody.Builder();
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                builder.add(entry.getKey(), entry.getValue());
+            }
+            return builder.build();
+        }
+
+        private void intercept(ResponseRequest request) throws IOException {
             List<IInterceptor> interceptors = mClient.interceptors;
             if (interceptors == null) {
                 return;
             }
             for (IInterceptor interceptor : interceptors) {
-                interceptor.intercept(conn);
+                interceptor.intercept(request);
             }
-        }
-
-        private void enqueue(final RequestFuture<RealResponse> response,
-                             final @NonNull SimpleCallback<Response> callback) {
-
         }
     }
 }

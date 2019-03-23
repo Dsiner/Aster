@@ -15,17 +15,11 @@ import com.d.lib.aster.integration.volley.func.ApiRetryFunc;
 import com.d.lib.aster.integration.volley.func.MapFunc;
 import com.d.lib.aster.integration.volley.observer.ApiObserver;
 import com.d.lib.aster.integration.volley.observer.AsyncApiObserver;
-import com.d.lib.aster.interceptor.IHeadersInterceptor;
-import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.request.IHttpRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.Util;
-
-import java.util.Map;
-
-import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Created by D on 2017/10/24.
@@ -105,72 +99,6 @@ public abstract class HttpRequest<HR extends HttpRequest>
         prepare();
         return mObservable.subscribeOn(Schedulers.io())
                 .map(new ApiFunc<T>(clazz));
-    }
-
-    @Override
-    public HR baseUrl(String baseUrl) {
-        mConfig.baseUrl(baseUrl);
-        return (HR) this;
-    }
-
-    @Override
-    public HR headers(Map<String, String> headers) {
-        mConfig.headers(headers);
-        return (HR) this;
-    }
-
-    @Override
-    public HR headers(IHeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
-        mConfig.headers(onHeadInterceptor);
-        return (HR) this;
-    }
-
-    @Override
-    public HR connectTimeout(long timeout) {
-        mConfig.connectTimeout(timeout);
-        return (HR) this;
-    }
-
-    @Override
-    public HR readTimeout(long timeout) {
-        mConfig.readTimeout(timeout);
-        return (HR) this;
-    }
-
-    @Override
-    public HR writeTimeout(long timeout) {
-        mConfig.writeTimeout(timeout);
-        return (HR) this;
-    }
-
-    @Override
-    public HR sslSocketFactory(SSLSocketFactory sslSocketFactory) {
-        mConfig.sslSocketFactory(sslSocketFactory);
-        return (HR) this;
-    }
-
-    @Override
-    public HR addInterceptor(IInterceptor interceptor) {
-        mConfig.addInterceptor(interceptor);
-        return (HR) this;
-    }
-
-    @Override
-    public HR addNetworkInterceptors(IInterceptor interceptor) {
-        mConfig.addNetworkInterceptors(interceptor);
-        return (HR) this;
-    }
-
-    @Override
-    public HR retryCount(int retryCount) {
-        mConfig.retryCount(retryCount);
-        return (HR) this;
-    }
-
-    @Override
-    public HR retryDelayMillis(long retryDelayMillis) {
-        mConfig.retryDelayMillis(retryDelayMillis);
-        return (HR) this;
     }
 
     /**

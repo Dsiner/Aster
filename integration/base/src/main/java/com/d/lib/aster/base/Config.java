@@ -28,7 +28,7 @@ public class Config extends IConfig<Config> {
         public static Level LOG_LEVEL = Level.BODY;
 
         /****************** Default ******************/
-        public static final String BASE_URL = "https://www.google.com/";
+        public static final String BASE_URL = "";
         public static final long CONNECT_TIMEOUT = 10 * 1000;
         public static final long READ_TIMEOUT = 10 * 1000;
         public static final long WRITE_TIMEOUT = 10 * 1000;

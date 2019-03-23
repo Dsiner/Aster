@@ -30,7 +30,6 @@ public abstract class IConfig<R> {
 
     protected abstract R addNetworkInterceptors(IInterceptor interceptor);
 
-    /************************** Retry **************************/
     protected abstract R retryCount(int retryCount);
 
     protected abstract R retryDelayMillis(long retryDelayMillis);

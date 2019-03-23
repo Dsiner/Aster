@@ -3,9 +3,9 @@ package com.d.lib.aster.base;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.d.lib.aster.request.IBodyRequest;
 import com.d.lib.aster.request.IDownloadRequest;
 import com.d.lib.aster.request.IHttpRequest;
-import com.d.lib.aster.request.IPostRequest;
 import com.d.lib.aster.request.IUploadRequest;
 
 /**
@@ -50,19 +50,27 @@ public abstract class AsterModule {
 
     public abstract IHttpRequest get(String url, Params params);
 
-    public abstract IPostRequest post(String url);
+    public abstract IBodyRequest post(String url);
 
-    public abstract IPostRequest post(String url, Params params);
+    public abstract IBodyRequest post(String url, Params params);
 
-    public abstract IHttpRequest head(String url, Params params);
+    public abstract IBodyRequest put(String url);
 
-    public abstract IHttpRequest options(String url, Params params);
+    public abstract IBodyRequest put(String url, Params params);
 
-    public abstract IHttpRequest put(String url, Params params);
+    public abstract IHttpRequest head(String url);
 
-    public abstract IHttpRequest patch(String url, Params params);
+    public abstract IBodyRequest delete(String url);
 
-    public abstract IHttpRequest delete(String url, Params params);
+    public abstract IBodyRequest delete(String url, Params params);
+
+    public abstract IBodyRequest options(String url);
+
+    public abstract IBodyRequest options(String url, Params params);
+
+    public abstract IBodyRequest patch(String url);
+
+    public abstract IBodyRequest patch(String url, Params params);
 
     public abstract IDownloadRequest download(String url);
 
@@ -79,19 +87,27 @@ public abstract class AsterModule {
 
         public abstract IHttpRequest.Singleton get(String url, Params params);
 
-        public abstract IPostRequest.Singleton post(String url);
+        public abstract IBodyRequest.Singleton post(String url);
 
-        public abstract IPostRequest.Singleton post(String url, Params params);
+        public abstract IBodyRequest.Singleton post(String url, Params params);
 
-        public abstract IHttpRequest.Singleton head(String url, Params params);
+        public abstract IBodyRequest.Singleton put(String url);
 
-        public abstract IHttpRequest.Singleton options(String url, Params params);
+        public abstract IBodyRequest.Singleton put(String url, Params params);
 
-        public abstract IHttpRequest.Singleton put(String url, Params params);
+        public abstract IHttpRequest.Singleton head(String url);
 
-        public abstract IHttpRequest.Singleton patch(String url, Params params);
+        public abstract IBodyRequest.Singleton delete(String url);
 
-        public abstract IHttpRequest.Singleton delete(String url, Params params);
+        public abstract IBodyRequest.Singleton delete(String url, Params params);
+
+        public abstract IBodyRequest.Singleton options(String url);
+
+        public abstract IBodyRequest.Singleton options(String url, Params params);
+
+        public abstract IBodyRequest.Singleton patch(String url);
+
+        public abstract IBodyRequest.Singleton patch(String url, Params params);
 
         public abstract IDownloadRequest.Singleton download(String url);
 

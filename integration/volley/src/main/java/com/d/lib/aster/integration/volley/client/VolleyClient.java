@@ -124,6 +124,15 @@ public class VolleyClient {
         return new Builder(this);
     }
 
+    private static int checkDuration(String name, long duration, TimeUnit unit) {
+        if (duration < 0) throw new IllegalArgumentException(name + " < 0");
+        if (unit == null) throw new NullPointerException("unit == null");
+        long millis = unit.toMillis(duration);
+        if (millis > Integer.MAX_VALUE) throw new IllegalArgumentException(name + " too large.");
+        if (millis == 0 && duration > 0) throw new IllegalArgumentException(name + " too small.");
+        return (int) millis;
+    }
+
     public static final class Builder {
         @Nullable
         Proxy proxy;
@@ -176,27 +185,33 @@ public class VolleyClient {
             return this;
         }
 
-        public Builder connectTimeout(long connectTimeout, TimeUnit milliseconds) {
+        public Builder connectTimeout(long timeout, TimeUnit unit) {
+            this.connectTimeout = checkDuration("timeout", timeout, unit);
             return this;
         }
 
-        public Builder readTimeout(long readTimeout, TimeUnit milliseconds) {
+        public Builder readTimeout(long timeout, TimeUnit unit) {
+            this.readTimeout = checkDuration("timeout", timeout, unit);
             return this;
         }
 
-        public Builder writeTimeout(long writeTimeout, TimeUnit milliseconds) {
+        public Builder writeTimeout(long timeout, TimeUnit unit) {
+            this.writeTimeout = checkDuration("timeout", timeout, unit);
             return this;
         }
 
         public Builder sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+            this.sslSocketFactory = sslSocketFactory;
             return this;
         }
 
         public Builder addInterceptor(IInterceptor interceptor) {
+            this.interceptors.add(interceptor);
             return this;
         }
 
         public Builder addNetworkInterceptor(IInterceptor networkInterceptor) {
+            this.networkInterceptors.add(networkInterceptor);
             return this;
         }
 

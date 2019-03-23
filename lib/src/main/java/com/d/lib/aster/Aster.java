@@ -8,9 +8,9 @@ import com.d.lib.aster.base.AsterModule.Singleton;
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IRequestManager;
 import com.d.lib.aster.base.Params;
+import com.d.lib.aster.request.IBodyRequest;
 import com.d.lib.aster.request.IDownloadRequest;
 import com.d.lib.aster.request.IHttpRequest;
-import com.d.lib.aster.request.IPostRequest;
 import com.d.lib.aster.request.IUploadRequest;
 
 /**
@@ -100,32 +100,48 @@ public class Aster {
         return getAster().get(url, params);
     }
 
-    public static IPostRequest post(String url) {
+    public static IBodyRequest post(String url) {
         return getAster().post(url);
     }
 
-    public static IPostRequest post(String url, Params params) {
+    public static IBodyRequest post(String url, Params params) {
         return getAster().post(url, params);
     }
 
-    public static IHttpRequest head(String url, Params params) {
-        return getAster().head(url, params);
+    public static IBodyRequest put(String url) {
+        return getAster().put(url);
     }
 
-    public static IHttpRequest options(String url, Params params) {
-        return getAster().options(url, params);
-    }
-
-    public static IHttpRequest put(String url, Params params) {
+    public static IBodyRequest put(String url, Params params) {
         return getAster().put(url, params);
     }
 
-    public static IHttpRequest patch(String url, Params params) {
-        return getAster().patch(url, params);
+    public static IHttpRequest head(String url) {
+        return getAster().head(url);
     }
 
-    public static IHttpRequest delete(String url, Params params) {
+    public static IBodyRequest delete(String url) {
+        return getAster().delete(url);
+    }
+
+    public static IBodyRequest delete(String url, Params params) {
         return getAster().delete(url, params);
+    }
+
+    public static IBodyRequest options(String url) {
+        return getAster().options(url);
+    }
+
+    public static IBodyRequest options(String url, Params params) {
+        return getAster().options(url, params);
+    }
+
+    public static IBodyRequest patch(String url) {
+        return getAster().patch(url);
+    }
+
+    public static IBodyRequest patch(String url, Params params) {
+        return getAster().patch(url, params);
     }
 
     public static IDownloadRequest download(String url) {

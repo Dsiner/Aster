@@ -47,7 +47,7 @@ public class Client {
                             .readTimeout(10 * 1000)
                             .writeTimeout(10 * 1000)
                             .retryCount(3)
-                            .retryDelayMillis(2 * 1000)
+                            .retryDelayMillis(3 * 1000)
                             .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                             .log(true));
             private OkHttpClient clientTransfer = OkHttpClient.create(IClient.TYPE_NORMAL,
@@ -55,8 +55,8 @@ public class Client {
                             .connectTimeout(10 * 1000)
                             .readTimeout(10 * 1000)
                             .writeTimeout(10 * 1000)
-                            .retryCount(3)
-                            .retryDelayMillis(2 * 1000)
+                            .retryCount(0)
+                            .retryDelayMillis(3 * 1000)
                             .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                             .log(false));
 
@@ -109,18 +109,8 @@ public class Client {
             }
 
             @Override
-            public HeadRequest.Singleton head(String url, Params params) {
-                return new HeadRequest.Singleton(url, params) {
-                    @Override
-                    protected OkHttpClient getClient() {
-                        return getClientDefault();
-                    }
-                };
-            }
-
-            @Override
-            public OptionRequest.Singleton options(String url, Params params) {
-                return new OptionRequest.Singleton(url, params) {
+            public PutRequest.Singleton put(String url) {
+                return new PutRequest.Singleton(url) {
                     @Override
                     protected OkHttpClient getClient() {
                         return getClientDefault();
@@ -139,8 +129,18 @@ public class Client {
             }
 
             @Override
-            public PatchRequest.Singleton patch(String url, Params params) {
-                return new PatchRequest.Singleton(url, params) {
+            public HeadRequest.Singleton head(String url) {
+                return new HeadRequest.Singleton(url) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
+            @Override
+            public DeleteRequest.Singleton delete(String url) {
+                return new DeleteRequest.Singleton(url) {
                     @Override
                     protected OkHttpClient getClient() {
                         return getClientDefault();
@@ -151,6 +151,46 @@ public class Client {
             @Override
             public DeleteRequest.Singleton delete(String url, Params params) {
                 return new DeleteRequest.Singleton(url, params) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
+            @Override
+            public OptionRequest.Singleton options(String url) {
+                return new OptionRequest.Singleton(url) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
+            @Override
+            public OptionRequest.Singleton options(String url, Params params) {
+                return new OptionRequest.Singleton(url, params) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
+            @Override
+            public PatchRequest.Singleton patch(String url) {
+                return new PatchRequest.Singleton(url) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
+            @Override
+            public PatchRequest.Singleton patch(String url, Params params) {
+                return new PatchRequest.Singleton(url, params) {
                     @Override
                     protected OkHttpClient getClient() {
                         return getClientDefault();
@@ -198,7 +238,7 @@ public class Client {
                             .readTimeout(10 * 1000)
                             .writeTimeout(10 * 1000)
                             .retryCount(3)
-                            .retryDelayMillis(2 * 1000)
+                            .retryDelayMillis(3 * 1000)
                             .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                             .log(true));
             private OkHttpClient clientTransfer = OkHttpClient.create(IClient.TYPE_NORMAL,
@@ -206,8 +246,8 @@ public class Client {
                             .connectTimeout(10 * 1000)
                             .readTimeout(10 * 1000)
                             .writeTimeout(10 * 1000)
-                            .retryCount(3)
-                            .retryDelayMillis(2 * 1000)
+                            .retryCount(0)
+                            .retryDelayMillis(3 * 1000)
                             .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
                             .log(false));
 
@@ -260,18 +300,8 @@ public class Client {
             }
 
             @Override
-            public HeadRequest.Singleton head(String url, Params params) {
-                return new HeadRequest.Singleton(url, params) {
-                    @Override
-                    protected OkHttpClient getClient() {
-                        return getClientDefault();
-                    }
-                };
-            }
-
-            @Override
-            public OptionRequest.Singleton options(String url, Params params) {
-                return new OptionRequest.Singleton(url, params) {
+            public PutRequest.Singleton put(String url) {
+                return new PutRequest.Singleton(url) {
                     @Override
                     protected OkHttpClient getClient() {
                         return getClientDefault();
@@ -290,8 +320,18 @@ public class Client {
             }
 
             @Override
-            public PatchRequest.Singleton patch(String url, Params params) {
-                return new PatchRequest.Singleton(url, params) {
+            public HeadRequest.Singleton head(String url) {
+                return new HeadRequest.Singleton(url) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
+            @Override
+            public DeleteRequest.Singleton delete(String url) {
+                return new DeleteRequest.Singleton(url) {
                     @Override
                     protected OkHttpClient getClient() {
                         return getClientDefault();
@@ -308,6 +348,47 @@ public class Client {
                     }
                 };
             }
+
+            @Override
+            public OptionRequest.Singleton options(String url) {
+                return new OptionRequest.Singleton(url) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
+            @Override
+            public OptionRequest.Singleton options(String url, Params params) {
+                return new OptionRequest.Singleton(url, params) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
+            @Override
+            public PatchRequest.Singleton patch(String url) {
+                return new PatchRequest.Singleton(url) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
+            @Override
+            public PatchRequest.Singleton patch(String url, Params params) {
+                return new PatchRequest.Singleton(url, params) {
+                    @Override
+                    protected OkHttpClient getClient() {
+                        return getClientDefault();
+                    }
+                };
+            }
+
 
             @Override
             public DownloadRequest.Singleton download(String url) {

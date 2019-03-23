@@ -20,7 +20,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.MediaType;
-import com.d.lib.aster.integration.volley.MediaTypes;
 import com.d.lib.aster.utils.Util;
 
 import java.io.DataOutputStream;
@@ -131,11 +130,17 @@ public abstract class RequestBody {
                 FileInputStream source = null;
                 try {
                     source = new FileInputStream(file);
-                    BodyWriter.writeFile(file,
-                            file.getName(),
-                            MediaTypes.APPLICATION_OCTET_STREAM_TYPE.type(),
-                            sink.getDataOutputStream(),
-                            sink);
+                    byte[] buffer = new byte[1024 * 2];
+                    int length;
+                    DataOutputStream outputStream = sink.getDataOutputStream();
+                    while ((length = source.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, length);
+                        sink.write(outputStream, length);
+                    }
+                    outputStream.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw e;
                 } finally {
                     Util.closeQuietly(source);
                 }

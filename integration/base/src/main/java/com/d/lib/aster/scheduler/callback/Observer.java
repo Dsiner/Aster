@@ -9,5 +9,5 @@ import android.support.annotation.NonNull;
 public interface Observer<T> {
     void onNext(@NonNull T result);
 
-    void onError(Throwable e);
+    void onError(@NonNull Throwable e);
 }

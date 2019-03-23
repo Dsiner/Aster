@@ -33,17 +33,41 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
         this.mConfig = config != null ? config : Config.getDefault();
     }
 
+    /**
+     * Initialize Observable, etc.
+     */
     protected abstract void prepare();
 
-    public void request() {
-    }
+    public abstract void request();
 
-    public <R> void request(@Nullable SimpleCallback<R> callback) {
-    }
+    public abstract <R> void request(@Nullable SimpleCallback<R> callback);
+
+    public abstract HR addParam(String paramKey, String paramValue);
+
+    public abstract HR addFile(String key, File file);
+
+    public abstract HR addFile(String key, File file, ProgressCallback callback);
+
+    public abstract HR addImageFile(String key, File file);
+
+    public abstract HR addImageFile(String key, File file, ProgressCallback callback);
+
+    public abstract HR addBytes(String key, byte[] bytes, String name);
+
+    public abstract HR addBytes(String key, byte[] bytes, String name, ProgressCallback callback);
+
+    public abstract HR addStream(String key, InputStream inputStream, String name);
+
+    public abstract HR addStream(String key, InputStream inputStream, String name, ProgressCallback callback);
 
     @Override
     public HR tag(Object tag) {
         return super.tag(tag);
+    }
+
+    @Override
+    public Object getTag() {
+        return super.getTag();
     }
 
     @Override
@@ -101,41 +125,6 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
         return super.retryDelayMillis(retryDelayMillis);
     }
 
-    public HR addParam(String paramKey, String paramValue) {
-        return (HR) this;
-    }
-
-    public HR addFile(String key, File file) {
-        return (HR) this;
-    }
-
-    public HR addFile(String key, File file, ProgressCallback callback) {
-        return (HR) this;
-    }
-
-    public HR addImageFile(String key, File file) {
-        return (HR) this;
-    }
-
-    public HR addImageFile(String key, File file, ProgressCallback callback) {
-        return (HR) this;
-    }
-
-    public HR addBytes(String key, byte[] bytes, String name) {
-        return (HR) this;
-    }
-
-    public HR addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
-        return (HR) this;
-    }
-
-    public HR addStream(String key, InputStream inputStream, String name) {
-        return (HR) this;
-    }
-
-    public HR addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
-        return (HR) this;
-    }
 
     /**
      * Singleton
@@ -148,53 +137,41 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
             this.mParams = new Params();
         }
 
+        /**
+         * Initialize Observable, etc.
+         */
         protected abstract void prepare();
 
-        public void request() {
-        }
+        public abstract void request();
 
-        public <R> void request(@Nullable SimpleCallback<R> callback) {
-        }
+        public abstract <R> void request(@Nullable SimpleCallback<R> callback);
+
+        public abstract HRF addParam(String paramKey, String paramValue);
+
+        public abstract HRF addFile(String key, File file);
+
+        public abstract HRF addFile(String key, File file, ProgressCallback callback);
+
+        public abstract HRF addImageFile(String key, File file);
+
+        public abstract HRF addImageFile(String key, File file, ProgressCallback callback);
+
+        public abstract HRF addBytes(String key, byte[] bytes, String name);
+
+        public abstract HRF addBytes(String key, byte[] bytes, String name, ProgressCallback callback);
+
+        public abstract HRF addStream(String key, InputStream inputStream, String name);
+
+        public abstract HRF addStream(String key, InputStream inputStream, String name, ProgressCallback callback);
 
         @Override
         public HRF tag(Object tag) {
             return super.tag(tag);
         }
 
-        public HRF addParam(String paramKey, String paramValue) {
-            return (HRF) this;
-        }
-
-        public HRF addFile(String key, File file) {
-            return (HRF) this;
-        }
-
-        public HRF addFile(String key, File file, ProgressCallback callback) {
-            return (HRF) this;
-        }
-
-        public HRF addImageFile(String key, File file) {
-            return (HRF) this;
-        }
-
-        public HRF addImageFile(String key, File file, ProgressCallback callback) {
-            return (HRF) this;
-        }
-
-        public HRF addBytes(String key, byte[] bytes, String name) {
-            return (HRF) this;
-        }
-
-        public HRF addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
-            return (HRF) this;
-        }
-
-        public HRF addStream(String key, InputStream inputStream, String name) {
-            return (HRF) this;
-        }
-
-        public HRF addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
-            return (HRF) this;
+        @Override
+        public Object getTag() {
+            return super.getTag();
         }
     }
 }

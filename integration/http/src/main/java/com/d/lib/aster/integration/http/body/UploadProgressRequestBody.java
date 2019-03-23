@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.callback.ProgressCallback;
+import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.utils.ULog;
-import com.d.lib.aster.utils.Util;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -59,7 +59,7 @@ public class UploadProgressRequestBody extends RequestBody {
         if (mCallback == null) {
             return;
         }
-        Util.executeMain(new Runnable() {
+        Observable.executeMain(new Runnable() {
             @Override
             public void run() {
                 mCallback.onStart();
@@ -71,7 +71,7 @@ public class UploadProgressRequestBody extends RequestBody {
         if (mCallback == null) {
             return;
         }
-        Util.executeMain(new Runnable() {
+        Observable.executeMain(new Runnable() {
             @Override
             public void run() {
                 mCallback.onError(e);
@@ -83,7 +83,7 @@ public class UploadProgressRequestBody extends RequestBody {
         if (mCallback == null) {
             return;
         }
-        Util.executeMain(new Runnable() {
+        Observable.executeMain(new Runnable() {
             @Override
             public void run() {
                 mCallback.onSuccess();
@@ -119,7 +119,7 @@ public class UploadProgressRequestBody extends RequestBody {
             long currentTime = System.currentTimeMillis();
             if (currentTime - mLastTime >= MIN_DELAY_TIME || mLastTime == 0 || currentLength == totalLength) {
                 mLastTime = currentTime;
-                Util.executeMain(new Runnable() {
+                Observable.executeMain(new Runnable() {
                     @Override
                     public void run() {
                         ULog.d("Upload progress currentLength: " + currentLength

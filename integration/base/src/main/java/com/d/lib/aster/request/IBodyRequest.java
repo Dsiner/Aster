@@ -2,13 +2,9 @@ package com.d.lib.aster.request;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
-import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.Params;
-import com.d.lib.aster.callback.AsyncCallback;
-import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
-import com.d.lib.aster.scheduler.Observable;
 
 import java.util.Map;
 
@@ -17,42 +13,35 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Created by D on 2017/10/24.
  */
-public abstract class IHttpRequest<HR extends IHttpRequest, C extends IClient>
-        extends IRequest<HR, C> {
+public abstract class IBodyRequest<HR extends IBodyRequest, C extends IClient,
+        RB, MT>
+        extends IHttpRequest<HR, C> {
 
-    public IHttpRequest(String url) {
-        this(url, null);
+    protected RB mRequestBody;
+    protected MT mMediaType;
+    protected String mContent;
+
+    public IBodyRequest(String url) {
+        super(url);
     }
 
-    public IHttpRequest(String url, Params params) {
-        this(url, params, null);
+    public IBodyRequest(String url, Params params) {
+        super(url, params);
     }
 
-    public IHttpRequest(String url, Params params, Config config) {
-        this.mUrl = url;
-        this.mParams = params;
-        this.mConfig = config != null ? config : Config.getDefault();
+    public IBodyRequest(String url, Params params, Config config) {
+        super(url, params, config);
     }
 
-    /**
-     * Initialize Observable, etc.
-     */
-    protected abstract void prepare();
+    public abstract HR setRequestBody(RB requestBody);
 
-    public abstract <T> void request(final SimpleCallback<T> callback);
+    public abstract HR setString(String string);
 
-    public abstract <T, R> void request(final AsyncCallback<T, R> callback);
-
-    public abstract <T> Observable.Observe<T> observable(Class<T> clazz);
+    public abstract HR setJson(String json);
 
     @Override
     public HR tag(Object tag) {
         return super.tag(tag);
-    }
-
-    @Override
-    public Object getTag() {
-        return super.getTag();
     }
 
     @Override
@@ -114,42 +103,30 @@ public abstract class IHttpRequest<HR extends IHttpRequest, C extends IClient>
     /**
      * Singleton
      */
-    public static abstract class Singleton<HRF extends Singleton, C extends IClient>
-            extends IRequest<HRF, C> {
+    public abstract static class Singleton<HRF extends Singleton, C extends IClient,
+            RB, MT>
+            extends IHttpRequest.Singleton<HRF, C> {
+
+        protected RB mRequestBody;
+        protected MT mMediaType;
+        protected String mContent;
 
         public Singleton(String url) {
-            this(url, null);
+            super(url);
         }
 
         public Singleton(String url, Params params) {
-            this(url, params, null);
+            super(url, params);
         }
 
         public Singleton(String url, Params params, Config config) {
-            this.mUrl = url;
-            this.mParams = params;
-            this.mConfig = config != null ? config : Config.getDefault();
+            super(url, params, config);
         }
 
-        /**
-         * Initialize Observable, etc.
-         */
-        protected abstract void prepare();
+        public abstract HRF setRequestBody(RB requestBody);
 
-        public abstract <T> void request(final SimpleCallback<T> callback);
+        public abstract HRF setString(String string);
 
-        public abstract <T, R> void request(final AsyncCallback<T, R> callback);
-
-        public abstract <T> Observable.Observe<T> observable(Class<T> clazz);
-
-        @Override
-        public HRF tag(Object tag) {
-            return super.tag(tag);
-        }
-
-        @Override
-        public Object getTag() {
-            return super.getTag();
-        }
+        public abstract HRF setJson(String json);
     }
 }

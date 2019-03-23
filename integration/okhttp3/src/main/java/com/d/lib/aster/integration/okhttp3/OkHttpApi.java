@@ -2,6 +2,7 @@ package com.d.lib.aster.integration.okhttp3;
 
 import android.accounts.NetworkErrorException;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.d.lib.aster.base.Params;
@@ -38,12 +39,13 @@ public class OkHttpApi {
         return mImpl;
     }
 
-    public Callable get(String url, Params params) {
-        return get(url + "?" + params.getRequestParamsString());
+    public Callable get(final String url) {
+        return get(url, null);
     }
 
-    public Callable get(final String url) {
-        final Call call = getImpl().getImpl(url);
+    public Callable get(final String url, @Nullable final Params params) {
+        final String realUrl = params != null ? url + "?" + params.getRequestParamsString() : url;
+        final Call call = getImpl().getImpl(realUrl);
         final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
@@ -61,47 +63,11 @@ public class OkHttpApi {
     }
 
     public Callable post(final String url) {
-        final Call call = getImpl().postImpl(url, null);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
-        return new Callable(call, observable);
+        return post(url, null);
     }
 
-    public Callable post(final String url, final Params params) {
+    public Callable post(final String url, @Nullable final Params params) {
         final Call call = getImpl().postImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
-        return new Callable(call, observable);
-    }
-
-    public Callable postForm(final String url, final Map<String, Object> forms) {
-        final FormBody.Builder builder = new FormBody.Builder();
-        for (Map.Entry<String, Object> entry : forms.entrySet()) {
-            builder.add(entry.getKey(), String.valueOf(entry.getValue()));
-        }
-        final Call call = getImpl().postBodyImpl(url, builder.build());
         final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
@@ -136,7 +102,11 @@ public class OkHttpApi {
         return new Callable(call, observable);
     }
 
-    public Callable put(final String url, final Params params) {
+    public Callable put(final String url) {
+        return put(url, null);
+    }
+
+    public Callable put(final String url, @Nullable final Params params) {
         final Call call = getImpl().putImpl(url, params);
         final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
@@ -154,8 +124,8 @@ public class OkHttpApi {
         return new Callable(call, observable);
     }
 
-    public Callable head(final String url, final Params params) {
-        final Call call = getImpl().headImpl(url, params);
+    public Callable putBody(final String url, final RequestBody requestBody) {
+        final Call call = getImpl().putBodyImpl(url, requestBody);
         final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
@@ -170,6 +140,28 @@ public class OkHttpApi {
             }
         });
         return new Callable(call, observable);
+    }
+
+    public Callable head(final String url) {
+        final Call call = getImpl().headImpl(url);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
+            @Override
+            public ResponseBody run() throws Exception {
+                try {
+                    Response response = call.execute();
+                    int code = response.code();
+                    return response.body();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        });
+        return new Callable(call, observable);
+    }
+
+    public Callable delete(final String url) {
+        return delete(url, null);
     }
 
     public Callable delete(final String url, final Params params) {
@@ -190,6 +182,28 @@ public class OkHttpApi {
         return new Callable(call, observable);
     }
 
+    public Callable deleteBody(final String url, final RequestBody requestBody) {
+        final Call call = getImpl().deleteBodyIml(url, requestBody);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
+            @Override
+            public ResponseBody run() throws Exception {
+                try {
+                    Response response = call.execute();
+                    int code = response.code();
+                    return response.body();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        });
+        return new Callable(call, observable);
+    }
+
+    public Callable options(final String url) {
+        return options(url, null);
+    }
+
     public Callable options(final String url, final Params params) {
         final Call call = getImpl().optionsImpl(url, params);
         final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
@@ -206,6 +220,28 @@ public class OkHttpApi {
             }
         });
         return new Callable(call, observable);
+    }
+
+    public Callable optionsBody(final String url, final RequestBody requestBody) {
+        final Call call = getImpl().optionsBodyImpl(url, requestBody);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
+            @Override
+            public ResponseBody run() throws Exception {
+                try {
+                    Response response = call.execute();
+                    int code = response.code();
+                    return response.body();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        });
+        return new Callable(call, observable);
+    }
+
+    public Callable patch(final String url) {
+        return patch(url, null);
     }
 
     public Callable patch(final String url, final Params params) {
@@ -226,12 +262,31 @@ public class OkHttpApi {
         return new Callable(call, observable);
     }
 
-    public Callable download(final String url, final Params params) {
-        return download(url + "?" + params.getRequestParamsString());
+    public Callable patchBody(final String url, final RequestBody requestBody) {
+        final Call call = getImpl().patchBodyImpl(url, requestBody);
+        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
+            @Override
+            public ResponseBody run() throws Exception {
+                try {
+                    Response response = call.execute();
+                    int code = response.code();
+                    return response.body();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        });
+        return new Callable(call, observable);
     }
 
     public Callable download(final String url) {
-        final Call call = getImpl().downloadImpl(url);
+        return download(url, null);
+    }
+
+    public Callable download(final String url, @Nullable final Params params) {
+        final String realUrl = params != null ? url + "?" + params.getRequestParamsString() : url;
+        final Call call = getImpl().downloadImpl(realUrl);
         final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
             @Override
             public ResponseBody run() throws Exception {
@@ -292,62 +347,19 @@ public class OkHttpApi {
             this.mClient = client;
         }
 
-
-        public void get(String url, Params params, SimpleCallback<Response> callback) {
-            get(url + "?" + params.getRequestParamsString(), callback);
-        }
-
-        public void get(String url, final SimpleCallback<Response> callback) {
-            enqueue(getImpl(url), callback);
-        }
-
-        private Call getImpl(String url) {
+        private Call getImpl(final String url) {
             final Request request = new Request.Builder()
                     .url(url)
                     .build();
             return mClient.newCall(request);
         }
 
-        public Response post(String url) throws IOException {
-            return postImpl(url, null).execute();
+        private Call postImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return postBodyImpl(url, requestBody);
         }
 
-        public void post(String url, final SimpleCallback<Response> callback) {
-            enqueue(postImpl(url, null), callback);
-        }
-
-        public Response post(String url, Params params) throws IOException {
-            return postImpl(url, params).execute();
-        }
-
-        public void post(String url, Params params, final SimpleCallback<Response> callback) {
-            enqueue(postImpl(url, params), callback);
-        }
-
-        private Call postImpl(String url, Params params) {
-            FormBody.Builder builder = new FormBody.Builder();
-            if (params != null) {
-                for (String key : params.keySet()) {
-                    builder.add(key, params.get(key));
-                }
-            }
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .post(builder.build())
-                    .build();
-            return mClient.newCall(request);
-        }
-
-        public Response postBody(String url, RequestBody requestBody) throws IOException {
-            return postBodyImpl(url, requestBody).execute();
-        }
-
-        public void postBody(String url, RequestBody requestBody,
-                             final SimpleCallback<Response> callback) {
-            enqueue(postBodyImpl(url, requestBody), callback);
-        }
-
-        private Call postBodyImpl(String url, RequestBody requestBody) {
+        private Call postBodyImpl(final String url, @NonNull final RequestBody requestBody) {
             final Request request = new Request.Builder()
                     .url(url)
                     .post(requestBody)
@@ -355,80 +367,62 @@ public class OkHttpApi {
             return mClient.newCall(request);
         }
 
-        private Call putImpl(String url, Params params) {
-            final FormBody.Builder builder = new FormBody.Builder();
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                builder.add(entry.getKey(), entry.getValue());
-            }
+        private Call putImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return putBodyImpl(url, requestBody);
+        }
+
+        private Call putBodyImpl(final String url, @NonNull final RequestBody requestBody) {
             final Request request = new Request.Builder()
                     .url(url)
-                    .put(builder.build())
+                    .put(requestBody)
                     .build();
             return mClient.newCall(request);
         }
 
-        public Response head(String url, Params params) throws IOException {
-            return headImpl(url, params).execute();
-        }
-
-        private Call headImpl(String url, Params params) {
-            FormBody.Builder builder = new FormBody.Builder();
-            if (params != null) {
-                for (String key : params.keySet()) {
-                    builder.add(key, params.get(key));
-                }
-            }
+        private Call headImpl(final String url) {
             final Request request = new Request.Builder()
                     .url(url)
-                    .method("HEAD", builder.build())
+                    .head()
                     .build();
             return mClient.newCall(request);
         }
 
-        public Response delete(String url, Params params) throws IOException {
-            return deleteImpl(url, params).execute();
+        private Call deleteImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return deleteBodyIml(url, requestBody);
         }
 
-        private Call deleteImpl(String url, Params params) {
-            FormBody.Builder builder = new FormBody.Builder();
-            if (params != null) {
-                for (String key : params.keySet()) {
-                    builder.add(key, params.get(key));
-                }
-            }
+        private Call deleteBodyIml(final String url, @Nullable final RequestBody requestBody) {
             final Request request = new Request.Builder()
                     .url(url)
-                    .delete(builder.build())
+                    .delete(requestBody)
                     .build();
             return mClient.newCall(request);
         }
 
-        public Response options(String url, Params params) throws IOException {
-            return optionsImpl(url, params).execute();
+        private Call optionsImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return optionsBodyImpl(url, requestBody);
         }
 
-        private Call optionsImpl(String url, Params params) {
-            FormBody.Builder builder = new FormBody.Builder();
-            if (params != null) {
-                for (String key : params.keySet()) {
-                    builder.add(key, params.get(key));
-                }
-            }
+        private Call optionsBodyImpl(final String url, @Nullable final RequestBody requestBody) {
             final Request request = new Request.Builder()
                     .url(url)
-                    .method("OPTIONS", builder.build())
+                    .method("OPTIONS", requestBody)
                     .build();
             return mClient.newCall(request);
         }
 
-        private Call patchImpl(String url, Params params) {
-            final FormBody.Builder builder = new FormBody.Builder();
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                builder.add(entry.getKey(), entry.getValue());
-            }
+        private Call patchImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return patchBodyImpl(url, requestBody);
+        }
+
+        private Call patchBodyImpl(final String url, @NonNull final RequestBody requestBody) {
             final Request request = new Request.Builder()
                     .url(url)
-                    .patch(builder.build())
+                    .patch(requestBody)
                     .build();
             return mClient.newCall(request);
         }
@@ -440,8 +434,9 @@ public class OkHttpApi {
             return mClient.newCall(request);
         }
 
-        private Call uploadImpl(String url, List<MultipartBody.Part> multipartBodyParts) {
-            MultipartBody.Builder builder = new MultipartBody.Builder();
+        private Call uploadImpl(String url,
+                                @NonNull List<MultipartBody.Part> multipartBodyParts) {
+            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             for (MultipartBody.Part part : multipartBodyParts) {
                 builder.addPart(part);
             }
@@ -452,7 +447,21 @@ public class OkHttpApi {
             return mClient.newCall(request);
         }
 
-        private void enqueue(@NonNull Call call, final SimpleCallback<Response> callback) {
+        @NonNull
+        private RequestBody getRequestBody(@Nullable Params params) {
+            if (params == null) {
+                return RequestBody.create(null, okhttp3.internal.Util.EMPTY_BYTE_ARRAY);
+            }
+            FormBody.Builder builder = new FormBody.Builder();
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                builder.add(entry.getKey(), entry.getValue());
+            }
+            return builder.build();
+        }
+
+        @Deprecated
+        private void enqueue(@NonNull final Call call,
+                             @Nullable final SimpleCallback<Response> callback) {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {

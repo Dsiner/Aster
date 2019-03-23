@@ -11,18 +11,11 @@ import com.d.lib.aster.integration.okhttp3.OkHttpApi;
 import com.d.lib.aster.integration.okhttp3.OkHttpClient;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
-import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.integration.okhttp3.observer.DownloadObserver;
-import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.request.IDownloadRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
-import com.d.lib.aster.utils.Util;
-
-import java.util.Map;
-
-import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.Call;
 import okhttp3.ResponseBody;
@@ -54,16 +47,15 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, OkHttpCli
     @Override
     protected void prepare() {
         final OkHttpApi.Callable callable;
-        if (mParams == null || mParams.size() <= 0) {
-            callable = getClient().create().download(mUrl);
-        } else {
+        if (mParams != null && mParams.size() > 0) {
             callable = getClient().create().download(mUrl, mParams);
+        } else {
+            callable = getClient().create().download(mUrl);
         }
         mCall = callable.call;
         mObservable = callable.observable;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void request(@NonNull final String path, @NonNull final String name,
                         @NonNull final ProgressCallback callback) {
@@ -87,7 +79,7 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, OkHttpCli
                                     final Call call,
                                     final ProgressCallback callback) {
         if (callback != null) {
-            Util.executeMain(new Runnable() {
+            Observable.executeMain(new Runnable() {
                 @Override
                 public void run() {
                     callback.onStart();
@@ -115,60 +107,6 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, OkHttpCli
                         }));
     }
 
-    @Override
-    public DownloadRequest baseUrl(String baseUrl) {
-        return super.baseUrl(baseUrl);
-    }
-
-    @Override
-    public DownloadRequest headers(Map<String, String> headers) {
-        return super.headers(headers);
-    }
-
-    @Override
-    public DownloadRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
-        return super.headers(onHeadInterceptor);
-    }
-
-    @Override
-    public DownloadRequest connectTimeout(long timeout) {
-        return super.connectTimeout(timeout);
-    }
-
-    @Override
-    public DownloadRequest readTimeout(long timeout) {
-        return super.readTimeout(timeout);
-    }
-
-    @Override
-    public DownloadRequest writeTimeout(long timeout) {
-        return super.writeTimeout(timeout);
-    }
-
-    @Override
-    public DownloadRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
-        return super.sslSocketFactory(sslSocketFactory);
-    }
-
-    @Override
-    public DownloadRequest addInterceptor(IInterceptor interceptor) {
-        return super.addInterceptor(interceptor);
-    }
-
-    @Override
-    public DownloadRequest addNetworkInterceptors(IInterceptor interceptor) {
-        return super.addNetworkInterceptors(interceptor);
-    }
-
-    @Override
-    public DownloadRequest retryCount(int retryCount) {
-        return super.retryCount(retryCount);
-    }
-
-    @Override
-    public DownloadRequest retryDelayMillis(long retryDelayMillis) {
-        return super.retryDelayMillis(retryDelayMillis);
-    }
 
     /**
      * Singleton
@@ -193,16 +131,15 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, OkHttpCli
         @Override
         protected void prepare() {
             final OkHttpApi.Callable callable;
-            if (mParams == null || mParams.size() <= 0) {
-                callable = getClient().create().download(mUrl);
-            } else {
+            if (mParams != null && mParams.size() > 0) {
                 callable = getClient().create().download(mUrl, mParams);
+            } else {
+                callable = getClient().create().download(mUrl);
             }
             mCall = callable.call;
             mObservable = callable.observable;
         }
 
-        @SuppressWarnings("ConstantConditions")
         @Override
         public void request(@NonNull final String path, @NonNull final String name,
                             @NonNull final ProgressCallback callback) {

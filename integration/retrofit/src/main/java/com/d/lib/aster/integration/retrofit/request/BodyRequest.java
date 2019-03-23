@@ -5,6 +5,7 @@ import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.integration.okhttp3.MediaTypes;
 import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiFunc;
@@ -12,31 +13,35 @@ import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
 import com.d.lib.aster.integration.retrofit.func.MapFunc;
 import com.d.lib.aster.integration.retrofit.observer.ApiObserver;
 import com.d.lib.aster.integration.retrofit.observer.AsyncApiObserver;
-import com.d.lib.aster.request.IHttpRequest;
+import com.d.lib.aster.request.IBodyRequest;
 import com.d.lib.aster.utils.Util;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 /**
  * Created by D on 2017/10/24.
  */
-public abstract class HttpRequest<HR extends HttpRequest>
-        extends IHttpRequest<HR, RetrofitClient> {
+public abstract class BodyRequest<HR extends BodyRequest>
+        extends IBodyRequest<HR, RetrofitClient,
+        RequestBody, MediaType> {
+
     protected Observable<ResponseBody> mObservable;
 
-    public HttpRequest(String url) {
+    public BodyRequest(String url) {
         super(url);
     }
 
-    public HttpRequest(String url, Params params) {
+    public BodyRequest(String url, Params params) {
         super(url, params);
     }
 
-    public HttpRequest(String url, Params params, Config config) {
+    public BodyRequest(String url, Params params, Config config) {
         super(url, params, config);
     }
 
@@ -89,12 +94,32 @@ public abstract class HttpRequest<HR extends HttpRequest>
                 .retryWhen(new ApiRetryFunc(mConfig.retryCount, mConfig.retryDelayMillis));
     }
 
+    @Override
+    public HR setRequestBody(RequestBody requestBody) {
+        this.mRequestBody = requestBody;
+        return (HR) this;
+    }
+
+    @Override
+    public HR setString(String string) {
+        this.mContent = string;
+        this.mMediaType = MediaTypes.TEXT_PLAIN_TYPE;
+        return (HR) this;
+    }
+
+    @Override
+    public HR setJson(String json) {
+        this.mContent = json;
+        this.mMediaType = MediaTypes.APPLICATION_JSON_TYPE;
+        return (HR) this;
+    }
 
     /**
      * Singleton
      */
-    public static abstract class Singleton<HRF extends Singleton>
-            extends IHttpRequest.Singleton<HRF, RetrofitClient> {
+    public abstract static class Singleton<HRF extends Singleton>
+            extends IBodyRequest.Singleton<HRF, RetrofitClient,
+            RequestBody, MediaType> {
 
         protected Observable<ResponseBody> mObservable;
 
@@ -160,6 +185,25 @@ public abstract class HttpRequest<HR extends HttpRequest>
                     .map(new ApiFunc<T>(clazz))
                     .retryWhen(new ApiRetryFunc(getClient().getHttpConfig().retryCount,
                             getClient().getHttpConfig().retryDelayMillis));
+        }
+
+        public HRF setRequestBody(RequestBody requestBody) {
+            this.mRequestBody = requestBody;
+            return (HRF) this;
+        }
+
+        @Override
+        public HRF setString(String string) {
+            this.mContent = string;
+            this.mMediaType = MediaTypes.TEXT_PLAIN_TYPE;
+            return (HRF) this;
+        }
+
+        @Override
+        public HRF setJson(String json) {
+            this.mContent = json;
+            this.mMediaType = MediaTypes.APPLICATION_JSON_TYPE;
+            return (HRF) this;
         }
     }
 }

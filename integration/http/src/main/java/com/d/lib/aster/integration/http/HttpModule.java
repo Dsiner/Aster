@@ -36,54 +36,87 @@ public class HttpModule extends AsterModule {
         return RequestManagerImpl.getIns();
     }
 
+    @Override
     public Singleton getDefault() {
         return Default.INSTANCE;
     }
 
+    @Override
     public GetRequest get(String url) {
         return new GetRequest(url);
     }
 
+    @Override
     public GetRequest get(String url, Params params) {
         return new GetRequest(url, params);
     }
 
+    @Override
     public PostRequest post(String url) {
         return new PostRequest(url);
     }
 
+    @Override
     public PostRequest post(String url, Params params) {
         return new PostRequest(url, params);
     }
 
-    public HeadRequest head(String url, Params params) {
-        return new HeadRequest(url, params);
+    @Override
+    public PutRequest put(String url) {
+        return new PutRequest(url);
     }
 
-    public OptionRequest options(String url, Params params) {
-        return new OptionRequest(url, params);
-    }
-
+    @Override
     public PutRequest put(String url, Params params) {
         return new PutRequest(url, params);
     }
 
-    public PatchRequest patch(String url, Params params) {
-        return new PatchRequest(url, params);
+    @Override
+    public HeadRequest head(String url) {
+        return new HeadRequest(url);
     }
 
+    @Override
+    public DeleteRequest delete(String url) {
+        return new DeleteRequest(url);
+    }
+
+    @Override
     public DeleteRequest delete(String url, Params params) {
         return new DeleteRequest(url, params);
     }
 
+    @Override
+    public OptionRequest options(String url) {
+        return new OptionRequest(url);
+    }
+
+    @Override
+    public OptionRequest options(String url, Params params) {
+        return new OptionRequest(url, params);
+    }
+
+    @Override
+    public PatchRequest patch(String url) {
+        return new PatchRequest(url);
+    }
+
+    @Override
+    public PatchRequest patch(String url, Params params) {
+        return new PatchRequest(url, params);
+    }
+
+    @Override
     public DownloadRequest download(String url) {
         return new DownloadRequest(url);
     }
 
+    @Override
     public DownloadRequest download(String url, Params params) {
         return new DownloadRequest(url, params);
     }
 
+    @Override
     public UploadRequest upload(String url) {
         return new UploadRequest(url);
     }
@@ -112,13 +145,8 @@ public class HttpModule extends AsterModule {
             }
 
             @Override
-            public HeadRequest.Singleton head(String url, Params params) {
-                return new HeadRequest.Singleton(url, params);
-            }
-
-            @Override
-            public OptionRequest.Singleton options(String url, Params params) {
-                return new OptionRequest.Singleton(url, params);
+            public PutRequest.Singleton put(String url) {
+                return new PutRequest.Singleton(url);
             }
 
             @Override
@@ -127,13 +155,38 @@ public class HttpModule extends AsterModule {
             }
 
             @Override
-            public PatchRequest.Singleton patch(String url, Params params) {
-                return new PatchRequest.Singleton(url, params);
+            public HeadRequest.Singleton head(String url) {
+                return new HeadRequest.Singleton(url);
+            }
+
+            @Override
+            public DeleteRequest.Singleton delete(String url) {
+                return new DeleteRequest.Singleton(url);
             }
 
             @Override
             public DeleteRequest.Singleton delete(String url, Params params) {
                 return new DeleteRequest.Singleton(url, params);
+            }
+
+            @Override
+            public OptionRequest.Singleton options(String url) {
+                return new OptionRequest.Singleton(url);
+            }
+
+            @Override
+            public OptionRequest.Singleton options(String url, Params params) {
+                return new OptionRequest.Singleton(url, params);
+            }
+
+            @Override
+            public PatchRequest.Singleton patch(String url) {
+                return new PatchRequest.Singleton(url);
+            }
+
+            @Override
+            public PatchRequest.Singleton patch(String url, Params params) {
+                return new PatchRequest.Singleton(url, params);
             }
 
             @Override

@@ -7,19 +7,12 @@ import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
 import com.d.lib.aster.integration.retrofit.observer.DownloadObserver;
-import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.request.IDownloadRequest;
-import com.d.lib.aster.utils.Util;
-
-import java.util.Map;
-
-import javax.net.ssl.SSLSocketFactory;
 
 import io.reactivex.Observable;
 import io.reactivex.observers.DisposableObserver;
@@ -58,7 +51,6 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, RetrofitC
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void request(@NonNull final String path, @NonNull final String name,
                         @NonNull final ProgressCallback callback) {
@@ -81,7 +73,7 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, RetrofitC
                                     final String path, final String name,
                                     final ProgressCallback callback) {
         if (callback != null) {
-            Util.executeMain(new Runnable() {
+            com.d.lib.aster.scheduler.Observable.executeMain(new Runnable() {
                 @Override
                 public void run() {
                     callback.onStart();
@@ -100,60 +92,6 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, RetrofitC
                 .subscribe(disposableObserver);
     }
 
-    @Override
-    public DownloadRequest baseUrl(String baseUrl) {
-        return super.baseUrl(baseUrl);
-    }
-
-    @Override
-    public DownloadRequest headers(Map<String, String> headers) {
-        return super.headers(headers);
-    }
-
-    @Override
-    public DownloadRequest headers(HeadersInterceptor.OnHeadInterceptor onHeadInterceptor) {
-        return super.headers(onHeadInterceptor);
-    }
-
-    @Override
-    public DownloadRequest connectTimeout(long timeout) {
-        return super.connectTimeout(timeout);
-    }
-
-    @Override
-    public DownloadRequest readTimeout(long timeout) {
-        return super.readTimeout(timeout);
-    }
-
-    @Override
-    public DownloadRequest writeTimeout(long timeout) {
-        return super.writeTimeout(timeout);
-    }
-
-    @Override
-    public DownloadRequest sslSocketFactory(SSLSocketFactory sslSocketFactory) {
-        return super.sslSocketFactory(sslSocketFactory);
-    }
-
-    @Override
-    public DownloadRequest addInterceptor(IInterceptor interceptor) {
-        return super.addInterceptor(interceptor);
-    }
-
-    @Override
-    public DownloadRequest addNetworkInterceptors(IInterceptor interceptor) {
-        return super.addNetworkInterceptors(interceptor);
-    }
-
-    @Override
-    public DownloadRequest retryCount(int retryCount) {
-        return super.retryCount(retryCount);
-    }
-
-    @Override
-    public DownloadRequest retryDelayMillis(long retryDelayMillis) {
-        return super.retryDelayMillis(retryDelayMillis);
-    }
 
     /**
      * Singleton
@@ -183,7 +121,6 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, RetrofitC
             }
         }
 
-        @SuppressWarnings("ConstantConditions")
         @Override
         public void request(@NonNull final String path, @NonNull final String name,
                             @NonNull final ProgressCallback callback) {

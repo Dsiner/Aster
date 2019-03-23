@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.volley.RequestManagerImpl;
 import com.d.lib.aster.integration.volley.client.ResponseBody;
+import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.utils.Util;
 
 /**
@@ -25,7 +26,7 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
         if (mCallback == null) {
             return;
         }
-        Util.executeMain(new Runnable() {
+        Observable.executeMain(new Runnable() {
             @Override
             public void run() {
                 mCallback.onError(new Exception("Request cancelled."));

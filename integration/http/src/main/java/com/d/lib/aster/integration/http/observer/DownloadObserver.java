@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.http.RequestManagerImpl;
 import com.d.lib.aster.integration.http.client.ResponseBody;
+import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.utils.Util;
 
 import java.io.File;
@@ -54,7 +55,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
         if (mCallback == null) {
             return;
         }
-        Util.executeMain(new Runnable() {
+        Observable.executeMain(new Runnable() {
             @Override
             public void run() {
                 mCallback.onCancel();
@@ -116,7 +117,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
         if (mCallback == null) {
             return;
         }
-        Util.executeMain(new Runnable() {
+        Observable.executeMain(new Runnable() {
             @Override
             public void run() {
                 mCallback.onProgress(currentLength, totalLength);
@@ -132,7 +133,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
         if (mCallback == null) {
             return;
         }
-        Util.executeMain(new Runnable() {
+        Observable.executeMain(new Runnable() {
             @Override
             public void run() {
                 mCallback.onError(e);
@@ -145,7 +146,7 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
         if (mCallback == null) {
             return;
         }
-        Util.executeMain(new Runnable() {
+        Observable.executeMain(new Runnable() {
             @Override
             public void run() {
                 mCallback.onSuccess();

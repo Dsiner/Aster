@@ -7,6 +7,7 @@ import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.integration.okhttp3.MediaTypes;
 import com.d.lib.aster.integration.okhttp3.OkHttpClient;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.func.ApiFunc;
@@ -14,31 +15,36 @@ import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
 import com.d.lib.aster.integration.okhttp3.func.MapFunc;
 import com.d.lib.aster.integration.okhttp3.observer.ApiObserver;
 import com.d.lib.aster.integration.okhttp3.observer.AsyncApiObserver;
-import com.d.lib.aster.request.IHttpRequest;
+import com.d.lib.aster.request.IBodyRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.Util;
 
 import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 /**
  * Created by D on 2017/10/24.
  */
-public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<HR, OkHttpClient> {
+public abstract class BodyRequest<HR extends BodyRequest>
+        extends IBodyRequest<HR, OkHttpClient,
+        RequestBody, MediaType> {
+
     protected Call mCall;
     protected Observable<ResponseBody> mObservable;
 
-    public HttpRequest(String url) {
+    public BodyRequest(String url) {
         super(url);
     }
 
-    public HttpRequest(String url, Params params) {
+    public BodyRequest(String url, Params params) {
         super(url, params);
     }
 
-    public HttpRequest(String url, Params params, Config config) {
+    public BodyRequest(String url, Params params, Config config) {
         super(url, params, config);
     }
 
@@ -103,12 +109,33 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
                 .map(new ApiFunc<T>(clazz));
     }
 
+    @Override
+    public HR setRequestBody(RequestBody requestBody) {
+        this.mRequestBody = requestBody;
+        return (HR) this;
+    }
+
+    @Override
+    public HR setString(String string) {
+        this.mContent = string;
+        this.mMediaType = MediaTypes.TEXT_PLAIN_TYPE;
+        return (HR) this;
+    }
+
+    @Override
+    public HR setJson(String json) {
+        this.mContent = json;
+        this.mMediaType = MediaTypes.APPLICATION_JSON_TYPE;
+        return (HR) this;
+    }
 
     /**
      * Singleton
      */
-    public static abstract class Singleton<HRF extends Singleton>
-            extends IHttpRequest.Singleton<HRF, OkHttpClient> {
+    public abstract static class Singleton<HRF extends Singleton>
+            extends IBodyRequest.Singleton<HRF, OkHttpClient,
+            RequestBody, MediaType> {
+
         protected Call mCall;
         protected Observable<ResponseBody> mObservable;
 
@@ -118,10 +145,6 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
 
         public Singleton(String url, Params params) {
             super(url, params);
-        }
-
-        public Singleton(String url, Params params, Config config) {
-            super(url, params, config);
         }
 
         @Override
@@ -184,6 +207,26 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
             prepare();
             return mObservable.subscribeOn(Schedulers.io())
                     .map(new ApiFunc<T>(clazz));
+        }
+
+        @Override
+        public HRF setRequestBody(RequestBody requestBody) {
+            this.mRequestBody = requestBody;
+            return (HRF) this;
+        }
+
+        @Override
+        public HRF setString(String string) {
+            this.mContent = string;
+            this.mMediaType = MediaTypes.TEXT_PLAIN_TYPE;
+            return (HRF) this;
+        }
+
+        @Override
+        public HRF setJson(String json) {
+            this.mContent = json;
+            this.mMediaType = MediaTypes.APPLICATION_JSON_TYPE;
+            return (HRF) this;
         }
     }
 }

@@ -36,7 +36,7 @@ public class BodyWriter {
         sb.append(LINE_END);
         sb.append("Content-Type: " + "text/plain");
         sb.append(LINE_END);
-        sb.append("Content-Lenght: ").append(value.length());
+        sb.append("Content-Length: ").append(value.length());
         sb.append(LINE_END);
         sb.append(LINE_END);
         sb.append(value);

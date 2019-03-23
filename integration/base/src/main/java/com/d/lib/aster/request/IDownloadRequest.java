@@ -34,16 +34,22 @@ public abstract class IDownloadRequest<HR extends IDownloadRequest, C extends IC
         this.mConfig = config != null ? config : Config.getDefault();
     }
 
+    /**
+     * Initialize Observable, etc.
+     */
     protected abstract void prepare();
 
-    @SuppressWarnings("ConstantConditions")
-    public void request(@NonNull final String path, @NonNull final String name,
-                        @NonNull final ProgressCallback callback) {
-    }
+    public abstract void request(@NonNull final String path, @NonNull final String name,
+                                 @NonNull final ProgressCallback callback);
 
     @Override
     public HR tag(Object tag) {
         return super.tag(tag);
+    }
+
+    @Override
+    public Object getTag() {
+        return super.getTag();
     }
 
     @Override
@@ -101,6 +107,7 @@ public abstract class IDownloadRequest<HR extends IDownloadRequest, C extends IC
         return super.retryDelayMillis(retryDelayMillis);
     }
 
+
     /**
      * Singleton
      */
@@ -116,16 +123,22 @@ public abstract class IDownloadRequest<HR extends IDownloadRequest, C extends IC
             this.mParams = params;
         }
 
+        /**
+         * Initialize Observable, etc.
+         */
         protected abstract void prepare();
 
-        @SuppressWarnings("ConstantConditions")
-        public void request(@NonNull final String path, @NonNull final String name,
-                            @NonNull final ProgressCallback callback) {
-        }
+        public abstract void request(@NonNull final String path, @NonNull final String name,
+                                     @NonNull final ProgressCallback callback);
 
         @Override
         public HRF tag(Object tag) {
             return super.tag(tag);
+        }
+
+        @Override
+        public Object getTag() {
+            return super.getTag();
         }
     }
 }
