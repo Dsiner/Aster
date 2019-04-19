@@ -17,11 +17,12 @@ import javax.net.ssl.SSLSocketFactory;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
- * HttpClient
+ * OkHttpClient
  * Created by D on 2017/7/14.
  */
 public class OkHttpClient extends IClient {
-    private OkHttpApi okHttpApi;
+    private okhttp3.OkHttpClient mClient;
+    private OkHttpApi mOkHttpApi;
 
     private static class Default {
         private final static OkHttpClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
@@ -32,13 +33,10 @@ public class OkHttpClient extends IClient {
         private final static OkHttpClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
     }
 
-    private okhttp3.OkHttpClient mClient;
-
-
     private OkHttpClient(@State int type, @NonNull Config config) {
         super(type, config);
         this.mClient = getClient(config);
-        this.okHttpApi = new OkHttpApi(mClient);
+        this.mOkHttpApi = new OkHttpApi(mClient);
     }
 
     @NonNull
@@ -48,7 +46,7 @@ public class OkHttpClient extends IClient {
 
     @NonNull
     public OkHttpApi create() {
-        return okHttpApi;
+        return mOkHttpApi;
     }
 
     public static OkHttpClient create(@State int type, @NonNull Config config) {
@@ -132,7 +130,7 @@ public class OkHttpClient extends IClient {
 
             @Override
             public void log(String s) {
-                // Print retrofit log
+                // Print log
                 ULog.d(Config.Default.TAG_LOG + s);
             }
         });

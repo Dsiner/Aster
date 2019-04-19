@@ -17,7 +17,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * HttpClient
+ * IClient
  * Created by D on 2017/7/14.
  */
 public class IClient {

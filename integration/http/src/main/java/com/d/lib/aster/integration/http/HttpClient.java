@@ -21,7 +21,8 @@ import javax.net.ssl.SSLSocketFactory;
  * Created by D on 2017/7/14.
  */
 public class HttpClient extends IClient {
-    private HttpURLApi httpURLApi;
+    private HttpURLClient mClient;
+    private HttpURLApi mHttpURLApi;
 
     private static class Default {
         private final static HttpClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
@@ -32,12 +33,10 @@ public class HttpClient extends IClient {
         private final static HttpClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
     }
 
-    private HttpURLClient mClient;
-
     private HttpClient(@State int type, @NonNull Config config) {
         super(type, config);
         this.mClient = getClient(config);
-        this.httpURLApi = new HttpURLApi(mClient);
+        this.mHttpURLApi = new HttpURLApi(mClient);
     }
 
     @NonNull
@@ -47,7 +46,7 @@ public class HttpClient extends IClient {
 
     @NonNull
     public HttpURLApi create() {
-        return httpURLApi;
+        return mHttpURLApi;
     }
 
     public static HttpClient create(@State int type, @NonNull Config config) {

@@ -17,11 +17,12 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLSocketFactory;
 
 /**
- * HttpClient
+ * VolleyClient
  * Created by D on 2017/7/14.
  */
 public class VolleyClient extends IClient {
-    private VolleyApi volleyApi;
+    private com.d.lib.aster.integration.volley.client.VolleyClient mClient;
+    private VolleyApi mVolleyApi;
 
     private static class Default {
         private final static VolleyClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
@@ -32,13 +33,10 @@ public class VolleyClient extends IClient {
         private final static VolleyClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
     }
 
-    private com.d.lib.aster.integration.volley.client.VolleyClient mClient;
-
-
     private VolleyClient(@State int type, @NonNull Config config) {
         super(type, config);
         this.mClient = getClient(config);
-        this.volleyApi = new VolleyApi(mClient);
+        this.mVolleyApi = new VolleyApi(mClient);
     }
 
     @NonNull
@@ -48,7 +46,7 @@ public class VolleyClient extends IClient {
 
     @NonNull
     public VolleyApi create() {
-        return volleyApi;
+        return mVolleyApi;
     }
 
     public static VolleyClient create(@State int type, @NonNull Config config) {

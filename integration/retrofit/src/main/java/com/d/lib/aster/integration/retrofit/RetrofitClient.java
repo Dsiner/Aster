@@ -22,10 +22,11 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * HttpClient
+ * RetrofitClient
  * Created by D on 2017/7/14.
  */
 public class RetrofitClient extends IClient {
+    private Retrofit mClient;
 
     private static class Default {
         private final static RetrofitClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
@@ -35,8 +36,6 @@ public class RetrofitClient extends IClient {
         private final static RetrofitClient DOWNLOAD = create(TYPE_DOWNLOAD, Config.getDefault().log(false));
         private final static RetrofitClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
     }
-
-    private Retrofit mClient;
 
     private RetrofitClient(@State int type, @NonNull Config config) {
         super(type, config);
@@ -138,7 +137,7 @@ public class RetrofitClient extends IClient {
 
             @Override
             public void log(String s) {
-                // Print retrofit log
+                // Print log
                 ULog.d(Config.Default.TAG_LOG + s);
             }
         });
