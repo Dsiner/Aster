@@ -1,13 +1,14 @@
 package com.d.aster.activity;
 
+import android.support.annotation.NonNull;
+import android.widget.Toast;
+
 import com.d.aster.api.API;
 import com.d.aster.model.MovieInfo;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
-import com.d.lib.aster.integration.retrofit.RetrofitAPI;
-import com.d.lib.aster.integration.retrofit.RetrofitModule;
 import com.d.lib.aster.scheduler.callback.Observer;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.ULog;
@@ -16,8 +17,6 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
 
 /**
@@ -127,11 +126,15 @@ public class Post extends Request {
     @Override
     protected void requestRetrofit() {
         AsterModule aster = Aster.getAster();
-        if (!(aster instanceof RetrofitModule)) {
+        if (!(aster instanceof com.d.lib.aster.integration.retrofit.RetrofitModule)) {
+            Toast.makeText(getApplicationContext(),
+                    "Please initial Aster with the RetrofitModule.",
+                    Toast.LENGTH_SHORT);
             return;
         }
-        RetrofitModule retrofit = (RetrofitModule) aster;
-        retrofit.getRetrofit().create(RetrofitAPI.class)
+        com.d.lib.aster.integration.retrofit.RetrofitModule retrofit
+                = (com.d.lib.aster.integration.retrofit.RetrofitModule) aster;
+        retrofit.getRetrofit().create(com.d.lib.aster.integration.retrofit.RetrofitAPI.class)
                 .post(mUrl)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .map(new io.reactivex.functions.Function<ResponseBody, MovieInfo>() {
@@ -143,7 +146,7 @@ public class Post extends Request {
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                 .subscribe(new io.reactivex.Observer<MovieInfo>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(io.reactivex.disposables.Disposable d) {
 
                     }
 

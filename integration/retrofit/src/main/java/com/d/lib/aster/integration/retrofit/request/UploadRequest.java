@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
+import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
@@ -11,9 +12,11 @@ import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
 import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
+import com.d.lib.aster.integration.retrofit.func.ApiFunc;
 import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
 import com.d.lib.aster.integration.retrofit.observer.UploadObserver;
 import com.d.lib.aster.request.IUploadRequest;
+import com.d.lib.aster.utils.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +34,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import okhttp3.internal.Util;
 import okio.BufferedSink;
 import okio.Okio;
 import okio.Source;
@@ -79,23 +81,24 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
     }
 
     @Override
-    public <R> void request(SimpleCallback<R> callback) {
+    public <T> void request(SimpleCallback<T> callback) {
         prepare();
         requestImpl(mObservable, getClient().getHttpConfig(),
-                mTag, mMultipartBodyParts, (SimpleCallback<ResponseBody>) callback);
+                mTag, mMultipartBodyParts, callback);
     }
 
-    private static void requestImpl(final Observable<ResponseBody> observable,
-                                    final Config config,
-                                    final Object tag,
-                                    final List<MultipartBody.Part> multipartBodyParts,
-                                    final SimpleCallback<ResponseBody> callback) {
-        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, multipartBodyParts, callback);
+    private static <T> void requestImpl(final Observable<ResponseBody> observable,
+                                        final Config config,
+                                        final Object tag,
+                                        final List<MultipartBody.Part> multipartBodyParts,
+                                        final SimpleCallback<T> callback) {
+        DisposableObserver<T> disposableObserver = new UploadObserver<T>(tag, multipartBodyParts, callback);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
+                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))
                 .subscribe(disposableObserver);
@@ -105,6 +108,14 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
     public UploadRequest addParam(String paramKey, String paramValue) {
         if (paramKey != null && paramValue != null) {
             this.mParams.put(paramKey, paramValue);
+        }
+        return this;
+    }
+
+    @Override
+    public UploadRequest addParam(Params params) {
+        if (params != null) {
+            this.mParams.putAll(params);
         }
         return this;
     }
@@ -220,7 +231,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
                     source = Okio.source(inputStream);
                     sink.writeAll(source);
                 } finally {
-                    Util.closeQuietly(source);
+                    okhttp3.internal.Util.closeQuietly(source);
                 }
             }
         };
@@ -276,6 +287,14 @@ public class UploadRequest extends IUploadRequest<UploadRequest, RetrofitClient>
         public Singleton addParam(String paramKey, String paramValue) {
             if (paramKey != null && paramValue != null) {
                 this.mParams.put(paramKey, paramValue);
+            }
+            return this;
+        }
+
+        @Override
+        public Singleton addParam(Params params) {
+            if (params != null) {
+                this.mParams.putAll(params);
             }
             return this;
         }

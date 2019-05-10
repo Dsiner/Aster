@@ -2,12 +2,17 @@ package com.d.aster.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.support.annotation.NonNull;
 
 import com.d.aster.App;
 import com.d.aster.R;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.scheduler.Observable;
+import com.d.lib.aster.scheduler.callback.Observer;
+import com.d.lib.aster.scheduler.callback.Task;
+import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
@@ -15,14 +20,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Request --> Upload
@@ -96,11 +93,11 @@ public class Upload extends Request {
                         ULog.d("dsiner_request--> onCancel");
                     }
                 })
-                .request(new SimpleCallback() {
+                .request(new SimpleCallback<String>() {
                     @Override
-                    public void onSuccess(Object response) {
+                    public void onSuccess(String response) {
                         Util.printThread("dsiner_theard onComplete / All");
-                        ULog.d("dsiner_request--> onComplete / All");
+                        ULog.d("dsiner_request--> onComplete / All: " + response);
                     }
 
                     @Override
@@ -153,11 +150,11 @@ public class Upload extends Request {
                         ULog.d("dsiner_request--> onCancel");
                     }
                 })
-                .request(new SimpleCallback() {
+                .request(new SimpleCallback<String>() {
                     @Override
-                    public void onSuccess(Object response) {
+                    public void onSuccess(String response) {
                         Util.printThread("dsiner_theard onComplete / All");
-                        ULog.d("dsiner_request--> onComplete / All");
+                        ULog.d("dsiner_request--> onComplete / All: " + response);
                     }
 
                     @Override
@@ -174,22 +171,25 @@ public class Upload extends Request {
             return;
         }
         mIsRunning = true;
-        Observable.create(new ObservableOnSubscribe<Boolean>() {
+        Observable.create(new Task<Boolean>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<Boolean> emitter) throws Exception {
-                boolean success = checkFile(name);
-                emitter.onNext(success);
-                emitter.onComplete();
+            public Boolean run() throws Exception {
+                return checkFile(name);
             }
         }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Boolean>() {
+                .observeOn(Schedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
                     @Override
-                    public void accept(@NonNull Boolean success) throws Exception {
+                    public void onNext(@NonNull Boolean success) {
                         mIsRunning = false;
                         if (runnable != null) {
                             runnable.run();
                         }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
                     }
                 });
     }

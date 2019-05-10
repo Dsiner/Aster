@@ -44,6 +44,8 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
 
     public abstract HR addParam(String paramKey, String paramValue);
 
+    public abstract HR addParam(Params params);
+
     public abstract HR addFile(String key, File file);
 
     public abstract HR addFile(String key, File file, ProgressCallback callback);
@@ -147,6 +149,8 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
         public abstract <R> void request(@Nullable SimpleCallback<R> callback);
 
         public abstract HRF addParam(String paramKey, String paramValue);
+
+        public abstract HRF addParam(Params params);
 
         public abstract HRF addFile(String key, File file);
 

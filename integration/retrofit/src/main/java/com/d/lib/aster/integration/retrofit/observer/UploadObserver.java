@@ -12,20 +12,19 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 /**
  * Observer with Upload Callback
  * Created by D on 2017/10/26.
  */
-public class UploadObserver extends AbsObserver<ResponseBody> {
+public class UploadObserver<R> extends AbsObserver<R> {
     private final List<MultipartBody.Part> mMultipartBodyParts;
     private final Object mTag;
-    private final SimpleCallback<ResponseBody> mCallback;
+    private final SimpleCallback<R> mCallback;
 
     public UploadObserver(@Nullable Object tag,
                           @Nullable List<MultipartBody.Part> multipartBodyParts,
-                          @Nullable SimpleCallback<ResponseBody> callback) {
+                          @Nullable SimpleCallback<R> callback) {
         this.mMultipartBodyParts = multipartBodyParts;
         this.mTag = tag;
         this.mCallback = callback;
@@ -52,13 +51,13 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
     }
 
     @Override
-    public void onNext(ResponseBody o) {
+    public void onNext(R r) {
         RequestManagerImpl.getIns().remove(mTag);
         Util.printThread("Aster_thread uploadOnNext");
         if (mCallback == null) {
             return;
         }
-        mCallback.onSuccess(o);
+        mCallback.onSuccess(r);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.base.MediaTypes;
+import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.HttpClient;
@@ -17,12 +18,14 @@ import com.d.lib.aster.integration.http.body.RequestBody;
 import com.d.lib.aster.integration.http.body.UploadProgressRequestBody;
 import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.integration.http.client.ResponseBody;
+import com.d.lib.aster.integration.http.func.ApiFunc;
 import com.d.lib.aster.integration.http.func.ApiRetryFunc;
 import com.d.lib.aster.integration.http.observer.UploadObserver;
 import com.d.lib.aster.request.IUploadRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
+import com.d.lib.aster.utils.Util;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -80,30 +83,33 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
     }
 
     @Override
-    public <R> void request(@Nullable SimpleCallback<R> callback) {
+    public <T> void request(@Nullable SimpleCallback<T> callback) {
         prepare();
         requestImpl(mObservable, getClient().getHttpConfig(),
-                mTag, mConn, (SimpleCallback<ResponseBody>) callback);
+                mTag, mConn, callback);
     }
 
-    private static void requestImpl(final Observable<ResponseBody> observable,
-                                    final Config config,
-                                    final Object tag,
-                                    final HttpURLConnection conn,
-                                    final SimpleCallback<ResponseBody> callback) {
-        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag, conn, callback);
+    private static <T> void requestImpl(final Observable<ResponseBody> observable,
+                                        final Config config,
+                                        final Object tag,
+                                        final HttpURLConnection conn,
+                                        final SimpleCallback<T> callback) {
+        DisposableObserver<T> disposableObserver = new UploadObserver<T>(tag, conn, callback);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
+                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
                 .observeOn(Schedulers.mainThread())
-                .subscribe(new ApiRetryFunc<ResponseBody>(disposableObserver,
-                        config.retryCount, config.retryDelayMillis,
-                        new ApiRetryFunc.OnRetry<ResponseBody>() {
+                .subscribe(new ApiRetryFunc<T>(disposableObserver,
+                        config.retryCount,
+                        config.retryDelayMillis,
+                        new ApiRetryFunc.OnRetry<T>() {
                             @NonNull
                             @Override
-                            public Observable.Observe<ResponseBody> observe() {
+                            public Observable.Observe<T> observe() {
                                 return observable.subscribeOn(Schedulers.io())
+                                        .map(new ApiFunc<T>(Util.getFirstCls(callback)))
                                         .observeOn(Schedulers.mainThread());
                             }
                         }));
@@ -113,6 +119,14 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
     public UploadRequest addParam(String paramKey, String paramValue) {
         if (paramKey != null && paramValue != null) {
             this.mParams.put(paramKey, paramValue);
+        }
+        return this;
+    }
+
+    @Override
+    public UploadRequest addParam(Params params) {
+        if (params != null) {
+            this.mParams.putAll(params);
         }
         return this;
     }
@@ -281,6 +295,14 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
         public Singleton addParam(String paramKey, String paramValue) {
             if (paramKey != null && paramValue != null) {
                 this.mParams.put(paramKey, paramValue);
+            }
+            return this;
+        }
+
+        @Override
+        public Singleton addParam(Params params) {
+            if (params != null) {
+                this.mParams.putAll(params);
             }
             return this;
         }

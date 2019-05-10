@@ -1,6 +1,7 @@
 package com.d.aster.activity;
 
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.d.aster.api.API;
 import com.d.aster.model.MovieInfo;
@@ -9,8 +10,6 @@ import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.integration.retrofit.RetrofitAPI;
-import com.d.lib.aster.integration.retrofit.RetrofitModule;
 import com.d.lib.aster.scheduler.callback.Function;
 import com.d.lib.aster.scheduler.callback.Observer;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
@@ -142,11 +141,15 @@ public class Get extends Request {
     @Override
     protected void requestRetrofit() {
         AsterModule aster = Aster.getAster();
-        if (!(aster instanceof RetrofitModule)) {
+        if (!(aster instanceof com.d.lib.aster.integration.retrofit.RetrofitModule)) {
+            Toast.makeText(getApplicationContext(),
+                    "Please initial Aster with the RetrofitModule.",
+                    Toast.LENGTH_SHORT);
             return;
         }
-        RetrofitModule retrofit = (RetrofitModule) aster;
-        retrofit.getRetrofit().create(RetrofitAPI.class)
+        com.d.lib.aster.integration.retrofit.RetrofitModule retrofit
+                = (com.d.lib.aster.integration.retrofit.RetrofitModule) aster;
+        retrofit.getRetrofit().create(com.d.lib.aster.integration.retrofit.RetrofitAPI.class)
                 .get(mUrl)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .map(new io.reactivex.functions.Function<ResponseBody, ArrayList<Boolean>>() {

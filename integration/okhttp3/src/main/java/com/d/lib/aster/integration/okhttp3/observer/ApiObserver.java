@@ -1,5 +1,6 @@
 package com.d.lib.aster.integration.okhttp3.observer;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.SimpleCallback;
@@ -37,7 +38,7 @@ public class ApiObserver<R> extends AbsObserver<R> {
     }
 
     @Override
-    public void onError(Throwable e) {
+    public void onError(@NonNull Throwable e) {
         RequestManagerImpl.getIns().remove(mTag);
         if (isDisposed()) {
             return;

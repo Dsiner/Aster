@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.volley.RequestManagerImpl;
-import com.d.lib.aster.integration.volley.client.ResponseBody;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.utils.Util;
 
@@ -12,11 +11,11 @@ import com.d.lib.aster.utils.Util;
  * Observer with Upload Callback
  * Created by D on 2017/10/26.
  */
-public class UploadObserver extends AbsObserver<ResponseBody> {
+public class UploadObserver<R> extends AbsObserver<R> {
     private final Object mTag;
-    private final SimpleCallback<ResponseBody> mCallback;
+    private final SimpleCallback<R> mCallback;
 
-    public UploadObserver(Object tag, @Nullable SimpleCallback<ResponseBody> callback) {
+    public UploadObserver(Object tag, @Nullable SimpleCallback<R> callback) {
         this.mTag = tag;
         this.mCallback = callback;
     }
@@ -35,13 +34,13 @@ public class UploadObserver extends AbsObserver<ResponseBody> {
     }
 
     @Override
-    public void onNext(ResponseBody o) {
+    public void onNext(R r) {
         RequestManagerImpl.getIns().remove(mTag);
         Util.printThread("Aster_thread uploadOnNext");
         if (mCallback == null) {
             return;
         }
-        mCallback.onSuccess(o);
+        mCallback.onSuccess(r);
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
+import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.okhttp3.MediaTypes;
@@ -12,12 +13,14 @@ import com.d.lib.aster.integration.okhttp3.OkHttpApi;
 import com.d.lib.aster.integration.okhttp3.OkHttpClient;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
+import com.d.lib.aster.integration.okhttp3.func.ApiFunc;
 import com.d.lib.aster.integration.okhttp3.func.ApiRetryFunc;
 import com.d.lib.aster.integration.okhttp3.observer.UploadObserver;
 import com.d.lib.aster.request.IUploadRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
+import com.d.lib.aster.utils.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +35,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import okhttp3.internal.Util;
 import okio.BufferedSink;
 import okio.Okio;
 import okio.Source;
@@ -83,19 +85,19 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
     }
 
     @Override
-    public <R> void request(@Nullable SimpleCallback<R> callback) {
+    public <T> void request(@Nullable SimpleCallback<T> callback) {
         prepare();
         requestImpl(mObservable, getClient().getHttpConfig(),
-                mTag, mMultipartBodyParts, mCall, (SimpleCallback<ResponseBody>) callback);
+                mTag, mMultipartBodyParts, mCall, callback);
     }
 
-    private static void requestImpl(final Observable<ResponseBody> observable,
-                                    final Config config,
-                                    final Object tag,
-                                    final List<MultipartBody.Part> multipartBodyParts,
-                                    final Call call,
-                                    final SimpleCallback<ResponseBody> callback) {
-        DisposableObserver<ResponseBody> disposableObserver = new UploadObserver(tag,
+    private static <T> void requestImpl(final Observable<ResponseBody> observable,
+                                        final Config config,
+                                        final Object tag,
+                                        final List<MultipartBody.Part> multipartBodyParts,
+                                        final Call call,
+                                        final SimpleCallback<T> callback) {
+        DisposableObserver<T> disposableObserver = new UploadObserver<T>(tag,
                 multipartBodyParts,
                 call,
                 callback);
@@ -103,14 +105,17 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
+                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
                 .observeOn(Schedulers.mainThread())
-                .subscribe(new ApiRetryFunc<ResponseBody>(disposableObserver,
-                        config.retryCount, config.retryDelayMillis,
-                        new ApiRetryFunc.OnRetry<ResponseBody>() {
+                .subscribe(new ApiRetryFunc<T>(disposableObserver,
+                        config.retryCount,
+                        config.retryDelayMillis,
+                        new ApiRetryFunc.OnRetry<T>() {
                             @NonNull
                             @Override
-                            public Observable.Observe<ResponseBody> observe() {
+                            public Observable.Observe<T> observe() {
                                 return observable.subscribeOn(Schedulers.io())
+                                        .map(new ApiFunc<T>(Util.getFirstCls(callback)))
                                         .observeOn(Schedulers.mainThread());
                             }
                         }));
@@ -120,6 +125,14 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
     public UploadRequest addParam(String paramKey, String paramValue) {
         if (paramKey != null && paramValue != null) {
             this.mParams.put(paramKey, paramValue);
+        }
+        return this;
+    }
+
+    @Override
+    public UploadRequest addParam(Params params) {
+        if (params != null) {
+            this.mParams.putAll(params);
         }
         return this;
     }
@@ -235,7 +248,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
                     source = Okio.source(inputStream);
                     sink.writeAll(source);
                 } finally {
-                    Util.closeQuietly(source);
+                    okhttp3.internal.Util.closeQuietly(source);
                 }
             }
         };
@@ -287,13 +300,21 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
         public <R> void request(SimpleCallback<R> callback) {
             prepare();
             requestImpl(mObservable, getClient().getHttpConfig(),
-                    mTag, mMultipartBodyParts, mCall, (SimpleCallback<ResponseBody>) callback);
+                    mTag, mMultipartBodyParts, mCall, callback);
         }
 
         @Override
         public Singleton addParam(String paramKey, String paramValue) {
             if (paramKey != null && paramValue != null) {
                 this.mParams.put(paramKey, paramValue);
+            }
+            return this;
+        }
+
+        @Override
+        public Singleton addParam(Params params) {
+            if (params != null) {
+                this.mParams.putAll(params);
             }
             return this;
         }
