@@ -6,12 +6,13 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
- * ResponseBody to T
+ * Response to T
  */
-public class ApiFunc<T> implements Function<ResponseBody, T> {
+public class ApiFunc<T> implements Function<Response, T> {
     private Type mType;
 
     public ApiFunc(Type type) {
@@ -19,23 +20,26 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
     }
 
     @Override
-    public T apply(ResponseBody responseBody) throws Exception {
-        Util.printThread("Aster_thread gsonFormat");
+    public T apply(Response response) throws Exception {
+        Util.printThread("Aster_thread class conversion");
         try {
-            if (mType.equals(ResponseBody.class)) {
-                return (T) responseBody;
+            if (mType.equals(Response.class)) {
+                return (T) response;
+            } else if (mType.equals(ResponseBody.class)) {
+                return (T) response.body();
             } else if (mType.equals(String.class)) {
-                return (T) responseBody.string();
+                return (T) response.body().string();
             } else {
                 Gson gson = new Gson();
-                return gson.fromJson(responseBody.string(), mType);
+                return gson.fromJson(response.body().string(), mType);
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
         } finally {
-            if (!mType.equals(ResponseBody.class) && responseBody != null) {
-                responseBody.close();
+            if (!Response.class.equals(mType) && !ResponseBody.class.equals(mType)
+                    && response != null && response.body() != null) {
+                response.body().close();
             }
         }
     }

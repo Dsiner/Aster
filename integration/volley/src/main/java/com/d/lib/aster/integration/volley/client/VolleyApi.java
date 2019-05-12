@@ -10,7 +10,6 @@ import com.android.volley.toolbox.RequestFuture;
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.integration.volley.body.FormBody;
-import com.d.lib.aster.integration.volley.body.MultipartBody;
 import com.d.lib.aster.integration.volley.body.RequestBody;
 import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
@@ -36,22 +35,20 @@ public class VolleyApi {
         return mImpl;
     }
 
-    public Observable<ResponseBody> get(String url, Params params) {
+    public Observable<Response> get(String url, Params params) {
         return get(url + "?" + params.getRequestParamsString());
     }
 
-    public Observable<ResponseBody> get(final String url) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> get(final String url) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().getImpl(url);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -60,18 +57,16 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> post(final String url) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> post(final String url) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().postImpl(url);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -80,18 +75,16 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> post(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> post(final String url, final Params params) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().postImpl(url, params);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -100,18 +93,16 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> postBody(final String url, final RequestBody requestBody) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> postBody(final String url, final RequestBody requestBody) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().postBodyImpl(url, requestBody);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -120,22 +111,20 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> put(final String url) {
+    public Observable<Response> put(final String url) {
         return put(url, null);
     }
 
-    public Observable<ResponseBody> put(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> put(final String url, final Params params) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().putImpl(url, params);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -144,18 +133,16 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> putBody(final String url, final RequestBody requestBody) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> putBody(final String url, final RequestBody requestBody) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().putBodyImpl(url, requestBody);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -164,18 +151,16 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> head(final String url) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> head(final String url) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().headImpl(url);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -184,22 +169,20 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> delete(final String url) {
+    public Observable<Response> delete(final String url) {
         return delete(url, null);
     }
 
-    public Observable<ResponseBody> delete(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> delete(final String url, final Params params) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().deleteImpl(url, params);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -208,18 +191,16 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> deleteBody(final String url, final RequestBody requestBody) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> deleteBody(final String url, final RequestBody requestBody) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().deleteBodyImpl(url, requestBody);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -228,22 +209,20 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> options(final String url) {
+    public Observable<Response> options(final String url) {
         return options(url, null);
     }
 
-    public Observable<ResponseBody> options(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> options(final String url, final Params params) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().optionsImpl(url, params);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -252,18 +231,16 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> optionsBody(final String url, final RequestBody requestBody) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> optionsBody(final String url, final RequestBody requestBody) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().optionsBodyImpl(url, requestBody);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -272,22 +249,20 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> patch(final String url) {
+    public Observable<Response> patch(final String url) {
         return patch(url, null);
     }
 
-    public Observable<ResponseBody> patch(final String url, final Params params) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> patch(final String url, final Params params) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().patchImpl(url, params);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -296,62 +271,16 @@ public class VolleyApi {
         });
     }
 
-    public Observable<ResponseBody> patchBody(final String url, final RequestBody requestBody) {
-        return Observable.create(new Task<ResponseBody>() {
+    public Observable<Response> patchBody(final String url, final RequestBody requestBody) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
                     RequestFuture<RealResponse> requestFuture = getImpl().patchBodyImpl(url, requestBody);
                     if (requestFuture.isCancelled()) {
                         throw new NetworkErrorException("Request cancelled.");
                     }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
-    }
-
-    public Observable<ResponseBody> download(final String url) {
-        return Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().downloadImpl(url);
-                    if (requestFuture.isCancelled()) {
-                        throw new NetworkErrorException("Request cancelled.");
-                    }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
-    }
-
-    public Observable<ResponseBody> download(final String url, final Params params) {
-        return download(url + "?" + params.getRequestParamsString());
-    }
-
-    public Observable<ResponseBody> upload(final String url, final List<MultipartBody.Part> multipartBodyParts) {
-        return Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    RequestFuture<RealResponse> requestFuture = getImpl().uploadImpl(url, multipartBodyParts);
-                    if (requestFuture.isCancelled()) {
-                        throw new NetworkErrorException("Request cancelled.");
-                    }
-                    RealResponse response = requestFuture.get();
-                    checkSuccessful(response);
-                    return response.body();
+                    return requestFuture.get();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -413,6 +342,10 @@ public class VolleyApi {
             ResponseRequest request = new ResponseRequest(Request.Method.POST, url,
                     requestFuture, requestFuture);
             request.setRequestBody(requestBody);
+            MediaType contentType = requestBody.contentType();
+            if (contentType != null && !TextUtils.isEmpty(contentType.toString())) {
+                request.addHeader("Content-Type", contentType.toString());
+            }
             intercept(request);
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
@@ -497,39 +430,6 @@ public class VolleyApi {
                     requestFuture, requestFuture);
             request.setRequestBody(requestBody);
             intercept(request);
-            requestFuture.setRequest(request);
-            mClient.getRequestQueue().add(request);
-            return requestFuture;
-        }
-
-        private RequestFuture<RealResponse> downloadImpl(final String url)
-                throws IOException {
-            final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
-            ResponseRequest request = new ResponseRequest(Request.Method.GET, url,
-                    requestFuture, requestFuture);
-            intercept(request);
-            requestFuture.setRequest(request);
-            mClient.getRequestQueue().add(request);
-            return requestFuture;
-        }
-
-        private RequestFuture<RealResponse> uploadImpl(final String url,
-                                                       final List<MultipartBody.Part> multipartBodyParts)
-                throws IOException {
-            final RequestFuture<RealResponse> requestFuture = RequestFuture.newFuture();
-            ResponseRequest request = new ResponseRequest(Request.Method.POST, url,
-                    requestFuture, requestFuture);
-            intercept(request);
-            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-            for (MultipartBody.Part part : multipartBodyParts) {
-                builder.addPart(part);
-            }
-            RequestBody requestBody = builder.build();
-            MediaType contentType = requestBody.contentType();
-            if (contentType != null
-                    && !TextUtils.isEmpty(contentType.toString())) {
-                request.addHeader("Content-Type", contentType.toString());
-            }
             requestFuture.setRequest(request);
             mClient.getRequestQueue().add(request);
             return requestFuture;

@@ -8,7 +8,7 @@ import com.d.lib.aster.utils.Util;
  * Map with AsyncCallback
  */
 public class MapFunc<T, R> implements Function<T, R> {
-    private AsyncCallback<T, R> mCallback;
+    private final AsyncCallback<T, R> mCallback;
 
     public MapFunc(AsyncCallback<T, R> callback) {
         this.mCallback = callback;
@@ -16,7 +16,7 @@ public class MapFunc<T, R> implements Function<T, R> {
 
     @Override
     public R apply(T responseBody) throws Exception {
-        Util.printThread("Aster_thread callback apply");
+        Util.printThread("Aster_thread map apply");
         return mCallback.apply(responseBody);
     }
 }

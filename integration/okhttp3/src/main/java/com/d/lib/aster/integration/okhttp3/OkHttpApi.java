@@ -11,18 +11,15 @@ import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.Task;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 /**
  * OkHttpApi
@@ -46,19 +43,7 @@ public class OkHttpApi {
     public Callable get(final String url, @Nullable final Params params) {
         final String realUrl = params != null ? url + "?" + params.getRequestParamsString() : url;
         final Call call = getImpl().getImpl(realUrl);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
@@ -68,37 +53,13 @@ public class OkHttpApi {
 
     public Callable post(final String url, @Nullable final Params params) {
         final Call call = getImpl().postImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
     public Callable postBody(final String url, final RequestBody requestBody) {
         final Call call = getImpl().postBodyImpl(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
@@ -108,55 +69,19 @@ public class OkHttpApi {
 
     public Callable put(final String url, @Nullable final Params params) {
         final Call call = getImpl().putImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
     public Callable putBody(final String url, final RequestBody requestBody) {
         final Call call = getImpl().putBodyImpl(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
     public Callable head(final String url) {
         final Call call = getImpl().headImpl(url);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
@@ -166,37 +91,13 @@ public class OkHttpApi {
 
     public Callable delete(final String url, final Params params) {
         final Call call = getImpl().deleteImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
     public Callable deleteBody(final String url, final RequestBody requestBody) {
         final Call call = getImpl().deleteBodyIml(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
@@ -206,37 +107,13 @@ public class OkHttpApi {
 
     public Callable options(final String url, final Params params) {
         final Call call = getImpl().optionsImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
     public Callable optionsBody(final String url, final RequestBody requestBody) {
         final Call call = getImpl().optionsBodyImpl(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
@@ -246,80 +123,29 @@ public class OkHttpApi {
 
     public Callable patch(final String url, final Params params) {
         final Call call = getImpl().patchImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(call);
         return new Callable(call, observable);
     }
 
     public Callable patchBody(final String url, final RequestBody requestBody) {
         final Call call = getImpl().patchBodyImpl(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
+    }
+
+    @NonNull
+    private Observable<Response> getObservable(final Call call) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
+                    return call.execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                     throw e;
                 }
             }
         });
-        return new Callable(call, observable);
-    }
-
-    public Callable download(final String url) {
-        return download(url, null);
-    }
-
-    public Callable download(final String url, @Nullable final Params params) {
-        final String realUrl = params != null ? url + "?" + params.getRequestParamsString() : url;
-        final Call call = getImpl().downloadImpl(realUrl);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
-        return new Callable(call, observable);
-    }
-
-    public Callable upload(final String url,
-                           final List<MultipartBody.Part> multipartBodyParts) {
-        final Call call = getImpl().uploadImpl(url, multipartBodyParts);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = call.execute();
-                    int code = response.code();
-                    return response.body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
-        return new Callable(call, observable);
     }
 
     private void checkSuccessful(@NonNull Response response) throws Exception {
@@ -332,9 +158,9 @@ public class OkHttpApi {
 
     public static final class Callable {
         public final Call call;
-        public final Observable<ResponseBody> observable;
+        public final Observable<Response> observable;
 
-        public Callable(Call call, Observable<ResponseBody> observable) {
+        public Callable(Call call, Observable<Response> observable) {
             this.call = call;
             this.observable = observable;
         }
@@ -423,26 +249,6 @@ public class OkHttpApi {
             final Request request = new Request.Builder()
                     .url(url)
                     .patch(requestBody)
-                    .build();
-            return mClient.newCall(request);
-        }
-
-        private Call downloadImpl(String url) {
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-            return mClient.newCall(request);
-        }
-
-        private Call uploadImpl(String url,
-                                @NonNull List<MultipartBody.Part> multipartBodyParts) {
-            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-            for (MultipartBody.Part part : multipartBodyParts) {
-                builder.addPart(part);
-            }
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .post(builder.build())
                     .build();
             return mClient.newCall(request);
         }

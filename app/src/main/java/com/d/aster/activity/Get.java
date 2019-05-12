@@ -3,6 +3,7 @@ package com.d.aster.activity;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.d.aster.Logger;
 import com.d.aster.api.API;
 import com.d.aster.model.MovieInfo;
 import com.d.lib.aster.Aster;
@@ -13,8 +14,6 @@ import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.scheduler.callback.Function;
 import com.d.lib.aster.scheduler.callback.Observer;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
-import com.d.lib.aster.utils.ULog;
-import com.d.lib.aster.utils.Util;
 
 import java.util.ArrayList;
 
@@ -47,15 +46,13 @@ public class Get extends Request {
                 .request(new SimpleCallback<MovieInfo>() {
                     @Override
                     public void onSuccess(MovieInfo response) {
-                        Util.printThread("dsiner_theard onSuccess");
-                        ULog.d("dsiner_request--> onSuccess: " + response);
+                        Logger.d("dsiner_request--> onSuccess: " + response);
                         formatPrinting(response.toString());
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                        ULog.d("dsiner_request--> onError");
+                        Logger.d("dsiner_request--> onError");
                     }
                 });
     }
@@ -73,22 +70,19 @@ public class Get extends Request {
                 .request(new AsyncCallback<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply");
-                        ULog.d("dsiner_request--> apply");
+                        Logger.d("dsiner_request--> apply");
                         int size = info.subjects.size();
                         return "" + size;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        Util.printThread("dsiner_theard onSuccess");
-                        ULog.d("dsiner_request--> onSuccess: " + response);
+                        Logger.d("dsiner_request--> onSuccess: " + response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                        ULog.d("dsiner_request--> onError");
+                        Logger.d("dsiner_request--> onError");
                     }
                 });
     }
@@ -104,7 +98,7 @@ public class Get extends Request {
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
                     public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply");
+                        Logger.d("dsiner_theard apply");
                         return info;
                     }
                 })
@@ -112,7 +106,7 @@ public class Get extends Request {
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
                     public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply");
+                        Logger.d("dsiner_theard apply");
                         return info;
                     }
                 })
@@ -120,7 +114,7 @@ public class Get extends Request {
                 .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
                     public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply");
+                        Logger.d("dsiner_theard apply");
                         return info;
                     }
                 })
@@ -128,12 +122,12 @@ public class Get extends Request {
                 .subscribe(new Observer() {
                     @Override
                     public void onNext(@NonNull Object result) {
-                        Util.printThread("dsiner_theard onNext");
+                        Logger.d("dsiner_theard onNext");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
+                        Logger.d("dsiner_theard onError");
                     }
                 });
     }

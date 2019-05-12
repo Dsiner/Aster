@@ -4,6 +4,8 @@ import java.io.Closeable;
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +43,15 @@ public class Util {
         Type[] params = ((ParameterizedType) types[0]).getActualTypeArguments();
         Class<T> reponseClass = (Class) params[0];
         return reponseClass;
+    }
+
+    public static String guessMimeType(String path) {
+        FileNameMap fileNameMap = URLConnection.getFileNameMap();
+        String contentTypeFor = fileNameMap.getContentTypeFor(path);
+        if (contentTypeFor == null) {
+            contentTypeFor = "application/octet-stream";
+        }
+        return contentTypeFor;
     }
 
     /**

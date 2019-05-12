@@ -23,16 +23,17 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
 
     private final String mPath;
     private final String mName;
-    private final Object mTag;
     private final DownloadModel mDownModel = new DownloadModel();
     private final ProgressCallback mCallback;
+    private final Object mTag;
 
-    public DownloadObserver(final String path, final String name, @Nullable final Object tag,
-                            @Nullable ProgressCallback callback) {
+    public DownloadObserver(final String path, final String name,
+                            @Nullable ProgressCallback callback,
+                            @Nullable final Object tag) {
         this.mPath = path;
         this.mName = name;
-        this.mTag = tag;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     @NonNull

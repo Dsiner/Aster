@@ -1,7 +1,7 @@
 package com.d.lib.aster.callback;
 
 /**
- * UploadCallback
+ * ProgressCallback
  * Created by D on 2017/10/24.
  */
 public interface ProgressCallback {

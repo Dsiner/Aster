@@ -21,7 +21,7 @@ import okio.Sink;
 /**
  * Upload progress request entity class
  */
-public class UploadProgressRequestBody extends RequestBody {
+public class UploadProgressRequestBody<T> extends RequestBody {
     // The two progress update intervals cannot be less than 1000ms
     private static final int MIN_DELAY_TIME = 1000;
 
@@ -42,21 +42,15 @@ public class UploadProgressRequestBody extends RequestBody {
     }
 
     @Override
-    public long contentLength() {
-        try {
-            return mRequestBody.contentLength();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;
+    public long contentLength() throws IOException {
+        return mRequestBody.contentLength();
     }
 
     @Override
     public void writeTo(@NonNull BufferedSink sink) throws IOException {
         onStartImpl();
-        BufferedSink bufferedSink;
         try {
-            bufferedSink = Okio.buffer(new CountingSink(sink));
+            BufferedSink bufferedSink = Okio.buffer(new CountingSink(sink));
             mRequestBody.writeTo(bufferedSink);
             bufferedSink.flush();
             onSuccessImpl();
@@ -131,12 +125,12 @@ public class UploadProgressRequestBody extends RequestBody {
         @Override
         public void write(@NonNull Buffer source, long byteCount) throws IOException {
             super.write(source, byteCount);
-            // Increase the number of bytes currently written
-            currentLength += byteCount;
             // Get the value of contentLength, no longer call later
             if (totalLength == 0) {
                 totalLength = contentLength();
             }
+            // Increase the number of bytes currently written
+            currentLength += byteCount;
             long currentTime = System.currentTimeMillis();
             if (currentTime - mLastTime >= MIN_DELAY_TIME || mLastTime == 0 || currentLength == totalLength) {
                 mLastTime = currentTime;
@@ -145,7 +139,9 @@ public class UploadProgressRequestBody extends RequestBody {
                     public void run() {
                         ULog.d("Upload progress currentLength: " + currentLength
                                 + " totalLength: " + totalLength);
-                        mCallback.onProgress(currentLength, totalLength);
+                        if (mCallback != null) {
+                            mCallback.onProgress(currentLength, totalLength);
+                        }
                     }
                 });
             }

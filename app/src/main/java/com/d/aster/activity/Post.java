@@ -3,6 +3,7 @@ package com.d.aster.activity;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.d.aster.Logger;
 import com.d.aster.api.API;
 import com.d.aster.model.MovieInfo;
 import com.d.lib.aster.Aster;
@@ -11,8 +12,6 @@ import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.scheduler.callback.Observer;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
-import com.d.lib.aster.utils.ULog;
-import com.d.lib.aster.utils.Util;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -46,22 +45,19 @@ public class Post extends Request {
                 .request(new AsyncCallback<String, String>() {
                     @Override
                     public String apply(@NonNull String info) throws Exception {
-                        Util.printThread("dsiner_theard apply");
-                        ULog.d("dsiner_request--> apply");
+                        Logger.d("dsiner_request--> apply");
                         return "" + info;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        Util.printThread("dsiner_theard onSuccess");
-                        ULog.d("dsiner_request--> onSuccess: " + response);
+                        Logger.d("dsiner_request--> onSuccess: " + response);
                         formatPrinting(response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                        ULog.d("dsiner_request--> onError");
+                        Logger.d("dsiner_request--> onError");
                     }
                 });
     }
@@ -79,23 +75,20 @@ public class Post extends Request {
                 .request(new AsyncCallback<MovieInfo, String>() {
                     @Override
                     public String apply(@NonNull MovieInfo info) throws Exception {
-                        Util.printThread("dsiner_theard apply");
-                        ULog.d("dsiner_request--> apply");
+                        Logger.d("dsiner_request--> apply");
                         int size = info.subjects.size();
                         return "" + size;
                     }
 
                     @Override
                     public void onSuccess(String response) {
-                        Util.printThread("dsiner_theard onSuccess");
-                        ULog.d("dsiner_request--> onSuccess: " + response);
+                        Logger.d("dsiner_request--> onSuccess: " + response);
                         formatPrinting(response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                        ULog.d("dsiner_request--> onError");
+                        Logger.d("dsiner_request--> onError");
                     }
                 });
     }

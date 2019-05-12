@@ -20,7 +20,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
 
     @Override
     public T apply(ResponseBody responseBody) throws Exception {
-        Util.printThread("Aster_thread gsonFormat");
+        Util.printThread("Aster_thread class conversion");
         try {
             if (mType.equals(ResponseBody.class)) {
                 return (T) responseBody;
@@ -34,7 +34,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
             e.printStackTrace();
             throw e;
         } finally {
-            if (!mType.equals(ResponseBody.class) && responseBody != null) {
+            if (!ResponseBody.class.equals(mType) && responseBody != null) {
                 responseBody.close();
             }
         }

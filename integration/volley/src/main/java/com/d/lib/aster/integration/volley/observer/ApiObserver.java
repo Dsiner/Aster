@@ -1,5 +1,7 @@
 package com.d.lib.aster.integration.volley.observer;
 
+import android.support.annotation.NonNull;
+
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.volley.RequestManagerImpl;
 
@@ -8,15 +10,15 @@ import com.d.lib.aster.integration.volley.RequestManagerImpl;
  */
 public class ApiObserver<R> extends AbsObserver<R> {
     private R mData;
-    private Object mTag; // Request tag
-    private SimpleCallback<R> mCallback;
+    private final SimpleCallback<R> mCallback;
+    private final Object mTag; // Request tag
 
-    public ApiObserver(Object tag, SimpleCallback<R> callback) {
+    public ApiObserver(@NonNull SimpleCallback<R> callback, Object tag) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null!");
         }
-        this.mTag = tag;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     @Override

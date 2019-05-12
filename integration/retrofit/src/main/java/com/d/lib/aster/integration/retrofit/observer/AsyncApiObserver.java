@@ -1,5 +1,7 @@
 package com.d.lib.aster.integration.retrofit.observer;
 
+import android.support.annotation.NonNull;
+
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 
@@ -8,15 +10,15 @@ import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
  */
 public class AsyncApiObserver<T, R> extends AbsObserver<R> {
     private R mData;
-    private Object mTag; // Request tag
     private AsyncCallback<T, R> mCallback;
+    private Object mTag; // Request tag
 
-    public AsyncApiObserver(Object tag, AsyncCallback<T, R> callback) {
+    public AsyncApiObserver(@NonNull AsyncCallback<T, R> callback, Object tag) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null!");
         }
-        this.mTag = tag;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     @Override

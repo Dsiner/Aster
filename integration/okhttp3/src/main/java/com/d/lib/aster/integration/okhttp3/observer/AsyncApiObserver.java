@@ -12,18 +12,18 @@ import okhttp3.Call;
  */
 public class AsyncApiObserver<T, R> extends AbsObserver<R> {
     private R mData;
-    private Object mTag; // Request tag
-    private AsyncCallback<T, R> mCallback;
+    private final AsyncCallback<T, R> mCallback;
+    private final Object mTag; // Request tag
 
-    public AsyncApiObserver(Object tag,
-                            @Nullable final Call call,
-                            @Nullable AsyncCallback<T, R> callback) {
+    public AsyncApiObserver(@Nullable final Call call,
+                            @Nullable AsyncCallback<T, R> callback,
+                            Object tag) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null!");
         }
-        this.mTag = tag;
         this.mCall = call;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     @Override

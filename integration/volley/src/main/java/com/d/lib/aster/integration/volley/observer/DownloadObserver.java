@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.volley.RequestManagerImpl;
+import com.d.lib.aster.integration.volley.client.Response;
 import com.d.lib.aster.integration.volley.client.ResponseBody;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.utils.Util;
@@ -18,22 +19,23 @@ import java.io.RandomAccessFile;
  * Observer with Download Callback
  * Created by D on 2017/10/26.
  */
-public class DownloadObserver extends AbsObserver<ResponseBody> {
+public class DownloadObserver extends AbsObserver<Response> {
     // The two progress update intervals cannot be less than 1000ms
     private static final int MIN_DELAY_TIME = 1000;
 
     private final String mPath;
     private final String mName;
-    private final Object mTag;
     private final DownloadModel mDownModel = new DownloadModel();
     private final ProgressCallback mCallback;
+    private final Object mTag;
 
-    public DownloadObserver(final String path, final String name, @Nullable final Object tag,
-                            @Nullable ProgressCallback callback) {
+    public DownloadObserver(final String path, final String name,
+                            @Nullable ProgressCallback callback,
+                            @Nullable final Object tag) {
         this.mPath = path;
         this.mName = name;
-        this.mTag = tag;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     @NonNull
@@ -60,8 +62,8 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     }
 
     @Override
-    public void onNext(ResponseBody responseBody) {
-        saveFile(responseBody, createFile());
+    public void onNext(Response response) {
+        saveFile(response.body(), createFile());
     }
 
     @Override

@@ -3,11 +3,10 @@ package com.d.aster.activity;
 import android.app.ProgressDialog;
 
 import com.d.aster.App;
+import com.d.aster.Logger;
 import com.d.aster.R;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.utils.ULog;
-import com.d.lib.aster.utils.Util;
 
 /**
  * Request --> Download
@@ -43,35 +42,30 @@ public class Download extends Request {
                 .request(App.DOWNLOAD_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
                     @Override
                     public void onStart() {
-                        Util.printThread("dsiner_theard onStart");
-                        ULog.d("dsiner_request--> onStart");
+                        Logger.d("dsiner_request--> onStart");
                         setDialogProgress(0, 1, false);
                     }
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        Util.printThread("dsiner_theard onProgresss");
-                        ULog.d("dsiner_request--> onProgresss download: " + currentLength + " total: " + totalLength);
+                        Logger.d("dsiner_request--> onProgresss download: " + currentLength + " total: " + totalLength);
                         setDialogProgress(currentLength, totalLength, false);
                     }
 
                     @Override
                     public void onSuccess() {
-                        Util.printThread("dsiner_theard onComplete");
-                        ULog.d("dsiner_request--> onComplete");
+                        Logger.d("dsiner_request--> onComplete");
                         setDialogProgress(1, 1, true);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                        ULog.d("dsiner_request--> onError: " + e.getMessage());
+                        Logger.d("dsiner_request--> onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onCancel() {
-                        Util.printThread("dsiner_theard onCancel");
-                        ULog.d("dsiner_request--> onCancel");
+                        Logger.d("dsiner_request--> onCancel");
                     }
                 });
     }
@@ -88,35 +82,30 @@ public class Download extends Request {
                 .request(App.DOWNLOAD_PATH, "" + System.currentTimeMillis() + mPostfix, new ProgressCallback() {
                     @Override
                     public void onStart() {
-                        Util.printThread("dsiner_theard onStart");
-                        ULog.d("dsiner_request--> onStart");
+                        Logger.d("dsiner_request--> onStart");
                         setDialogProgress(0, 1, false);
                     }
 
                     @Override
                     public void onProgress(long currentLength, long totalLength) {
-                        Util.printThread("dsiner_theard onProgresss: ");
-                        ULog.d("dsiner_request--> onProgresss download: " + currentLength + " total: " + totalLength);
+                        Logger.d("dsiner_request--> onProgresss download: " + currentLength + " total: " + totalLength);
                         setDialogProgress(currentLength, totalLength, false);
                     }
 
                     @Override
                     public void onSuccess() {
-                        Util.printThread("dsiner_theard onComplete");
-                        ULog.d("dsiner_request--> onComplete");
+                        Logger.d("dsiner_request--> onComplete");
                         setDialogProgress(1, 1, true);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError: ");
-                        ULog.d("dsiner_request--> onError: " + e.getMessage());
+                        Logger.d("dsiner_request--> onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onCancel() {
-                        Util.printThread("dsiner_theard onCancel");
-                        ULog.d("dsiner_request--> onCancel");
+                        Logger.d("dsiner_request--> onCancel");
                     }
                 });
     }

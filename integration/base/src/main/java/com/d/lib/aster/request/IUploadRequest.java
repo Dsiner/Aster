@@ -1,13 +1,11 @@
 package com.d.lib.aster.request;
 
-import android.support.annotation.Nullable;
-
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.IRequest;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.callback.UploadCallback;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
 
@@ -38,29 +36,27 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
      */
     protected abstract void prepare();
 
-    public abstract void request();
-
-    public abstract <R> void request(@Nullable SimpleCallback<R> callback);
+    public abstract <T> void request(UploadCallback<T> callback);
 
     public abstract HR addParam(String paramKey, String paramValue);
 
     public abstract HR addParam(Params params);
 
-    public abstract HR addFile(String key, File file);
+    public abstract HR addFile(String name, File file);
 
-    public abstract HR addFile(String key, File file, ProgressCallback callback);
+    public abstract HR addFile(String name, File file, ProgressCallback callback);
 
-    public abstract HR addImageFile(String key, File file);
+    public abstract HR addImageFile(String name, File file);
 
-    public abstract HR addImageFile(String key, File file, ProgressCallback callback);
+    public abstract HR addImageFile(String name, File file, ProgressCallback callback);
 
-    public abstract HR addBytes(String key, byte[] bytes, String name);
+    public abstract HR addBytes(String name, String filename, byte[] bytes);
 
-    public abstract HR addBytes(String key, byte[] bytes, String name, ProgressCallback callback);
+    public abstract HR addBytes(String name, String filename, byte[] bytes, ProgressCallback callback);
 
-    public abstract HR addStream(String key, InputStream inputStream, String name);
+    public abstract HR addStream(String name, String filename, InputStream inputStream);
 
-    public abstract HR addStream(String key, InputStream inputStream, String name, ProgressCallback callback);
+    public abstract HR addStream(String name, String filename, InputStream inputStream, ProgressCallback callback);
 
     @Override
     public HR tag(Object tag) {
@@ -144,29 +140,27 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
          */
         protected abstract void prepare();
 
-        public abstract void request();
-
-        public abstract <R> void request(@Nullable SimpleCallback<R> callback);
+        public abstract <T> void request(UploadCallback<T> callback);
 
         public abstract HRF addParam(String paramKey, String paramValue);
 
         public abstract HRF addParam(Params params);
 
-        public abstract HRF addFile(String key, File file);
+        public abstract HRF addFile(String name, File file);
 
-        public abstract HRF addFile(String key, File file, ProgressCallback callback);
+        public abstract HRF addFile(String name, File file, ProgressCallback callback);
 
-        public abstract HRF addImageFile(String key, File file);
+        public abstract HRF addImageFile(String name, File file);
 
-        public abstract HRF addImageFile(String key, File file, ProgressCallback callback);
+        public abstract HRF addImageFile(String name, File file, ProgressCallback callback);
 
-        public abstract HRF addBytes(String key, byte[] bytes, String name);
+        public abstract HRF addBytes(String name, String filename, byte[] bytes);
 
-        public abstract HRF addBytes(String key, byte[] bytes, String name, ProgressCallback callback);
+        public abstract HRF addBytes(String name, String filename, byte[] bytes, ProgressCallback callback);
 
-        public abstract HRF addStream(String key, InputStream inputStream, String name);
+        public abstract HRF addStream(String name, String filename, InputStream inputStream);
 
-        public abstract HRF addStream(String key, InputStream inputStream, String name, ProgressCallback callback);
+        public abstract HRF addStream(String name, String filename, InputStream inputStream, ProgressCallback callback);
 
         @Override
         public HRF tag(Object tag) {

@@ -13,31 +13,32 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 import okhttp3.Call;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
  * Observer with Download Callback
  * Created by D on 2017/10/26.
  */
-public class DownloadObserver extends AbsObserver<ResponseBody> {
+public class DownloadObserver extends AbsObserver<Response> {
     // The two progress update intervals cannot be less than 1000ms
     private static final int MIN_DELAY_TIME = 1000;
 
     private final String mPath;
     private final String mName;
-    private final Object mTag;
     private final DownloadModel mDownModel = new DownloadModel();
     private final ProgressCallback mCallback;
+    private final Object mTag;
 
-    public DownloadObserver(final String path, final String name,
-                            @Nullable final Object tag,
-                            @Nullable final Call call,
-                            @Nullable ProgressCallback callback) {
+    public DownloadObserver(@Nullable final Call call,
+                            final String path, final String name,
+                            @Nullable ProgressCallback callback,
+                            @Nullable final Object tag) {
+        this.mCall = call;
         this.mPath = path;
         this.mName = name;
-        this.mTag = tag;
-        this.mCall = call;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     @NonNull
@@ -64,8 +65,8 @@ public class DownloadObserver extends AbsObserver<ResponseBody> {
     }
 
     @Override
-    public void onNext(ResponseBody responseBody) {
-        saveFile(responseBody, createFile());
+    public void onNext(Response response) {
+        saveFile(response.body(), createFile());
     }
 
     @Override

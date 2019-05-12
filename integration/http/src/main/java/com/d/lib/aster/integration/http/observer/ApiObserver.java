@@ -13,18 +13,18 @@ import java.net.HttpURLConnection;
  */
 public class ApiObserver<R> extends AbsObserver<R> {
     private R mData;
-    private Object mTag; // Request tag
-    private SimpleCallback<R> mCallback;
+    private final SimpleCallback<R> mCallback;
+    private final Object mTag; // Request tag
 
-    public ApiObserver(@Nullable Object tag,
-                       @Nullable final HttpURLConnection conn,
-                       @NonNull SimpleCallback<R> callback) {
+    public ApiObserver(@Nullable final HttpURLConnection conn,
+                       @NonNull SimpleCallback<R> callback,
+                       @Nullable Object tag) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null!");
         }
-        this.mTag = tag;
         this.mConn = conn;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     @Override

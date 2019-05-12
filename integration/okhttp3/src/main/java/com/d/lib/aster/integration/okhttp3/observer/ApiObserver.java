@@ -13,18 +13,19 @@ import okhttp3.Call;
  */
 public class ApiObserver<R> extends AbsObserver<R> {
     private R mData;
-    private Object mTag; // Request tag
-    private SimpleCallback<R> mCallback;
+    @NonNull
+    private final SimpleCallback<R> mCallback;
+    private final Object mTag; // Request tag
 
-    public ApiObserver(Object tag,
-                       @Nullable final Call call,
-                       @Nullable SimpleCallback<R> callback) {
+    public ApiObserver(@Nullable final Call call,
+                       @Nullable SimpleCallback<R> callback,
+                       Object tag) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null!");
         }
-        this.mTag = tag;
         this.mCall = call;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ApiObserver<R> extends AbsObserver<R> {
         if (isDisposed()) {
             return;
         }
-        this.mData = r;
+        mData = r;
         mCallback.onSuccess(r);
     }
 

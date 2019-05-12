@@ -1,37 +1,26 @@
 package com.d.lib.aster.integration.volley.request;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.base.MediaTypes;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.callback.SimpleCallback;
-import com.d.lib.aster.integration.volley.RequestManagerImpl;
+import com.d.lib.aster.callback.UploadCallback;
 import com.d.lib.aster.integration.volley.VolleyClient;
-import com.d.lib.aster.integration.volley.body.BodyWriter;
+import com.d.lib.aster.integration.volley.body.InputStreamRequestBody;
 import com.d.lib.aster.integration.volley.body.MultipartBody;
 import com.d.lib.aster.integration.volley.body.RequestBody;
 import com.d.lib.aster.integration.volley.body.UploadProgressRequestBody;
-import com.d.lib.aster.integration.volley.client.ResponseBody;
-import com.d.lib.aster.integration.volley.func.ApiFunc;
-import com.d.lib.aster.integration.volley.func.ApiRetryFunc;
-import com.d.lib.aster.integration.volley.observer.UploadObserver;
+import com.d.lib.aster.integration.volley.client.Response;
+import com.d.lib.aster.integration.volley.func.ApiTransformer;
 import com.d.lib.aster.request.IUploadRequest;
 import com.d.lib.aster.scheduler.Observable;
-import com.d.lib.aster.scheduler.callback.DisposableObserver;
-import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.Util;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +30,8 @@ import java.util.Map;
 @Deprecated
 public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
     protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
-    protected Observable<ResponseBody> mObservable;
+    protected Observable<Response> mObservable;
+    protected UploadCallback mUploadCallback;
 
     public UploadRequest(String url) {
         super(url);
@@ -58,182 +48,109 @@ public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
 
     @Override
     protected void prepare() {
-        if (mParams != null && mParams.size() > 0) {
-            List<MultipartBody.Part> formParts = new ArrayList<>();
-            Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
-            Map.Entry<String, String> entry;
-            while (entryIterator.hasNext()) {
-                entry = entryIterator.next();
-                if (entry != null) {
-                    formParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
-                }
-            }
-            mMultipartBodyParts.addAll(0, formParts);
+        final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        for (MultipartBody.Part part : mMultipartBodyParts) {
+            builder.addPart(part);
         }
-        mObservable = getClient().create().upload(mUrl, mMultipartBodyParts);
+        final RequestBody requestBody;
+        if (mUploadCallback != null) {
+            requestBody = new UploadProgressRequestBody(builder.build(), mUploadCallback);
+        } else {
+            requestBody = builder.build();
+        }
+        mObservable = getClient().create().postBody(mUrl, requestBody);
     }
 
     @Override
-    public void request() {
-        request(null);
-    }
-
-    @Override
-    public <T> void request(@Nullable SimpleCallback<T> callback) {
+    public <T> void request(UploadCallback<T> callback) {
+        mUploadCallback = callback;
         prepare();
-        requestImpl(mObservable, getClient().getHttpConfig(), mTag, callback);
-    }
-
-    private static <T> void requestImpl(final Observable<ResponseBody> observable,
-                                        final Config config,
-                                        final Object tag,
-                                        final SimpleCallback<T> callback) {
-        DisposableObserver<T> disposableObserver = new UploadObserver<T>(tag, callback);
-        if (tag != null) {
-            RequestManagerImpl.getIns().add(tag, disposableObserver);
-        }
-        observable.subscribeOn(Schedulers.io())
-                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
-                .observeOn(Schedulers.mainThread())
-                .subscribe(new ApiRetryFunc<T>(disposableObserver,
-                        config.retryCount,
-                        config.retryDelayMillis,
-                        new ApiRetryFunc.OnRetry<T>() {
-                            @NonNull
-                            @Override
-                            public Observable.Observe<T> observe() {
-                                return observable.subscribeOn(Schedulers.io())
-                                        .map(new ApiFunc<T>(Util.getFirstCls(callback)))
-                                        .observeOn(Schedulers.mainThread());
-                            }
-                        }));
+        ApiTransformer.requestUpload(mObservable, mConfig, callback, mTag);
     }
 
     @Override
     public UploadRequest addParam(String paramKey, String paramValue) {
         if (paramKey != null && paramValue != null) {
-            this.mParams.put(paramKey, paramValue);
+            mParams.put(paramKey, paramValue);
+            mMultipartBodyParts.add(MultipartBody.Part.createFormData(paramKey, paramValue));
         }
         return this;
     }
 
     @Override
     public UploadRequest addParam(Params params) {
-        if (params != null) {
-            this.mParams.putAll(params);
-        }
-        return this;
-    }
-
-    @Override
-    public UploadRequest addFile(String key, File file) {
-        return addFile(key, file, null);
-    }
-
-    @Override
-    public UploadRequest addFile(String key, File file, ProgressCallback callback) {
-        if (key == null || file == null) {
-            return this;
-        }
-        RequestBody requestBody = RequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, file);
-        if (callback != null) {
-            UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
-            MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-            this.mMultipartBodyParts.add(part);
-        } else {
-            MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-            this.mMultipartBodyParts.add(part);
-        }
-        return this;
-    }
-
-    @Override
-    public UploadRequest addImageFile(String key, File file) {
-        return addImageFile(key, file, null);
-    }
-
-    @Override
-    public UploadRequest addImageFile(String key, File file, ProgressCallback callback) {
-        if (key == null || file == null) {
-            return this;
-        }
-        RequestBody requestBody = RequestBody.create(MediaTypes.IMAGE_TYPE, file);
-        if (callback != null) {
-            UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
-            MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-            this.mMultipartBodyParts.add(part);
-        } else {
-            MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-            this.mMultipartBodyParts.add(part);
-        }
-        return this;
-    }
-
-    @Override
-    public UploadRequest addBytes(String key, byte[] bytes, String name) {
-        return addBytes(key, bytes, name, null);
-    }
-
-    @Override
-    public UploadRequest addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
-        if (key == null || bytes == null || name == null) {
-            return this;
-        }
-        RequestBody requestBody = RequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, bytes);
-        if (callback != null) {
-            UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
-            MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-            this.mMultipartBodyParts.add(part);
-        } else {
-            MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-            this.mMultipartBodyParts.add(part);
-        }
-        return this;
-    }
-
-    @Override
-    public UploadRequest addStream(String key, InputStream inputStream, String name) {
-        return addStream(key, inputStream, name, null);
-    }
-
-    @Override
-    public UploadRequest addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
-        if (key == null || inputStream == null || name == null) {
-            return this;
-        }
-        RequestBody requestBody = create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, inputStream);
-        if (callback != null) {
-            UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
-            MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-            this.mMultipartBodyParts.add(part);
-        } else {
-            MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-            this.mMultipartBodyParts.add(part);
-        }
-        return this;
-    }
-
-    private static RequestBody create(final MediaType mediaType, final InputStream inputStream) {
-        return new RequestBody() {
-            @Override
-            public MediaType contentType() {
-                return mediaType;
+        if (params != null && params.size() > 0) {
+            mParams.putAll(params);
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                mMultipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(),
+                        entry.getValue()));
             }
+        }
+        return this;
+    }
 
-            @Override
-            public long contentLength() {
-                try {
-                    return inputStream.available();
-                } catch (IOException e) {
-                    return 0;
-                }
-            }
+    @Override
+    public UploadRequest addFile(String name, File file) {
+        return addFile(name, file, null);
+    }
 
-            @Override
-            public void writeTo(DataOutputStream sink) throws IOException {
-                BodyWriter.writeInputStream(inputStream, sink, null);
-            }
-        };
+    @Override
+    public UploadRequest addFile(String name, File file, ProgressCallback callback) {
+        final RequestBody requestBody = RequestBody.create(MediaType.parse(Util.guessMimeType(file.getName())), file);
+        final MultipartBody.Part part = callback != null
+                ? MultipartBody.Part.createFormData(name, file.getName(),
+                new UploadProgressRequestBody(requestBody, callback))
+                : MultipartBody.Part.createFormData(name, file.getName(), requestBody);
+        mMultipartBodyParts.add(part);
+        return this;
+    }
+
+    @Override
+    public UploadRequest addImageFile(String name, File file) {
+        return addImageFile(name, file, null);
+    }
+
+    @Override
+    public UploadRequest addImageFile(String name, File file, ProgressCallback callback) {
+        final RequestBody requestBody = RequestBody.create(MediaTypes.IMAGE_TYPE, file);
+        final MultipartBody.Part part = callback != null
+                ? MultipartBody.Part.createFormData(name, file.getName(),
+                new UploadProgressRequestBody(requestBody, callback))
+                : MultipartBody.Part.createFormData(name, file.getName(), requestBody);
+        mMultipartBodyParts.add(part);
+        return this;
+    }
+
+    @Override
+    public UploadRequest addBytes(String name, String filename, byte[] bytes) {
+        return addBytes(name, filename, bytes, null);
+    }
+
+    @Override
+    public UploadRequest addBytes(String name, String filename, byte[] bytes, ProgressCallback callback) {
+        final RequestBody requestBody = RequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, bytes);
+        final MultipartBody.Part part = callback != null
+                ? MultipartBody.Part.createFormData(name, filename,
+                new UploadProgressRequestBody(requestBody, callback))
+                : MultipartBody.Part.createFormData(name, filename, requestBody);
+        mMultipartBodyParts.add(part);
+        return this;
+    }
+
+    @Override
+    public UploadRequest addStream(String name, String filename, InputStream inputStream) {
+        return addStream(name, filename, inputStream, null);
+    }
+
+    @Override
+    public UploadRequest addStream(String name, String filename, InputStream inputStream, ProgressCallback callback) {
+        final RequestBody requestBody = InputStreamRequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, inputStream);
+        final MultipartBody.Part part = callback != null
+                ? MultipartBody.Part.createFormData(name, filename,
+                new UploadProgressRequestBody(requestBody, callback))
+                : MultipartBody.Part.createFormData(name, filename, requestBody);
+        mMultipartBodyParts.add(part);
+        return this;
     }
 
 
@@ -243,7 +160,8 @@ public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
     @Deprecated
     public static class Singleton extends IUploadRequest.Singleton<Singleton, VolleyClient> {
         protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
-        protected Observable<ResponseBody> mObservable;
+        protected Observable<Response> mObservable;
+        protected UploadCallback mUploadCallback;
 
         public Singleton(String url) {
             super(url);
@@ -256,134 +174,109 @@ public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
 
         @Override
         protected void prepare() {
-            if (mParams != null && mParams.size() > 0) {
-                List<MultipartBody.Part> formParts = new ArrayList<>();
-                Iterator<Map.Entry<String, String>> entryIterator = mParams.entrySet().iterator();
-                Map.Entry<String, String> entry;
-                while (entryIterator.hasNext()) {
-                    entry = entryIterator.next();
-                    if (entry != null) {
-                        formParts.add(MultipartBody.Part.createFormData(entry.getKey(), entry.getValue()));
-                    }
-                }
-                mMultipartBodyParts.addAll(0, formParts);
+            final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            for (MultipartBody.Part part : mMultipartBodyParts) {
+                builder.addPart(part);
             }
-            mObservable = getClient().create().upload(mUrl, mMultipartBodyParts);
+            final RequestBody requestBody;
+            if (mUploadCallback != null) {
+                requestBody = new UploadProgressRequestBody(builder.build(), mUploadCallback);
+            } else {
+                requestBody = builder.build();
+            }
+            mObservable = getClient().create().postBody(mUrl, requestBody);
         }
 
         @Override
-        public void request() {
-            request(null);
-        }
-
-        @Override
-        public <R> void request(SimpleCallback<R> callback) {
+        public <T> void request(UploadCallback<T> callback) {
+            mUploadCallback = callback;
             prepare();
-            requestImpl(mObservable, getClient().getHttpConfig(),
-                    mTag, (SimpleCallback<ResponseBody>) callback);
+            ApiTransformer.requestUpload(mObservable, getClient().getHttpConfig(),
+                    callback, mTag);
         }
 
         @Override
         public Singleton addParam(String paramKey, String paramValue) {
             if (paramKey != null && paramValue != null) {
-                this.mParams.put(paramKey, paramValue);
+                mParams.put(paramKey, paramValue);
+                mMultipartBodyParts.add(MultipartBody.Part.createFormData(paramKey, paramValue));
             }
             return this;
         }
 
         @Override
         public Singleton addParam(Params params) {
-            if (params != null) {
-                this.mParams.putAll(params);
+            if (params != null && params.size() > 0) {
+                mParams.putAll(params);
+                for (Map.Entry<String, String> entry : params.entrySet()) {
+                    mMultipartBodyParts.add(MultipartBody.Part.createFormData(entry.getKey(),
+                            entry.getValue()));
+                }
             }
             return this;
         }
 
         @Override
-        public Singleton addFile(String key, File file) {
-            return addFile(key, file, null);
+        public Singleton addFile(String name, File file) {
+            return addFile(name, file, null);
         }
 
         @Override
-        public Singleton addFile(String key, File file, ProgressCallback callback) {
-            if (key == null || file == null) {
-                return this;
-            }
-            RequestBody requestBody = RequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, file);
-            if (callback != null) {
-                UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
-                MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-                this.mMultipartBodyParts.add(part);
-            } else {
-                MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-                this.mMultipartBodyParts.add(part);
-            }
+        public Singleton addFile(String name, File file, ProgressCallback callback) {
+            final RequestBody requestBody = RequestBody.create(MediaType.parse(Util.guessMimeType(file.getName())), file);
+            final MultipartBody.Part part = callback != null
+                    ? MultipartBody.Part.createFormData(name, file.getName(),
+                    new UploadProgressRequestBody(requestBody, callback))
+                    : MultipartBody.Part.createFormData(name, file.getName(), requestBody);
+            mMultipartBodyParts.add(part);
             return this;
         }
 
         @Override
-        public Singleton addImageFile(String key, File file) {
-            return addImageFile(key, file, null);
+        public Singleton addImageFile(String name, File file) {
+            return addImageFile(name, file, null);
         }
 
         @Override
-        public Singleton addImageFile(String key, File file, ProgressCallback callback) {
-            if (key == null || file == null) {
-                return this;
-            }
-            RequestBody requestBody = RequestBody.create(MediaTypes.IMAGE_TYPE, file);
-            if (callback != null) {
-                UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
-                MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
-                this.mMultipartBodyParts.add(part);
-            } else {
-                MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), requestBody);
-                this.mMultipartBodyParts.add(part);
-            }
+        public Singleton addImageFile(String name, File file, ProgressCallback callback) {
+            final RequestBody requestBody = RequestBody.create(MediaTypes.IMAGE_TYPE, file);
+            final MultipartBody.Part part = callback != null
+                    ? MultipartBody.Part.createFormData(name, file.getName(),
+                    new UploadProgressRequestBody(requestBody, callback))
+                    : MultipartBody.Part.createFormData(name, file.getName(), requestBody);
+            mMultipartBodyParts.add(part);
             return this;
         }
 
         @Override
-        public Singleton addBytes(String key, byte[] bytes, String name) {
-            return addBytes(key, bytes, name, null);
+        public Singleton addBytes(String name, String filename, byte[] bytes) {
+            return addBytes(name, filename, bytes, null);
         }
 
         @Override
-        public Singleton addBytes(String key, byte[] bytes, String name, ProgressCallback callback) {
-            if (key == null || bytes == null || name == null) {
-                return this;
-            }
-            RequestBody requestBody = RequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, bytes);
-            if (callback != null) {
-                UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
-                MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-                this.mMultipartBodyParts.add(part);
-            } else {
-                MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-                this.mMultipartBodyParts.add(part);
-            }
+        public Singleton addBytes(String name, String filename, byte[] bytes, ProgressCallback callback) {
+            final RequestBody requestBody = RequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, bytes);
+            final MultipartBody.Part part = callback != null
+                    ? MultipartBody.Part.createFormData(name, filename,
+                    new UploadProgressRequestBody(requestBody, callback))
+                    : MultipartBody.Part.createFormData(name, filename, requestBody);
+            mMultipartBodyParts.add(part);
             return this;
         }
 
         @Override
-        public Singleton addStream(String key, InputStream inputStream, String name) {
-            return addStream(key, inputStream, name, null);
+        public Singleton addStream(String name, String filename, InputStream inputStream) {
+            return addStream(name, filename, inputStream, null);
         }
 
         @Override
-        public Singleton addStream(String key, InputStream inputStream, String name, ProgressCallback callback) {
-            if (key == null || inputStream == null || name == null) {
-                return this;
-            }
-            RequestBody requestBody = create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, inputStream);
-            if (callback != null) {
-                UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
-                MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
-                this.mMultipartBodyParts.add(part);
-            } else {
-                MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, requestBody);
-                this.mMultipartBodyParts.add(part);
-            }
+        public Singleton addStream(String name, String filename, InputStream inputStream, ProgressCallback callback) {
+            final RequestBody requestBody = InputStreamRequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, inputStream);
+            final MultipartBody.Part part = callback != null
+                    ? MultipartBody.Part.createFormData(name, filename,
+                    new UploadProgressRequestBody(requestBody, callback))
+                    : MultipartBody.Part.createFormData(name, filename, requestBody);
+            mMultipartBodyParts.add(part);
             return this;
         }
     }

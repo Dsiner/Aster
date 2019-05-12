@@ -14,15 +14,15 @@ import java.net.HttpURLConnection;
  * Created by D on 2017/10/26.
  */
 public class UploadObserver<R> extends AbsObserver<R> {
-    private final Object mTag;
     private final SimpleCallback<R> mCallback;
+    private final Object mTag;
 
-    public UploadObserver(Object tag,
-                          @Nullable final HttpURLConnection conn,
-                          @Nullable SimpleCallback<R> callback) {
-        this.mTag = tag;
+    public UploadObserver(@Nullable final HttpURLConnection conn,
+                          @Nullable SimpleCallback<R> callback,
+                          Object tag) {
         this.mConn = conn;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     public void cancel() {

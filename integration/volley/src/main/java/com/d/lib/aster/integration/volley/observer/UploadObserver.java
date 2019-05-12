@@ -12,12 +12,12 @@ import com.d.lib.aster.utils.Util;
  * Created by D on 2017/10/26.
  */
 public class UploadObserver<R> extends AbsObserver<R> {
-    private final Object mTag;
     private final SimpleCallback<R> mCallback;
+    private final Object mTag;
 
-    public UploadObserver(Object tag, @Nullable SimpleCallback<R> callback) {
-        this.mTag = tag;
+    public UploadObserver(@Nullable SimpleCallback<R> callback, Object tag) {
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     public void cancel() {

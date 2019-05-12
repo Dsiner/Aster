@@ -19,15 +19,15 @@ import okhttp3.RequestBody;
  */
 public class UploadObserver<R> extends AbsObserver<R> {
     private final List<MultipartBody.Part> mMultipartBodyParts;
-    private final Object mTag;
     private final SimpleCallback<R> mCallback;
+    private final Object mTag;
 
-    public UploadObserver(@Nullable Object tag,
-                          @Nullable List<MultipartBody.Part> multipartBodyParts,
-                          @Nullable SimpleCallback<R> callback) {
+    public UploadObserver(@Nullable List<MultipartBody.Part> multipartBodyParts,
+                          @Nullable SimpleCallback<R> callback,
+                          @Nullable Object tag) {
         this.mMultipartBodyParts = multipartBodyParts;
-        this.mTag = tag;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     public void cancel() {

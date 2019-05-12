@@ -5,16 +5,14 @@ import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 
 import com.d.aster.App;
+import com.d.aster.Logger;
 import com.d.aster.R;
 import com.d.lib.aster.Aster;
-import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.callback.UploadCallback;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.Observer;
 import com.d.lib.aster.scheduler.callback.Task;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
-import com.d.lib.aster.utils.ULog;
-import com.d.lib.aster.utils.Util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,53 +57,41 @@ public class Upload extends Request {
                 .addParam("token", "008")
                 .addParam("user", "0")
                 .addParam("password", "0")
-                .addFile("androidPicFile", file, new ProgressCallback() {
+                .addFile("androidPicFile", file)
+                .request(new UploadCallback<String>() {
+                             @Override
+                             public void onStart() {
+                                 Logger.d("dsiner_request--> onStart");
+                             }
 
-                    @Override
-                    public void onStart() {
-                        Util.printThread("dsiner_theard onStart");
-                        ULog.d("dsiner_request--> onStart");
-                    }
+                             @Override
+                             public void onProgress(long currentLength, long totalLength) {
+                                 Logger.d("dsiner_request--> onProgresss upload: " + currentLength + " total: " + totalLength);
+                                 setDialogProgress(currentLength, totalLength, false);
+                             }
 
-                    @Override
-                    public void onProgress(long currentLength, long totalLength) {
-                        Util.printThread("dsiner_theard onProgresss");
-                        ULog.d("dsiner_request--> onProgresss upload: " + currentLength + " total: " + totalLength);
-                        setDialogProgress(currentLength, totalLength, false);
-                    }
+                             @Override
+                             public void onSuccess() {
+                                 Logger.d("dsiner_request--> upload done: total");
+                             }
 
-                    @Override
-                    public void onSuccess() {
-                        Util.printThread("dsiner_theard onSuccess");
-                        ULog.d("dsiner_request--> onSuccess");
-                        setDialogProgress(1, 1, true);
-                    }
+                             @Override
+                             public void onSuccess(String response) {
+                                 Logger.d("dsiner_request--> onResponse: " + response);
+                                 setDialogProgress(1, 1, true);
+                             }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                        ULog.d("dsiner_request--> onError: " + e.getMessage());
-                    }
+                             @Override
+                             public void onError(Throwable e) {
+                                 Logger.d("dsiner_request--> onError: " + e.getMessage());
+                             }
 
-                    @Override
-                    public void onCancel() {
-                        Util.printThread("dsiner_theard onCancel");
-                        ULog.d("dsiner_request--> onCancel");
-                    }
-                })
-                .request(new SimpleCallback<String>() {
-                    @Override
-                    public void onSuccess(String response) {
-                        Util.printThread("dsiner_theard onComplete / All");
-                        ULog.d("dsiner_request--> onComplete / All: " + response);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError / All");
-                        ULog.d("dsiner_request--> onError / All: " + e.getMessage());
-                    }
-                });
+                             @Override
+                             public void onCancel() {
+                                 Logger.d("dsiner_request--> onCancel");
+                             }
+                         }
+                );
     }
 
     @Override
@@ -117,52 +103,41 @@ public class Upload extends Request {
                 .writeTimeout(60 * 1000)
                 .retryCount(3)
                 .retryDelayMillis(1000)
-                .addImageFile("androidPicFile", file, new ProgressCallback() {
-                    @Override
-                    public void onStart() {
-                        Util.printThread("dsiner_theard onStart");
-                        ULog.d("dsiner_request--> onStart");
-                    }
+                .addImageFile("androidPicFile", file)
+                .request(new UploadCallback<String>() {
+                             @Override
+                             public void onStart() {
+                                 Logger.d("dsiner_request--> onStart");
+                             }
 
-                    @Override
-                    public void onProgress(long currentLength, long totalLength) {
-                        Util.printThread("dsiner_theard onProgresss");
-                        ULog.d("dsiner_request--> onProgresss upload: " + currentLength + " total: " + totalLength);
-                        setDialogProgress(currentLength, totalLength, false);
-                    }
+                             @Override
+                             public void onProgress(long currentLength, long totalLength) {
+                                 Logger.d("dsiner_request--> onProgresss upload: " + currentLength + " total: " + totalLength);
+                                 setDialogProgress(currentLength, totalLength, false);
+                             }
 
-                    @Override
-                    public void onSuccess() {
-                        Util.printThread("dsiner_theard onComplete");
-                        ULog.d("dsiner_request--> onComplete");
-                        setDialogProgress(1, 1, true);
-                    }
+                             @Override
+                             public void onSuccess() {
+                                 Logger.d("dsiner_request--> upload done: total");
+                             }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError");
-                        ULog.d("dsiner_request--> onError: " + e.getMessage());
-                    }
+                             @Override
+                             public void onSuccess(String response) {
+                                 Logger.d("dsiner_request--> onResponse: " + response);
+                                 setDialogProgress(1, 1, true);
+                             }
 
-                    @Override
-                    public void onCancel() {
-                        Util.printThread("dsiner_theard onCancel");
-                        ULog.d("dsiner_request--> onCancel");
-                    }
-                })
-                .request(new SimpleCallback<String>() {
-                    @Override
-                    public void onSuccess(String response) {
-                        Util.printThread("dsiner_theard onComplete / All");
-                        ULog.d("dsiner_request--> onComplete / All: " + response);
-                    }
+                             @Override
+                             public void onError(Throwable e) {
+                                 Logger.d("dsiner_request--> onError: " + e.getMessage());
+                             }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Util.printThread("dsiner_theard onError / All");
-                        ULog.d("dsiner_request--> onError / All: " + e.getMessage());
-                    }
-                });
+                             @Override
+                             public void onCancel() {
+                                 Logger.d("dsiner_request--> onCancel");
+                             }
+                         }
+                );
     }
 
     @SuppressLint("CheckResult")
@@ -189,7 +164,7 @@ public class Upload extends Request {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        mIsRunning = false;
                     }
                 });
     }
@@ -221,6 +196,8 @@ public class Upload extends Request {
                     e.printStackTrace();
                 }
             }
+        } else {
+            return true;
         }
         return success;
     }

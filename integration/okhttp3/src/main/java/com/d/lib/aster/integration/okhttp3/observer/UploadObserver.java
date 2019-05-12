@@ -1,66 +1,53 @@
 package com.d.lib.aster.integration.okhttp3.observer;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.callback.UploadCallback;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
-import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
+import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
-import java.util.List;
-
 import okhttp3.Call;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 /**
  * Observer with Upload Callback
  * Created by D on 2017/10/26.
  */
 public class UploadObserver<R> extends AbsObserver<R> {
-    private List<MultipartBody.Part> mMultipartBodyParts;
+    private R mData;
+    @NonNull
+    private final UploadCallback<R> mCallback;
     private final Object mTag;
-    private final SimpleCallback<R> mCallback;
 
-    public UploadObserver(Object tag,
-                          @Nullable List<MultipartBody.Part> multipartBodyParts,
-                          @Nullable Call call,
-                          @Nullable SimpleCallback<R> callback) {
-        this.mTag = tag;
-        this.mMultipartBodyParts = multipartBodyParts;
+    public UploadObserver(@Nullable Call call,
+                          @Nullable UploadCallback<R> callback,
+                          Object tag) {
+        if (callback == null) {
+            throw new NullPointerException("This callback must not be null!");
+        }
         this.mCall = call;
         this.mCallback = callback;
+        this.mTag = tag;
     }
 
     public void cancel() {
         ULog.e("Request cancelled.");
         dispose();
-    }
-
-    @Override
-    public void dispose() {
-        if (mMultipartBodyParts != null) {
-            for (MultipartBody.Part part : mMultipartBodyParts) {
-                RequestBody body = part.body();
-                if (body == null) {
-                    continue;
-                }
-                if (body instanceof UploadProgressRequestBody) {
-                    ((UploadProgressRequestBody) body).dispose();
-                }
+        Observable.executeMain(new Runnable() {
+            @Override
+            public void run() {
+                mCallback.onCancel();
             }
-        }
-        super.dispose();
+        });
     }
 
     @Override
     public void onNext(R r) {
         RequestManagerImpl.getIns().remove(mTag);
         Util.printThread("Aster_thread uploadOnNext");
-        if (mCallback == null) {
-            return;
-        }
+        mData = r;
         mCallback.onSuccess(r);
     }
 
@@ -71,9 +58,10 @@ public class UploadObserver<R> extends AbsObserver<R> {
             return;
         }
         super.onError(e);
-        if (mCallback == null) {
-            return;
-        }
         mCallback.onError(e);
+    }
+
+    public R getData() {
+        return mData;
     }
 }

@@ -7,16 +7,12 @@ import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
-import com.d.lib.aster.integration.retrofit.RequestManagerImpl;
 import com.d.lib.aster.integration.retrofit.RetrofitAPI;
 import com.d.lib.aster.integration.retrofit.RetrofitClient;
-import com.d.lib.aster.integration.retrofit.func.ApiRetryFunc;
-import com.d.lib.aster.integration.retrofit.observer.DownloadObserver;
+import com.d.lib.aster.integration.retrofit.func.ApiTransformer;
 import com.d.lib.aster.request.IDownloadRequest;
 
 import io.reactivex.Observable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
 /**
@@ -64,32 +60,7 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, RetrofitC
             throw new NullPointerException("This callback must not be null!");
         }
         prepare();
-        requestImpl(mObservable, getClient().getHttpConfig(), mTag, path, name, callback);
-    }
-
-    private static void requestImpl(final Observable<ResponseBody> observable,
-                                    final Config config,
-                                    final Object tag,
-                                    final String path, final String name,
-                                    final ProgressCallback callback) {
-        if (callback != null) {
-            com.d.lib.aster.scheduler.Observable.executeMain(new Runnable() {
-                @Override
-                public void run() {
-                    callback.onStart();
-
-                }
-            });
-        }
-        DisposableObserver<ResponseBody> disposableObserver = new DownloadObserver(path, name, tag, callback);
-        if (tag != null) {
-            RequestManagerImpl.getIns().add(tag, disposableObserver);
-        }
-        observable.subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))
-                .subscribe(disposableObserver);
+        ApiTransformer.requestDownload(mObservable, mConfig, path, name, callback, mTag);
     }
 
 
@@ -134,7 +105,8 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, RetrofitC
                 throw new NullPointerException("This callback must not be null!");
             }
             prepare();
-            requestImpl(mObservable, getClient().getHttpConfig(), mTag, path, name, callback);
+            ApiTransformer.requestDownload(mObservable, getClient().getHttpConfig(),
+                    path, name, callback, mTag);
         }
     }
 }

@@ -44,19 +44,7 @@ public class HttpURLApi {
     public Callable get(final String url, Params params) {
         final String realUrl = params != null ? url + "?" + params.getRequestParamsString() : url;
         final HttpURLConnection conn = getImpl().getImpl(realUrl);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().execute(conn);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservable(conn);
         return new Callable(conn, observable);
     }
 
@@ -66,37 +54,13 @@ public class HttpURLApi {
 
     public Callable post(final String url, final Params params) {
         final HttpURLConnection conn = getImpl().postImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeParams(conn, params);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableParams(params, conn);
         return new Callable(conn, observable);
     }
 
     public Callable postBody(final String url, final RequestBody requestBody) {
         final HttpURLConnection conn = getImpl().postBodyImpl(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeBody(conn, requestBody);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableBody(requestBody, conn);
         return new Callable(conn, observable);
     }
 
@@ -106,55 +70,19 @@ public class HttpURLApi {
 
     public Callable put(final String url, final Params params) {
         final HttpURLConnection conn = getImpl().putImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeParams(conn, params);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableParams(params, conn);
         return new Callable(conn, observable);
     }
 
     public Callable putBody(final String url, final RequestBody requestBody) {
         final HttpURLConnection conn = getImpl().putBodyImpl(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeBody(conn, requestBody);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableBody(requestBody, conn);
         return new Callable(conn, observable);
     }
 
     public Callable head(final String url, final Params params) {
         final HttpURLConnection conn = getImpl().headImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeParams(conn, params);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableParams(params, conn);
         return new Callable(conn, observable);
     }
 
@@ -164,37 +92,13 @@ public class HttpURLApi {
 
     public Callable delete(final String url, final Params params) {
         final HttpURLConnection conn = getImpl().deleteImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeParams(conn, params);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableParams(params, conn);
         return new Callable(conn, observable);
     }
 
     public Callable deleteBody(final String url, final RequestBody requestBody) {
         final HttpURLConnection conn = getImpl().deleteBodyImpl(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeBody(conn, requestBody);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableBody(requestBody, conn);
         return new Callable(conn, observable);
     }
 
@@ -204,37 +108,13 @@ public class HttpURLApi {
 
     public Callable options(final String url, final Params params) {
         final HttpURLConnection conn = getImpl().optionsImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeParams(conn, params);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableParams(params, conn);
         return new Callable(conn, observable);
     }
 
     public Callable optionsBody(final String url, final RequestBody requestBody) {
         final HttpURLConnection conn = getImpl().optionsBodyImpl(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeBody(conn, requestBody);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableBody(requestBody, conn);
         return new Callable(conn, observable);
     }
 
@@ -244,79 +124,58 @@ public class HttpURLApi {
 
     public Callable patch(final String url, final Params params) {
         final HttpURLConnection conn = getImpl().patchImpl(url, params);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
-            @Override
-            public ResponseBody run() throws Exception {
-                try {
-                    Response response = getImpl().executeParams(conn, params);
-                    checkSuccessful(response);
-                    return response.body();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
+        final Observable<Response> observable = getObservableParams(params, conn);
         return new Callable(conn, observable);
     }
 
     public Callable patchBody(final String url, final RequestBody requestBody) {
         final HttpURLConnection conn = getImpl().patchBodyImpl(url, requestBody);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
+        final Observable<Response> observable = getObservableBody(requestBody, conn);
+        return new Callable(conn, observable);
+    }
+
+    private Observable<Response> getObservable(final HttpURLConnection conn) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
-                    Response response = getImpl().executeBody(conn, requestBody);
-                    checkSuccessful(response);
-                    return response.body();
+                    return getImpl().execute(conn);
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
                 }
             }
         });
-        return new Callable(conn, observable);
     }
 
-    public Callable download(final String url) {
-        return download(url, null);
-    }
-
-    public Callable download(final String url, final Params params) {
-        final String realUrl = params != null ? url + "?" + params.getRequestParamsString() : url;
-        final HttpURLConnection conn = getImpl().downloadImpl(realUrl);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
+    private Observable<Response> getObservableParams(final Params params,
+                                                     final HttpURLConnection conn) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
-                    Response response = getImpl().execute(conn);
-                    checkSuccessful(response);
-                    return response.body();
+                    return getImpl().executeParams(conn, params);
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
                 }
             }
         });
-        return new Callable(conn, observable);
     }
 
-    public Callable upload(final String url, final List<MultipartBody.Part> multipartBodyParts) {
-        final HttpURLConnection conn = getImpl().uploadImpl(url);
-        final Observable<ResponseBody> observable = Observable.create(new Task<ResponseBody>() {
+    private Observable<Response> getObservableBody(final RequestBody requestBody,
+                                                   final HttpURLConnection conn) {
+        return Observable.create(new Task<Response>() {
             @Override
-            public ResponseBody run() throws Exception {
+            public Response run() throws Exception {
                 try {
-                    Response response = getImpl().executeMultipartBody(conn, multipartBodyParts);
-                    checkSuccessful(response);
-                    return response.body();
+                    return getImpl().executeBody(conn, requestBody);
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
                 }
             }
         });
-        return new Callable(conn, observable);
     }
 
     private void checkSuccessful(@NonNull Response response) throws Exception {
@@ -337,9 +196,9 @@ public class HttpURLApi {
 
     public static final class Callable {
         public final HttpURLConnection conn;
-        public final Observable<ResponseBody> observable;
+        public final Observable<Response> observable;
 
-        public Callable(HttpURLConnection conn, Observable<ResponseBody> observable) {
+        public Callable(HttpURLConnection conn, Observable<Response> observable) {
             this.conn = conn;
             this.observable = observable;
         }
@@ -539,39 +398,6 @@ public class HttpURLApi {
                 if (conn != null) {
                     conn.disconnect();
                 }
-                return null;
-            }
-        }
-
-        @Nullable
-        private HttpURLConnection downloadImpl(String url) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "GET");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
-        }
-
-        @Nullable
-        private HttpURLConnection uploadImpl(String url) {
-            HttpURLConnection conn;
-            try {
-                conn = getHttpURLConnection(url, "POST");
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                conn.setUseCaches(false);
-                conn.setRequestProperty("Connection", "Keep-Alive");
-                conn.setRequestProperty("Charset", "UTF-8");
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
                 return null;
             }
         }
