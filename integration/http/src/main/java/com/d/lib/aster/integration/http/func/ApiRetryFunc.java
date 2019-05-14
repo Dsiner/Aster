@@ -3,18 +3,17 @@ package com.d.lib.aster.integration.http.func;
 import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.Config;
+import com.d.lib.aster.retry.IRetry;
+import com.d.lib.aster.retry.RetryException;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
 
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-
 /**
  * Retry Func
  */
-public class ApiRetryFunc<T> extends DisposableObserver<T> {
+public class ApiRetryFunc<T> extends DisposableObserver<T> implements IRetry {
     private final OnRetry<T> mObserve;
     private final DisposableObserver<T> mDisposableObserver;
     private final int mMaxRetries;
@@ -36,15 +35,24 @@ public class ApiRetryFunc<T> extends DisposableObserver<T> {
     }
 
     @Override
+    public void retry() {
+        mRetryCount++;
+        ULog.d("Get response data error, it will try after " + mRetryDelayMillis
+                + " millisecond, retry count " + mRetryCount + "/" + mMaxRetries);
+        Observable.postMainDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Util.printThread("Aster_thread retryApply");
+                mObserve.observe().subscribe(ApiRetryFunc.this);
+            }
+        }, mRetryDelayMillis);
+    }
+
+    @Override
     public void onError(Throwable e) {
-        Util.printThread("Aster_thread retryInit");
-        Util.printThread("Aster_thread retryApply");
-        if (++mRetryCount <= mMaxRetries && (e instanceof SocketTimeoutException
-                || e instanceof ConnectException)) {
-            ULog.d("Get response data error, it will try after " + mRetryDelayMillis
-                    + " millisecond, retry count " + mRetryCount + "/" + mMaxRetries);
-            mRetryCount++;
-            mObserve.observe().subscribe(this);
+        if (mRetryCount < mMaxRetries && e instanceof RetryException) {
+            Util.printThread("Aster_thread retryInit");
+            ((RetryException) e).run(this);
             return;
         }
         mDisposableObserver.onError(e);

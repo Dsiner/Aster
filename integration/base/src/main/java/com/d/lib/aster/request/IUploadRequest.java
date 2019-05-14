@@ -42,13 +42,13 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
 
     public abstract HR addParam(Params params);
 
-    public abstract HR addFile(String name, File file);
+    public abstract HR addFile(String name, String filename, File file);
 
-    public abstract HR addFile(String name, File file, ProgressCallback callback);
+    public abstract HR addFile(String name, String filename, File file, ProgressCallback callback);
 
-    public abstract HR addImageFile(String name, File file);
+    public abstract HR addImageFile(String name, String filename, File file);
 
-    public abstract HR addImageFile(String name, File file, ProgressCallback callback);
+    public abstract HR addImageFile(String name, String filename, File file, ProgressCallback callback);
 
     public abstract HR addBytes(String name, String filename, byte[] bytes);
 
@@ -57,6 +57,8 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
     public abstract HR addStream(String name, String filename, InputStream inputStream);
 
     public abstract HR addStream(String name, String filename, InputStream inputStream, ProgressCallback callback);
+
+    public abstract HR addPart(Object part);
 
     @Override
     public HR tag(Object tag) {
@@ -146,13 +148,13 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
 
         public abstract HRF addParam(Params params);
 
-        public abstract HRF addFile(String name, File file);
+        public abstract HRF addFile(String name, String filename, File file);
 
-        public abstract HRF addFile(String name, File file, ProgressCallback callback);
+        public abstract HRF addFile(String name, String filename, File file, ProgressCallback callback);
 
-        public abstract HRF addImageFile(String name, File file);
+        public abstract HRF addImageFile(String name, String filename, File file);
 
-        public abstract HRF addImageFile(String name, File file, ProgressCallback callback);
+        public abstract HRF addImageFile(String name, String filename, File file, ProgressCallback callback);
 
         public abstract HRF addBytes(String name, String filename, byte[] bytes);
 
@@ -161,6 +163,8 @@ public abstract class IUploadRequest<HR extends IUploadRequest, C extends IClien
         public abstract HRF addStream(String name, String filename, InputStream inputStream);
 
         public abstract HRF addStream(String name, String filename, InputStream inputStream, ProgressCallback callback);
+
+        public abstract HRF addPart(Object part);
 
         @Override
         public HRF tag(Object tag) {

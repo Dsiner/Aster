@@ -90,33 +90,33 @@ public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
     }
 
     @Override
-    public UploadRequest addFile(String name, File file) {
-        return addFile(name, file, null);
+    public UploadRequest addFile(String name, String filename, File file) {
+        return addFile(name, filename, file, null);
     }
 
     @Override
-    public UploadRequest addFile(String name, File file, ProgressCallback callback) {
+    public UploadRequest addFile(String name, String filename, File file, ProgressCallback callback) {
         final RequestBody requestBody = RequestBody.create(MediaType.parse(Util.guessMimeType(file.getName())), file);
         final MultipartBody.Part part = callback != null
-                ? MultipartBody.Part.createFormData(name, file.getName(),
+                ? MultipartBody.Part.createFormData(name, filename,
                 new UploadProgressRequestBody(requestBody, callback))
-                : MultipartBody.Part.createFormData(name, file.getName(), requestBody);
+                : MultipartBody.Part.createFormData(name, filename, requestBody);
         mMultipartBodyParts.add(part);
         return this;
     }
 
     @Override
-    public UploadRequest addImageFile(String name, File file) {
-        return addImageFile(name, file, null);
+    public UploadRequest addImageFile(String name, String filename, File file) {
+        return addImageFile(name, filename, file, null);
     }
 
     @Override
-    public UploadRequest addImageFile(String name, File file, ProgressCallback callback) {
+    public UploadRequest addImageFile(String name, String filename, File file, ProgressCallback callback) {
         final RequestBody requestBody = RequestBody.create(MediaTypes.IMAGE_TYPE, file);
         final MultipartBody.Part part = callback != null
-                ? MultipartBody.Part.createFormData(name, file.getName(),
+                ? MultipartBody.Part.createFormData(name, filename,
                 new UploadProgressRequestBody(requestBody, callback))
-                : MultipartBody.Part.createFormData(name, file.getName(), requestBody);
+                : MultipartBody.Part.createFormData(name, filename, requestBody);
         mMultipartBodyParts.add(part);
         return this;
     }
@@ -153,6 +153,11 @@ public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
         return this;
     }
 
+    @Override
+    public UploadRequest addPart(Object part) {
+        mMultipartBodyParts.add((MultipartBody.Part) part);
+        return this;
+    }
 
     /**
      * Singleton
@@ -217,33 +222,33 @@ public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
         }
 
         @Override
-        public Singleton addFile(String name, File file) {
-            return addFile(name, file, null);
+        public Singleton addFile(String name, String filename, File file) {
+            return addFile(name, filename, file, null);
         }
 
         @Override
-        public Singleton addFile(String name, File file, ProgressCallback callback) {
+        public Singleton addFile(String name, String filename, File file, ProgressCallback callback) {
             final RequestBody requestBody = RequestBody.create(MediaType.parse(Util.guessMimeType(file.getName())), file);
             final MultipartBody.Part part = callback != null
-                    ? MultipartBody.Part.createFormData(name, file.getName(),
+                    ? MultipartBody.Part.createFormData(name, filename,
                     new UploadProgressRequestBody(requestBody, callback))
-                    : MultipartBody.Part.createFormData(name, file.getName(), requestBody);
+                    : MultipartBody.Part.createFormData(name, filename, requestBody);
             mMultipartBodyParts.add(part);
             return this;
         }
 
         @Override
-        public Singleton addImageFile(String name, File file) {
-            return addImageFile(name, file, null);
+        public Singleton addImageFile(String name, String filename, File file) {
+            return addImageFile(name, filename, file, null);
         }
 
         @Override
-        public Singleton addImageFile(String name, File file, ProgressCallback callback) {
+        public Singleton addImageFile(String name, String filename, File file, ProgressCallback callback) {
             final RequestBody requestBody = RequestBody.create(MediaTypes.IMAGE_TYPE, file);
             final MultipartBody.Part part = callback != null
-                    ? MultipartBody.Part.createFormData(name, file.getName(),
+                    ? MultipartBody.Part.createFormData(name, filename,
                     new UploadProgressRequestBody(requestBody, callback))
-                    : MultipartBody.Part.createFormData(name, file.getName(), requestBody);
+                    : MultipartBody.Part.createFormData(name, filename, requestBody);
             mMultipartBodyParts.add(part);
             return this;
         }
@@ -277,6 +282,12 @@ public class UploadRequest extends IUploadRequest<UploadRequest, VolleyClient> {
                     new UploadProgressRequestBody(requestBody, callback))
                     : MultipartBody.Part.createFormData(name, filename, requestBody);
             mMultipartBodyParts.add(part);
+            return this;
+        }
+
+        @Override
+        public Singleton addPart(Object part) {
+            mMultipartBodyParts.add((MultipartBody.Part) part);
             return this;
         }
     }
