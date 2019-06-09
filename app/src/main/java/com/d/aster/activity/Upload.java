@@ -57,7 +57,7 @@ public class Upload extends Request {
                 .addParam("token", "008")
                 .addParam("user", "0")
                 .addParam("password", "0")
-                .addFile("androidPicFile", file)
+                .addFile("file", file.getName(), file)
                 .request(new UploadCallback<String>() {
                              @Override
                              public void onStart() {
@@ -103,7 +103,7 @@ public class Upload extends Request {
                 .writeTimeout(60 * 1000)
                 .retryCount(3)
                 .retryDelayMillis(1000)
-                .addImageFile("androidPicFile", file)
+                .addImageFile("file", file.getName(), file)
                 .request(new UploadCallback<String>() {
                              @Override
                              public void onStart() {
