@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.http.RequestManagerImpl;
+import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.scheduler.Observable;
@@ -14,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.net.HttpURLConnection;
 
 /**
  * Observer with Download Callback
@@ -30,11 +30,11 @@ public class DownloadObserver extends AbsObserver<Response> {
     private final ProgressCallback mCallback;
     private final Object mTag;
 
-    public DownloadObserver(@Nullable final HttpURLConnection conn,
+    public DownloadObserver(@Nullable final Call call,
                             final String path, final String name,
                             @Nullable ProgressCallback callback,
                             @Nullable final Object tag) {
-        this.mConn = conn;
+        this.mCall = call;
         this.mPath = path;
         this.mName = name;
         this.mCallback = callback;

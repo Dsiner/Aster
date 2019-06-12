@@ -2,16 +2,15 @@ package com.d.lib.aster.integration.http.observer;
 
 import android.support.annotation.NonNull;
 
+import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.utils.ULog;
-
-import java.net.HttpURLConnection;
 
 /**
  * Abstract Observer
  */
 abstract class AbsObserver<T> extends DisposableObserver<T> {
-    HttpURLConnection mConn;
+    Call mCall;
 
     AbsObserver() {
     }
@@ -25,8 +24,8 @@ abstract class AbsObserver<T> extends DisposableObserver<T> {
     @Override
     public void dispose() {
         super.dispose();
-        if (mConn != null) {
-            mConn.disconnect();
+        if (mCall != null && !mCall.isCanceled()) {
+            mCall.cancel();
         }
     }
 }

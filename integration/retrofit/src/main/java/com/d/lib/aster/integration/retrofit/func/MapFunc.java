@@ -16,8 +16,8 @@ public class MapFunc<T, R> implements Function<T, R> {
     }
 
     @Override
-    public R apply(T responseBody) throws Exception {
+    public R apply(T t) throws Exception {
         Util.printThread("Aster_thread map apply");
-        return mCallback.apply(responseBody);
+        return mCallback.apply(t);
     }
 }

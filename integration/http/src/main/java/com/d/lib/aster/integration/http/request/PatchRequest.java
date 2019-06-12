@@ -35,7 +35,7 @@ public class PatchRequest extends BodyRequest<PatchRequest> {
         } else {
             callable = getClient().create().patch(mUrl);
         }
-        mConn = callable.conn;
+        mCall = callable.call;
         mObservable = callable.observable;
     }
 
@@ -66,7 +66,7 @@ public class PatchRequest extends BodyRequest<PatchRequest> {
             } else {
                 callable = getClient().create().patch(mUrl);
             }
-            mConn = callable.conn;
+            mCall = callable.call;
             mObservable = callable.observable;
         }
     }

@@ -6,6 +6,7 @@ import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.HttpClient;
+import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.func.ApiFunc;
 import com.d.lib.aster.integration.http.func.ApiTransformer;
@@ -13,13 +14,11 @@ import com.d.lib.aster.request.IHttpRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
 
-import java.net.HttpURLConnection;
-
 /**
  * Created by D on 2017/10/24.
  */
 public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<HR, HttpClient> {
-    protected HttpURLConnection mConn;
+    protected Call mCall;
     protected Observable<Response> mObservable;
 
     public HttpRequest(String url) {
@@ -42,13 +41,13 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
     @Override
     public <T> void request(final SimpleCallback<T> callback) {
         prepare();
-        ApiTransformer.request(mConn, mObservable, mConfig, callback, mTag);
+        ApiTransformer.request(mCall, mObservable, mConfig, callback, mTag);
     }
 
     @Override
     public <T, R> void request(final AsyncCallback<T, R> callback) {
         prepare();
-        ApiTransformer.requestAsync(mConn, mObservable, mConfig, callback, mTag);
+        ApiTransformer.requestAsync(mCall, mObservable, mConfig, callback, mTag);
     }
 
     @Override
@@ -64,7 +63,7 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
      */
     public static abstract class Singleton<HRF extends Singleton>
             extends IHttpRequest.Singleton<HRF, HttpClient> {
-        protected HttpURLConnection mConn;
+        protected Call mCall;
         protected Observable<Response> mObservable;
 
         public Singleton(String url) {
@@ -87,14 +86,14 @@ public abstract class HttpRequest<HR extends HttpRequest> extends IHttpRequest<H
         @Override
         public <T> void request(final SimpleCallback<T> callback) {
             prepare();
-            ApiTransformer.request(mConn, mObservable, getClient().getHttpConfig(),
+            ApiTransformer.request(mCall, mObservable, getClient().getHttpConfig(),
                     callback, mTag);
         }
 
         @Override
         public <T, R> void request(final AsyncCallback<T, R> callback) {
             prepare();
-            ApiTransformer.requestAsync(mConn, mObservable, getClient().getHttpConfig(),
+            ApiTransformer.requestAsync(mCall, mObservable, getClient().getHttpConfig(),
                     callback, mTag);
         }
 

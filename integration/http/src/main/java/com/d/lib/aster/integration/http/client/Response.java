@@ -2,6 +2,8 @@ package com.d.lib.aster.integration.http.client;
 
 import android.support.annotation.Nullable;
 
+import com.d.lib.aster.base.Headers;
+
 import java.io.Closeable;
 
 public interface Response extends Closeable {
@@ -21,6 +23,8 @@ public interface Response extends Closeable {
      * Returns the HTTP status message.
      */
     String message();
+
+    Headers headers();
 
     @Nullable
     ResponseBody body();

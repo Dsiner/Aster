@@ -53,6 +53,12 @@ public class Headers extends LinkedHashMap<String, String> {
         super();
     }
 
+    public Headers build() {
+        Headers headers = new Headers();
+        headers.putAll(this);
+        return headers;
+    }
+
     public void addParam(String key, String value) {
         put(key, value == null ? "" : value);
     }

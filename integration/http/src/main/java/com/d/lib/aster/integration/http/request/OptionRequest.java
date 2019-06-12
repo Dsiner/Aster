@@ -35,7 +35,7 @@ public class OptionRequest extends BodyRequest<OptionRequest> {
         } else {
             callable = getClient().create().options(mUrl);
         }
-        mConn = callable.conn;
+        mCall = callable.call;
         mObservable = callable.observable;
     }
 
@@ -66,7 +66,7 @@ public class OptionRequest extends BodyRequest<OptionRequest> {
             } else {
                 callable = getClient().create().options(mUrl);
             }
-            mConn = callable.conn;
+            mCall = callable.call;
             mObservable = callable.observable;
         }
     }

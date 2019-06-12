@@ -94,6 +94,13 @@ public class HttpURLClient {
         }
     }
 
+    /**
+     * Prepares the {@code request} to be executed at some point in the future.
+     */
+    public Call newCall(Request request) {
+        return new RealCall(this, request);
+    }
+
     public Builder newBuilder() {
         return new Builder(this);
     }
@@ -105,6 +112,14 @@ public class HttpURLClient {
         if (millis > Integer.MAX_VALUE) throw new IllegalArgumentException(name + " too large.");
         if (millis == 0 && duration > 0) throw new IllegalArgumentException(name + " too small.");
         return (int) millis;
+    }
+
+    public List<IInterceptor> interceptors() {
+        return interceptors;
+    }
+
+    public List<IInterceptor> networkInterceptors() {
+        return networkInterceptors;
     }
 
     public static final class Builder {

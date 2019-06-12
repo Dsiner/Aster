@@ -8,6 +8,7 @@ import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.callback.UploadCallback;
 import com.d.lib.aster.integration.http.RequestManagerImpl;
+import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.observer.ApiObserver;
 import com.d.lib.aster.integration.http.observer.AsyncApiObserver;
@@ -18,16 +19,14 @@ import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
 import com.d.lib.aster.utils.Util;
 
-import java.net.HttpURLConnection;
-
 public class ApiTransformer {
 
-    public static <T> void request(final HttpURLConnection conn,
+    public static <T> void request(final Call call,
                                    final Observable<Response> observable,
                                    final Config config,
                                    final SimpleCallback<T> callback,
                                    final Object tag) {
-        DisposableObserver<T> disposableObserver = new ApiObserver<T>(conn, callback, tag);
+        DisposableObserver<T> disposableObserver = new ApiObserver<T>(call, callback, tag);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
@@ -48,12 +47,12 @@ public class ApiTransformer {
                         }));
     }
 
-    public static <T, R> void requestAsync(final HttpURLConnection conn,
+    public static <T, R> void requestAsync(final Call call,
                                            final Observable<Response> observable,
                                            final Config config,
                                            final AsyncCallback<T, R> callback,
                                            final Object tag) {
-        DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(conn, callback, tag);
+        DisposableObserver<R> disposableObserver = new AsyncApiObserver<T, R>(call, callback, tag);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
@@ -75,7 +74,7 @@ public class ApiTransformer {
                         }));
     }
 
-    public static void requestDownload(final HttpURLConnection conn,
+    public static void requestDownload(final Call call,
                                        final Observable<Response> observable,
                                        final Config config,
                                        final String path, final String name,
@@ -89,7 +88,7 @@ public class ApiTransformer {
                 }
             });
         }
-        DisposableObserver<Response> disposableObserver = new DownloadObserver(conn,
+        DisposableObserver<Response> disposableObserver = new DownloadObserver(call,
                 path, name, callback, tag);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
@@ -108,12 +107,12 @@ public class ApiTransformer {
                         }));
     }
 
-    public static <T> void requestUpload(final HttpURLConnection conn,
+    public static <T> void requestUpload(final Call call,
                                          final Observable<Response> observable,
                                          final Config config,
                                          final UploadCallback<T> callback,
                                          final Object tag) {
-        DisposableObserver<T> disposableObserver = new UploadObserver<T>(conn, callback, tag);
+        DisposableObserver<T> disposableObserver = new UploadObserver<T>(call, callback, tag);
         if (tag != null) {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }

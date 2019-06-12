@@ -12,6 +12,7 @@ import com.d.lib.aster.integration.http.body.InputStreamRequestBody;
 import com.d.lib.aster.integration.http.body.MultipartBody;
 import com.d.lib.aster.integration.http.body.RequestBody;
 import com.d.lib.aster.integration.http.body.UploadProgressRequestBody;
+import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.func.ApiTransformer;
@@ -21,7 +22,6 @@ import com.d.lib.aster.utils.Util;
 
 import java.io.File;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
     protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
-    protected HttpURLConnection mConn;
+    protected Call mCall;
     protected Observable<Response> mObservable;
     protected UploadCallback mUploadCallback;
 
@@ -60,8 +60,8 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
         } else {
             requestBody = builder.build();
         }
-        final HttpURLApi.Callable callable = getClient().create().postBody(mUrl, requestBody);
-        mConn = callable.conn;
+        final HttpURLApi.Callable callable = getClient().create().uploadBody(mUrl, requestBody);
+        mCall = callable.call;
         mObservable = callable.observable;
     }
 
@@ -69,7 +69,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
     public <T> void request(UploadCallback<T> callback) {
         mUploadCallback = callback;
         prepare();
-        ApiTransformer.requestUpload(mConn, mObservable, mConfig, callback, mTag);
+        ApiTransformer.requestUpload(mCall, mObservable, mConfig, callback, mTag);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
      */
     public static class Singleton extends IUploadRequest.Singleton<Singleton, HttpClient> {
         protected List<MultipartBody.Part> mMultipartBodyParts = new ArrayList<>();
-        protected HttpURLConnection mConn;
+        protected Call mCall;
         protected Observable<Response> mObservable;
         protected UploadCallback mUploadCallback;
 
@@ -193,8 +193,8 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
             } else {
                 requestBody = builder.build();
             }
-            final HttpURLApi.Callable callable = getClient().create().postBody(mUrl, requestBody);
-            mConn = callable.conn;
+            final HttpURLApi.Callable callable = getClient().create().uploadBody(mUrl, requestBody);
+            mCall = callable.call;
             mObservable = callable.observable;
         }
 
@@ -202,7 +202,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, HttpClient> {
         public <T> void request(UploadCallback<T> callback) {
             mUploadCallback = callback;
             prepare();
-            ApiTransformer.requestUpload(mConn, mObservable, getClient().getHttpConfig(),
+            ApiTransformer.requestUpload(mCall, mObservable, getClient().getHttpConfig(),
                     callback, mTag);
         }
 

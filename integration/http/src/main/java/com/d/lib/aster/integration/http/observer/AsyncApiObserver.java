@@ -5,8 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.integration.http.RequestManagerImpl;
-
-import java.net.HttpURLConnection;
+import com.d.lib.aster.integration.http.client.Call;
 
 /**
  * Observer with Async Callback
@@ -16,13 +15,13 @@ public class AsyncApiObserver<T, R> extends AbsObserver<R> {
     private final AsyncCallback<T, R> mCallback;
     private final Object mTag; // Request tag
 
-    public AsyncApiObserver(@Nullable final HttpURLConnection conn,
+    public AsyncApiObserver(@Nullable final Call call,
                             @NonNull AsyncCallback<T, R> callback,
                             @Nullable Object tag) {
         if (callback == null) {
             throw new NullPointerException("This callback must not be null!");
         }
-        this.mConn = conn;
+        this.mCall = call;
         this.mTag = tag;
         this.mCallback = callback;
     }

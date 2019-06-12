@@ -9,14 +9,13 @@ import com.d.lib.aster.callback.AsyncCallback;
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.HttpClient;
 import com.d.lib.aster.integration.http.body.RequestBody;
+import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.func.ApiFunc;
 import com.d.lib.aster.integration.http.func.ApiTransformer;
 import com.d.lib.aster.request.IBodyRequest;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
-
-import java.net.HttpURLConnection;
 
 /**
  * Created by D on 2017/10/24.
@@ -25,7 +24,7 @@ public abstract class BodyRequest<HR extends BodyRequest>
         extends IBodyRequest<HR, HttpClient,
         RequestBody, MediaType> {
 
-    protected HttpURLConnection mConn;
+    protected Call mCall;
     protected Observable<Response> mObservable;
 
     public BodyRequest(String url) {
@@ -48,13 +47,13 @@ public abstract class BodyRequest<HR extends BodyRequest>
     @Override
     public <T> void request(final SimpleCallback<T> callback) {
         prepare();
-        ApiTransformer.request(mConn, mObservable, mConfig, callback, mTag);
+        ApiTransformer.request(mCall, mObservable, mConfig, callback, mTag);
     }
 
     @Override
     public <T, R> void request(final AsyncCallback<T, R> callback) {
         prepare();
-        ApiTransformer.requestAsync(mConn, mObservable, mConfig, callback, mTag);
+        ApiTransformer.requestAsync(mCall, mObservable, mConfig, callback, mTag);
     }
 
     @Override
@@ -92,7 +91,7 @@ public abstract class BodyRequest<HR extends BodyRequest>
             extends IBodyRequest.Singleton<HRF, HttpClient,
             RequestBody, MediaType> {
 
-        protected HttpURLConnection mConn;
+        protected Call mCall;
         protected Observable<Response> mObservable;
 
         public Singleton(String url) {
@@ -111,14 +110,14 @@ public abstract class BodyRequest<HR extends BodyRequest>
         @Override
         public <T> void request(final SimpleCallback<T> callback) {
             prepare();
-            ApiTransformer.request(mConn, mObservable, getClient().getHttpConfig(),
+            ApiTransformer.request(mCall, mObservable, getClient().getHttpConfig(),
                     callback, mTag);
         }
 
         @Override
         public <T, R> void request(final AsyncCallback<T, R> callback) {
             prepare();
-            ApiTransformer.requestAsync(mConn, mObservable, getClient().getHttpConfig(),
+            ApiTransformer.requestAsync(mCall, mObservable, getClient().getHttpConfig(),
                     callback, mTag);
         }
 

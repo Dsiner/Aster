@@ -9,6 +9,7 @@ import com.d.lib.aster.integration.http.client.HttpURLClient;
 import com.d.lib.aster.integration.http.interceptor.HttpLoggingInterceptor;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
+import com.d.lib.aster.utils.ULog;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -127,7 +128,30 @@ public class HttpClient extends IClient {
     }
 
     private static HttpLoggingInterceptor getHttpURLLog() {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+
+            @Override
+            public void log(String s) {
+                // Print log
+                ULog.d(Config.Default.TAG_LOG + s);
+            }
+        });
+        loggingInterceptor.setLevel(getLoggingLevel());
         return loggingInterceptor;
+    }
+
+    @NonNull
+    private static HttpLoggingInterceptor.Level getLoggingLevel() {
+        HttpLoggingInterceptor.Level level;
+        if (Config.Level.BODY == Config.Default.LOG_LEVEL) {
+            level = HttpLoggingInterceptor.Level.BODY;
+        } else if (Config.Level.HEADERS == Config.Default.LOG_LEVEL) {
+            level = HttpLoggingInterceptor.Level.HEADERS;
+        } else if (Config.Level.BASIC == Config.Default.LOG_LEVEL) {
+            level = HttpLoggingInterceptor.Level.BASIC;
+        } else {
+            level = HttpLoggingInterceptor.Level.NONE;
+        }
+        return level;
     }
 }

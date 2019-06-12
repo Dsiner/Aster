@@ -35,7 +35,7 @@ public class PostRequest extends BodyRequest<PostRequest> {
         } else {
             callable = getClient().create().post(mUrl);
         }
-        mConn = callable.conn;
+        mCall = callable.call;
         mObservable = callable.observable;
     }
 
@@ -66,7 +66,7 @@ public class PostRequest extends BodyRequest<PostRequest> {
             } else {
                 callable = getClient().create().post(mUrl);
             }
-            mConn = callable.conn;
+            mCall = callable.call;
             mObservable = callable.observable;
         }
     }

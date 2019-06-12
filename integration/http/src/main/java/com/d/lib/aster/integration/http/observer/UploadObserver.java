@@ -4,10 +4,9 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.RequestManagerImpl;
+import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.utils.ULog;
 import com.d.lib.aster.utils.Util;
-
-import java.net.HttpURLConnection;
 
 /**
  * Observer with Upload Callback
@@ -17,10 +16,10 @@ public class UploadObserver<R> extends AbsObserver<R> {
     private final SimpleCallback<R> mCallback;
     private final Object mTag;
 
-    public UploadObserver(@Nullable final HttpURLConnection conn,
+    public UploadObserver(@Nullable final Call call,
                           @Nullable SimpleCallback<R> callback,
                           Object tag) {
-        this.mConn = conn;
+        this.mCall = call;
         this.mCallback = callback;
         this.mTag = tag;
     }

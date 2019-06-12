@@ -18,8 +18,8 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
 
     @Override
     protected void prepare() {
-        final HttpURLApi.Callable callable = getClient().create().head(mUrl, mParams);
-        mConn = callable.conn;
+        final HttpURLApi.Callable callable = getClient().create().head(mUrl);
+        mCall = callable.call;
         mObservable = callable.observable;
     }
 
@@ -35,8 +35,8 @@ public class HeadRequest extends HttpRequest<HeadRequest> {
 
         @Override
         protected void prepare() {
-            final HttpURLApi.Callable callable = getClient().create().head(mUrl, mParams);
-            mConn = callable.conn;
+            final HttpURLApi.Callable callable = getClient().create().head(mUrl);
+            mCall = callable.call;
             mObservable = callable.observable;
         }
     }

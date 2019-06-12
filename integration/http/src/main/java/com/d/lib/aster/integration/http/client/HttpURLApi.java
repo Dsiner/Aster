@@ -5,21 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.base.Params;
+import com.d.lib.aster.callback.SimpleCallback;
 import com.d.lib.aster.integration.http.body.FormBody;
-import com.d.lib.aster.integration.http.body.MultipartBody;
 import com.d.lib.aster.integration.http.body.RequestBody;
-import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.Task;
 import com.d.lib.aster.utils.Util;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,53 +31,53 @@ public class HttpURLApi {
         return mImpl;
     }
 
-    public Callable get(String url) {
+    public Callable get(final String url) {
         return get(url, null);
     }
 
-    public Callable get(final String url, Params params) {
+    public Callable get(final String url, @Nullable final Params params) {
         final String realUrl = params != null ? url + "?" + params.getRequestParamsString() : url;
-        final HttpURLConnection conn = getImpl().getImpl(realUrl);
-        final Observable<Response> observable = getObservable(conn);
-        return new Callable(conn, observable);
+        final Call call = getImpl().getImpl(realUrl);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable post(final String url) {
         return post(url, null);
     }
 
-    public Callable post(final String url, final Params params) {
-        final HttpURLConnection conn = getImpl().postImpl(url, params);
-        final Observable<Response> observable = getObservableParams(params, conn);
-        return new Callable(conn, observable);
+    public Callable post(final String url, @Nullable final Params params) {
+        final Call call = getImpl().postImpl(url, params);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable postBody(final String url, final RequestBody requestBody) {
-        final HttpURLConnection conn = getImpl().postBodyImpl(url, requestBody);
-        final Observable<Response> observable = getObservableBody(requestBody, conn);
-        return new Callable(conn, observable);
+        final Call call = getImpl().postBodyImpl(url, requestBody);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable put(final String url) {
         return put(url, null);
     }
 
-    public Callable put(final String url, final Params params) {
-        final HttpURLConnection conn = getImpl().putImpl(url, params);
-        final Observable<Response> observable = getObservableParams(params, conn);
-        return new Callable(conn, observable);
+    public Callable put(final String url, @Nullable final Params params) {
+        final Call call = getImpl().putImpl(url, params);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable putBody(final String url, final RequestBody requestBody) {
-        final HttpURLConnection conn = getImpl().putBodyImpl(url, requestBody);
-        final Observable<Response> observable = getObservableBody(requestBody, conn);
-        return new Callable(conn, observable);
+        final Call call = getImpl().putBodyImpl(url, requestBody);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
-    public Callable head(final String url, final Params params) {
-        final HttpURLConnection conn = getImpl().headImpl(url, params);
-        final Observable<Response> observable = getObservableParams(params, conn);
-        return new Callable(conn, observable);
+    public Callable head(final String url) {
+        final Call call = getImpl().headImpl(url);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable delete(final String url) {
@@ -91,15 +85,15 @@ public class HttpURLApi {
     }
 
     public Callable delete(final String url, final Params params) {
-        final HttpURLConnection conn = getImpl().deleteImpl(url, params);
-        final Observable<Response> observable = getObservableParams(params, conn);
-        return new Callable(conn, observable);
+        final Call call = getImpl().deleteImpl(url, params);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable deleteBody(final String url, final RequestBody requestBody) {
-        final HttpURLConnection conn = getImpl().deleteBodyImpl(url, requestBody);
-        final Observable<Response> observable = getObservableBody(requestBody, conn);
-        return new Callable(conn, observable);
+        final Call call = getImpl().deleteBodyIml(url, requestBody);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable options(final String url) {
@@ -107,15 +101,15 @@ public class HttpURLApi {
     }
 
     public Callable options(final String url, final Params params) {
-        final HttpURLConnection conn = getImpl().optionsImpl(url, params);
-        final Observable<Response> observable = getObservableParams(params, conn);
-        return new Callable(conn, observable);
+        final Call call = getImpl().optionsImpl(url, params);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable optionsBody(final String url, final RequestBody requestBody) {
-        final HttpURLConnection conn = getImpl().optionsBodyImpl(url, requestBody);
-        final Observable<Response> observable = getObservableBody(requestBody, conn);
-        return new Callable(conn, observable);
+        final Call call = getImpl().optionsBodyImpl(url, requestBody);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable patch(final String url) {
@@ -123,54 +117,42 @@ public class HttpURLApi {
     }
 
     public Callable patch(final String url, final Params params) {
-        final HttpURLConnection conn = getImpl().patchImpl(url, params);
-        final Observable<Response> observable = getObservableParams(params, conn);
-        return new Callable(conn, observable);
+        final Call call = getImpl().patchImpl(url, params);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
     public Callable patchBody(final String url, final RequestBody requestBody) {
-        final HttpURLConnection conn = getImpl().patchBodyImpl(url, requestBody);
-        final Observable<Response> observable = getObservableBody(requestBody, conn);
-        return new Callable(conn, observable);
+        final Call call = getImpl().patchBodyImpl(url, requestBody);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
     }
 
-    private Observable<Response> getObservable(final HttpURLConnection conn) {
+    public Callable download(final String url) {
+        return download(url, null);
+    }
+
+    public Callable download(final String url, @Nullable final Params params) {
+        final String realUrl = params != null ? url + "?" + params.getRequestParamsString() : url;
+        final Call call = getImpl().downloadImpl(realUrl);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
+    }
+
+    public Callable uploadBody(final String url, final RequestBody requestBody) {
+        final Call call = getImpl().uploadBodyImpl(url, requestBody);
+        final Observable<Response> observable = getObservable(call);
+        return new Callable(call, observable);
+    }
+
+    @NonNull
+    private Observable<Response> getObservable(final Call call) {
         return Observable.create(new Task<Response>() {
             @Override
             public Response run() throws Exception {
                 try {
-                    return getImpl().execute(conn);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
-    }
-
-    private Observable<Response> getObservableParams(final Params params,
-                                                     final HttpURLConnection conn) {
-        return Observable.create(new Task<Response>() {
-            @Override
-            public Response run() throws Exception {
-                try {
-                    return getImpl().executeParams(conn, params);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        });
-    }
-
-    private Observable<Response> getObservableBody(final RequestBody requestBody,
-                                                   final HttpURLConnection conn) {
-        return Observable.create(new Task<Response>() {
-            @Override
-            public Response run() throws Exception {
-                try {
-                    return getImpl().executeBody(conn, requestBody);
-                } catch (Exception e) {
+                    return call.execute();
+                } catch (IOException e) {
                     e.printStackTrace();
                     throw e;
                 }
@@ -179,227 +161,125 @@ public class HttpURLApi {
     }
 
     private void checkSuccessful(@NonNull Response response) throws Exception {
-
-    }
-
-    private void checkSuccessfulImpl(@NonNull Response response) throws Exception {
         if (!response.isSuccessful()) {
-            if (((RealResponse) response).exception != null) {
-                throw ((RealResponse) response).exception;
-            }
-            String message = ((RealResponse) response).message;
-            throw new NetworkErrorException(!TextUtils.isEmpty(message) ?
-                    "Request is not successful for " + message
+            throw new NetworkErrorException(!TextUtils.isEmpty(response.message()) ?
+                    "Request is not successful for " + response.message()
                     : "Request is not successful.");
         }
     }
 
     public static final class Callable {
-        public final HttpURLConnection conn;
+        public final Call call;
         public final Observable<Response> observable;
 
-        public Callable(HttpURLConnection conn, Observable<Response> observable) {
-            this.conn = conn;
+        public Callable(Call call, Observable<Response> observable) {
+            this.call = call;
             this.observable = observable;
         }
     }
 
     static class Impl {
-        private final static int REQUEST_TYPE_HTTP = 0;
-        private final static int REQUEST_TYPE_BODY = 1;
-        private final static int REQUEST_TYPE_MULTIPARTBODY = 2;
-
         private HttpURLClient mClient;
 
         public Impl(HttpURLClient client) {
             this.mClient = client;
         }
 
-        private HttpURLConnection getImpl(String url) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "GET");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call getImpl(final String url) {
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            return mClient.newCall(request);
         }
 
-        private HttpURLConnection postImpl(String url, Params params) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "POST");
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                conn.setUseCaches(false);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                e.printStackTrace();
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call postImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return postBodyImpl(url, requestBody);
         }
 
-        private HttpURLConnection postBodyImpl(String url, @NonNull RequestBody requestBody) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "POST");
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                conn.setUseCaches(false);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                e.printStackTrace();
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call postBodyImpl(final String url, @NonNull final RequestBody requestBody) {
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .build();
+            return mClient.newCall(request);
         }
 
-        private HttpURLConnection putImpl(String url, Params params) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "PUT");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call putImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return putBodyImpl(url, requestBody);
         }
 
-        private HttpURLConnection putBodyImpl(String url, final RequestBody requestBody) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "PUT");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call putBodyImpl(final String url, @NonNull final RequestBody requestBody) {
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .put(requestBody)
+                    .build();
+            return mClient.newCall(request);
         }
 
-        @Nullable
-        private HttpURLConnection headImpl(String url, Params params) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "HEAD");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call headImpl(final String url) {
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .head()
+                    .build();
+            return mClient.newCall(request);
         }
 
-        private HttpURLConnection deleteImpl(String url, Params params) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "DELETE");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call deleteImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return deleteBodyIml(url, requestBody);
         }
 
-        private HttpURLConnection deleteBodyImpl(String url, RequestBody requestBody) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "DELETE");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call deleteBodyIml(final String url, @Nullable final RequestBody requestBody) {
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .delete(requestBody)
+                    .build();
+            return mClient.newCall(request);
         }
 
-        private HttpURLConnection optionsImpl(String url, Params params) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "OPTIONS");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call optionsImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return optionsBodyImpl(url, requestBody);
         }
 
-        private HttpURLConnection optionsBodyImpl(String url, RequestBody requestBody) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "OPTIONS");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call optionsBodyImpl(final String url, @Nullable final RequestBody requestBody) {
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .method("OPTIONS", requestBody)
+                    .build();
+            return mClient.newCall(request);
         }
 
-        private HttpURLConnection patchImpl(String url, Params params) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "PATCH");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call patchImpl(final String url, @Nullable final Params params) {
+            final RequestBody requestBody = getRequestBody(params);
+            return patchBodyImpl(url, requestBody);
         }
 
-        private HttpURLConnection patchBodyImpl(String url, RequestBody requestBody) {
-            HttpURLConnection conn = null;
-            try {
-                conn = getHttpURLConnection(url, "PATCH");
-                conn.setDoInput(true);
-                intercept(conn);
-                return conn;
-            } catch (Exception e) {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-                return null;
-            }
+        private Call patchBodyImpl(final String url, @NonNull final RequestBody requestBody) {
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .patch(requestBody)
+                    .build();
+            return mClient.newCall(request);
+        }
+
+        private Call downloadImpl(final String url) {
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .transfer()
+                    .build();
+            return mClient.newCall(request);
+        }
+
+        private Call uploadBodyImpl(final String url, @NonNull final RequestBody requestBody) {
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .transfer()
+                    .build();
+            return mClient.newCall(request);
         }
 
         @NonNull
@@ -414,120 +294,24 @@ public class HttpURLApi {
             return builder.build();
         }
 
-        private HttpURLConnection getHttpURLConnection(String requestURL, String requestMethod)
-                throws IOException {
-            URL url = new URL(requestURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(mClient.connectTimeout);
-            conn.setReadTimeout(mClient.readTimeout);
-            conn.setRequestMethod(requestMethod);
-            return conn;
-        }
-
-        private void intercept(HttpURLConnection conn) throws IOException {
-            List<IInterceptor> interceptors = mClient.interceptors;
-            if (interceptors == null) {
-                return;
-            }
-            for (IInterceptor interceptor : interceptors) {
-                interceptor.intercept(conn);
-            }
-        }
-
-        @NonNull
-        private RealResponse execute(@Nullable HttpURLConnection conn) {
-            if (conn == null) {
-                return getRealResponse(new NullPointerException("HttpURLConnection is null."));
-            }
-            try {
-                return getRealResponse(conn);
-            } catch (Exception e) {
-                e.printStackTrace();
-                conn.disconnect();
-                return getRealResponse(e);
-            }
-        }
-
-        @NonNull
-        private RealResponse executeParams(@Nullable HttpURLConnection conn,
-                                           @Nullable Params params) {
-            final RequestBody requestBody = getRequestBody(params);
-            return executeBody(conn, requestBody);
-        }
-
-        @NonNull
-        private RealResponse executeBody(@Nullable HttpURLConnection conn,
-                                         @NonNull RequestBody requestBody) {
-            if (conn == null) {
-                return getRealResponse(new NullPointerException("HttpURLConnection is null."));
-            }
-            MediaType contentType = requestBody.contentType();
-            if (contentType != null
-                    && !TextUtils.isEmpty(contentType.toString())) {
-                conn.setRequestProperty("Content-Type", contentType.toString());
-            }
-            DataOutputStream outputStream = null;
-            try {
-                outputStream = new DataOutputStream(conn.getOutputStream());
-                requestBody.writeTo(outputStream);
-                outputStream.flush();
-                return getRealResponse(conn);
-            } catch (Exception e) {
-                e.printStackTrace();
-                conn.disconnect();
-                return getRealResponse(e);
-            } finally {
-                Util.closeQuietly(outputStream);
-            }
-        }
-
-        @NonNull
-        private RealResponse executeMultipartBody(@Nullable HttpURLConnection conn,
-                                                  List<MultipartBody.Part> multipartBodyParts) {
-            if (conn == null) {
-                return getRealResponse(new NullPointerException("HttpURLConnection is null."));
-            }
-            DataOutputStream outputStream = null;
-            try {
-                MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-                for (MultipartBody.Part part : multipartBodyParts) {
-                    builder.addPart(part);
+        @Deprecated
+        private void enqueue(@NonNull final Call call,
+                             @Nullable final SimpleCallback<Response> callback) {
+            call.enqueue(new SimpleCallback<Response>() {
+                @Override
+                public void onError(Throwable e) {
+                    if (callback != null) {
+                        callback.onError(e);
+                    }
                 }
-                RequestBody requestBody = builder.build();
-                MediaType contentType = requestBody.contentType();
-                if (contentType != null
-                        && !TextUtils.isEmpty(contentType.toString())) {
-                    conn.setRequestProperty("Content-Type", contentType.toString());
-                }
-                outputStream = new DataOutputStream(conn.getOutputStream());
-                requestBody.writeTo(outputStream);
-                outputStream.flush();
-                return getRealResponse(conn);
-            } catch (Exception e) {
-                e.printStackTrace();
-                conn.disconnect();
-                return getRealResponse(e);
-            } finally {
-                Util.closeQuietly(outputStream);
-            }
-        }
 
-        private RealResponse getRealResponse(@Nullable HttpURLConnection conn) {
-            if (conn != null) {
-                try {
-                    return new RealResponse(conn.getResponseCode(),
-                            conn.getResponseMessage(),
-                            ResponseBody.create(conn),
-                            null);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                @Override
+                public void onSuccess(Response response) {
+                    if (callback != null) {
+                        callback.onSuccess(response);
+                    }
                 }
-            }
-            return new RealResponse(-1, "", null, null);
-        }
-
-        private RealResponse getRealResponse(@Nullable Exception e) {
-            return new RealResponse(-1, "", null, e);
+            });
         }
     }
 }

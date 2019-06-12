@@ -2,19 +2,22 @@ package com.d.lib.aster.integration.http.client;
 
 import android.support.annotation.Nullable;
 
+import com.d.lib.aster.base.Headers;
 import com.d.lib.aster.utils.Util;
 
 public final class RealResponse implements Response {
     final int code;
     final String message;
+    final Headers headers;
     final @Nullable
     ResponseBody body;
     final Exception exception;
 
-    public RealResponse(int code, String message, @Nullable ResponseBody body,
+    public RealResponse(int code, String message, Headers headers, @Nullable ResponseBody body,
                         @Nullable Exception exception) {
         this.code = code;
         this.message = message;
+        this.headers = headers;
         this.body = body;
         this.exception = exception;
     }
@@ -42,6 +45,11 @@ public final class RealResponse implements Response {
     @Override
     public String message() {
         return message;
+    }
+
+    @Override
+    public Headers headers() {
+        return headers;
     }
 
     @Nullable

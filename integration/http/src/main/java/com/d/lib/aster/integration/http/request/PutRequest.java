@@ -36,7 +36,7 @@ public class PutRequest extends BodyRequest<PutRequest> {
         } else {
             callable = getClient().create().put(mUrl);
         }
-        mConn = callable.conn;
+        mCall = callable.call;
         mObservable = callable.observable;
     }
 
@@ -67,7 +67,7 @@ public class PutRequest extends BodyRequest<PutRequest> {
             } else {
                 callable = getClient().create().put(mUrl);
             }
-            mConn = callable.conn;
+            mCall = callable.call;
             mObservable = callable.observable;
         }
     }

@@ -1,31 +1,55 @@
 package com.d.lib.aster.integration.http.client;
 
+import com.d.lib.aster.base.Headers;
+import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.utils.Util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.nio.charset.Charset;
 
 public class ResponseBody implements Closeable {
-    private final InputStream source;
-    private final HttpURLConnection conn;
+    private final Headers mHeaders;
+    private final HttpURLConnection mConn;
+    private final InputStream mInputStream;
+    private final ByteArrayOutputStream mByteArrayOutputStream;
 
-    public ResponseBody(HttpURLConnection conn) {
-        this.conn = conn;
+    public ResponseBody(Headers headers, HttpURLConnection conn, boolean isTransfer) {
+        this.mHeaders = headers;
+        this.mConn = conn;
         InputStream is = null;
+        ByteArrayOutputStream byteArrayOutputStream = null;
         try {
             is = conn.getInputStream();
+            if (!isTransfer) {
+                byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = is.read(buffer)) > -1) {
+                    byteArrayOutputStream.write(buffer, 0, len);
+                }
+                byteArrayOutputStream.flush();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.source = is;
+        this.mInputStream = is;
+        this.mByteArrayOutputStream = byteArrayOutputStream;
     }
 
-    public static ResponseBody create(HttpURLConnection conn) {
-        return new ResponseBody(conn);
+    public static ResponseBody create(Headers headers, HttpURLConnection conn, boolean isTransfer) {
+        return new ResponseBody(headers, conn, isTransfer);
+    }
+
+    public MediaType contentType() {
+        String contentType = mHeaders.get("Content-Type");
+        return contentType != null ? MediaType.parse(contentType) : null;
     }
 
     /**
@@ -33,15 +57,17 @@ public class ResponseBody implements Closeable {
      * -1 if unknown.
      */
     public long contentLength() {
-        return conn.getContentLength();
+        return mConn.getContentLength();
     }
 
     public final InputStream byteStream() {
-        return source;
+        return mInputStream;
     }
 
     public InputStream source() {
-        return source;
+        return mByteArrayOutputStream != null
+                ? new ByteArrayInputStream(mByteArrayOutputStream.toByteArray())
+                : mInputStream;
     }
 
     /**
@@ -52,7 +78,37 @@ public class ResponseBody implements Closeable {
      * possibility for your response.
      */
     public final byte[] bytes() throws IOException {
-        return null;
+        long contentLength = contentLength();
+        if (contentLength > Integer.MAX_VALUE) {
+            throw new IOException("Cannot buffer entire body for content length: " + contentLength);
+        }
+
+        byte[] bytes;
+        InputStream inputStream = source();
+        try {
+            bytes = toByteArray(inputStream);
+        } finally {
+            Util.closeQuietly(mInputStream);
+        }
+        if (contentLength != -1 && contentLength != bytes.length) {
+            throw new IOException("Content-Length ("
+                    + contentLength
+                    + ") and stream length ("
+                    + bytes.length
+                    + ") disagree");
+        }
+        return bytes;
+    }
+
+
+    private byte[] toByteArray(InputStream input) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        byte[] buffer = new byte[4096];
+        int n = 0;
+        while (-1 != (n = input.read(buffer))) {
+            output.write(buffer, 0, n);
+        }
+        return output.toByteArray();
     }
 
     /**
@@ -67,8 +123,10 @@ public class ResponseBody implements Closeable {
      */
     public final String string() {
         String buf;
+        BufferedReader reader = null;
+        InputStream inputStream = source();
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(source, charset()));
+            reader = new BufferedReader(new InputStreamReader(inputStream, charset()));
             StringBuilder sb = new StringBuilder();
             String line = "";
             while ((line = reader.readLine()) != null) {
@@ -80,19 +138,21 @@ public class ResponseBody implements Closeable {
             e.printStackTrace();
             return null;
         } finally {
-            Util.closeQuietly(source);
+            Util.closeQuietly(reader);
+            Util.closeQuietly(mInputStream);
         }
     }
 
-    private String charset() {
-        return "utf-8";
+    private Charset charset() {
+        MediaType contentType = contentType();
+        return contentType != null ? contentType.charset(Util.UTF_8) : Util.UTF_8;
     }
 
     @Override
     public void close() throws IOException {
-        Util.closeQuietly(source);
-        if (conn != null) {
-            conn.disconnect();
+        Util.closeQuietly(mInputStream);
+        if (mConn != null) {
+            mConn.disconnect();
         }
     }
 }

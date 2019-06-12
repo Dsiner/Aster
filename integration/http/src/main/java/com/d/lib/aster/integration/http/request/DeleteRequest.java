@@ -35,7 +35,7 @@ public class DeleteRequest extends BodyRequest<DeleteRequest> {
         } else {
             callable = getClient().create().delete(mUrl);
         }
-        mConn = callable.conn;
+        mCall = callable.call;
         mObservable = callable.observable;
     }
 
@@ -66,7 +66,7 @@ public class DeleteRequest extends BodyRequest<DeleteRequest> {
             } else {
                 callable = getClient().create().delete(mUrl);
             }
-            mConn = callable.conn;
+            mCall = callable.call;
             mObservable = callable.observable;
         }
     }

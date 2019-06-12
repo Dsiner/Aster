@@ -8,19 +8,18 @@ import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.http.HttpClient;
+import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.integration.http.client.HttpURLApi;
 import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.func.ApiTransformer;
 import com.d.lib.aster.request.IDownloadRequest;
 import com.d.lib.aster.scheduler.Observable;
 
-import java.net.HttpURLConnection;
-
 /**
  * Created by D on 2017/10/24.
  */
 public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClient> {
-    protected HttpURLConnection mConn;
+    protected Call mCall;
     protected Observable<Response> mObservable;
 
     public DownloadRequest(String url) {
@@ -43,12 +42,12 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
     @Override
     protected void prepare() {
         if (mParams == null || mParams.size() <= 0) {
-            final HttpURLApi.Callable callable = getClient().create().get(mUrl);
-            mConn = callable.conn;
+            final HttpURLApi.Callable callable = getClient().create().download(mUrl);
+            mCall = callable.call;
             mObservable = callable.observable;
         } else {
-            final HttpURLApi.Callable callable = getClient().create().get(mUrl, mParams);
-            mConn = callable.conn;
+            final HttpURLApi.Callable callable = getClient().create().download(mUrl, mParams);
+            mCall = callable.call;
             mObservable = callable.observable;
         }
     }
@@ -66,7 +65,7 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
             throw new NullPointerException("This callback must not be null!");
         }
         prepare();
-        ApiTransformer.requestDownload(mConn, mObservable, mConfig, path, name, callback, mTag);
+        ApiTransformer.requestDownload(mCall, mObservable, mConfig, path, name, callback, mTag);
     }
 
 
@@ -74,7 +73,7 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
      * Singleton
      */
     public static class Singleton extends IDownloadRequest.Singleton<Singleton, HttpClient> {
-        protected HttpURLConnection mConn;
+        protected Call mCall;
         protected Observable<Response> mObservable;
 
         public Singleton(String url) {
@@ -93,12 +92,12 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
         @Override
         protected void prepare() {
             if (mParams == null || mParams.size() <= 0) {
-                final HttpURLApi.Callable callable = getClient().create().get(mUrl);
-                mConn = callable.conn;
+                final HttpURLApi.Callable callable = getClient().create().download(mUrl);
+                mCall = callable.call;
                 mObservable = callable.observable;
             } else {
-                final HttpURLApi.Callable callable = getClient().create().get(mUrl, mParams);
-                mConn = callable.conn;
+                final HttpURLApi.Callable callable = getClient().create().download(mUrl, mParams);
+                mCall = callable.call;
                 mObservable = callable.observable;
             }
         }
@@ -115,7 +114,7 @@ public class DownloadRequest extends IDownloadRequest<DownloadRequest, HttpClien
                 throw new NullPointerException("This callback must not be null!");
             }
             prepare();
-            ApiTransformer.requestDownload(mConn, mObservable, getClient().getHttpConfig(),
+            ApiTransformer.requestDownload(mCall, mObservable, getClient().getHttpConfig(),
                     path, name, callback, mTag);
         }
     }

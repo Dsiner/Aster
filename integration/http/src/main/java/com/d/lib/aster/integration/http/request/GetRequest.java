@@ -29,7 +29,7 @@ public class GetRequest extends HttpRequest<GetRequest> {
         } else {
             callable = getClient().create().get(mUrl);
         }
-        mConn = callable.conn;
+        mCall = callable.call;
         mObservable = callable.observable;
     }
 
@@ -55,7 +55,7 @@ public class GetRequest extends HttpRequest<GetRequest> {
             } else {
                 callable = getClient().create().get(mUrl);
             }
-            mConn = callable.conn;
+            mCall = callable.call;
             mObservable = callable.observable;
         }
     }
