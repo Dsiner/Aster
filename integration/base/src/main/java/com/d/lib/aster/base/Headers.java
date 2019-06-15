@@ -53,7 +53,7 @@ public class Headers extends LinkedHashMap<String, String> {
         super();
     }
 
-    public Headers build() {
+    public Headers newBuild() {
         Headers headers = new Headers();
         headers.putAll(this);
         return headers;

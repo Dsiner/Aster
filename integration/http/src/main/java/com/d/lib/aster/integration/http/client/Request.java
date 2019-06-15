@@ -21,7 +21,7 @@ public final class Request {
     Request(Builder builder) {
         this.url = builder.url;
         this.method = builder.method;
-        this.headers = builder.headers.build();
+        this.headers = builder.headers.newBuild();
         this.body = builder.body;
         this.isTransfer = builder.isTransfer;
         this.tag = builder.tag != null ? builder.tag : this;
@@ -76,8 +76,8 @@ public final class Request {
         String method;
         Headers headers;
         RequestBody body;
-        Object tag;
         boolean isTransfer = false;
+        Object tag;
 
         public Builder() {
             this.method = "GET";
@@ -87,9 +87,10 @@ public final class Request {
         Builder(Request request) {
             this.url = request.url;
             this.method = request.method;
+            this.headers = request.headers.newBuild();
             this.body = request.body;
+            this.isTransfer = request.isTransfer;
             this.tag = request.tag;
-            this.headers = request.headers.build();
         }
 
         public Builder url(String url) {
