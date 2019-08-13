@@ -146,8 +146,7 @@ final class RealCall implements Call {
             interceptors.add(interceptor);
         }
         interceptors.add(new BridgeInterceptor(mClient));
-        interceptors.add(new ConnectInterceptor(mClient,
-                mClient.connectTimeout, mClient.readTimeout, mClient.writeTimeout));
+        interceptors.add(new ConnectInterceptor(mClient));
         for (IInterceptor interceptor : mClient.networkInterceptors()) {
             interceptors.add(interceptor);
         }

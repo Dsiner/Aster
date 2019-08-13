@@ -1,5 +1,6 @@
 package com.d.lib.aster.integration.http.client;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.interceptor.IInterceptor;
@@ -26,20 +27,20 @@ import javax.net.ssl.X509TrustManager;
  **/
 public class HttpURLClient {
     @Nullable
-    final Proxy proxy;
-    final List<IInterceptor> interceptors;
-    final List<IInterceptor> networkInterceptors;
-    final ProxySelector proxySelector;
-    final SocketFactory socketFactory;
-    @Nullable
-    final SSLSocketFactory sslSocketFactory;
-    final boolean followSslRedirects;
-    final boolean followRedirects;
-    final boolean retryOnConnectionFailure;
-    final int connectTimeout;
-    final int readTimeout;
-    final int writeTimeout;
-    final int pingInterval;
+    public final Proxy proxy;
+    public final List<IInterceptor> interceptors;
+    public final List<IInterceptor> networkInterceptors;
+    public final ProxySelector proxySelector;
+    public final SocketFactory socketFactory;
+    @NonNull
+    public final SSLSocketFactory sslSocketFactory;
+    public final boolean followSslRedirects;
+    public final boolean followRedirects;
+    public final boolean retryOnConnectionFailure;
+    public final int connectTimeout;
+    public final int readTimeout;
+    public final int writeTimeout;
+    public final int pingInterval;
 
     public HttpURLClient() {
         this(new Builder());

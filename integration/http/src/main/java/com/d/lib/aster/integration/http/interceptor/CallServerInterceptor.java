@@ -42,7 +42,6 @@ public class CallServerInterceptor implements IInterceptor<Chain, Response> {
         if (withBody) {
             connection.setDoInput(true);
             connection.setDoOutput(true);
-            connection.setUseCaches(false);
             return executeBody(realChain);
         } else {
             connection.setDoInput(true);

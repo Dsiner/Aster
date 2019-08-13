@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
+import java.util.zip.GZIPInputStream;
 
 public class ResponseBody implements Closeable {
     private final Headers mHeaders;
@@ -26,10 +27,16 @@ public class ResponseBody implements Closeable {
         InputStream is = null;
         ByteArrayOutputStream byteArrayOutputStream = null;
         try {
-            is = conn.getInputStream();
+            String gzip = headers.get("Content-Encoding");
+            if (gzip != null && gzip.toLowerCase().contains("gzip")) {
+                // gzip
+                is = new GZIPInputStream(conn.getInputStream());
+            } else {
+                is = conn.getInputStream();
+            }
             if (!isTransfer) {
                 byteArrayOutputStream = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[1024 * 4];
                 int len;
                 while ((len = is.read(buffer)) > -1) {
                     byteArrayOutputStream.write(buffer, 0, len);

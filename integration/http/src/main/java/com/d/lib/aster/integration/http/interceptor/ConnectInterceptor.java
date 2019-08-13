@@ -11,20 +11,15 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+
 public class ConnectInterceptor implements IInterceptor<Chain, Response> {
     private final HttpURLClient mClient;
-    private final int mConnectTimeout;
-    private final int mReadTimeout;
-    private final int mWriteTimeout;
 
-    public ConnectInterceptor(HttpURLClient client,
-                              int connectTimeout,
-                              int readTimeout,
-                              int writeTimeout) {
+    public ConnectInterceptor(HttpURLClient client) {
         this.mClient = client;
-        this.mConnectTimeout = connectTimeout;
-        this.mReadTimeout = readTimeout;
-        this.mWriteTimeout = writeTimeout;
     }
 
     @Override
@@ -43,9 +38,23 @@ public class ConnectInterceptor implements IInterceptor<Chain, Response> {
         HttpURLConnection conn = null;
         try {
             URL url = new URL(request.url());
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(mConnectTimeout);
-            conn.setReadTimeout(mReadTimeout);
+            if ("https".equals(url.getProtocol())) {
+                HttpsURLConnection connHttps = (HttpsURLConnection) url.openConnection();
+                connHttps.setSSLSocketFactory(mClient.sslSocketFactory);
+                connHttps.setHostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true; // Default authentication
+                    }
+                });
+                conn = connHttps;
+            } else {
+                conn = (HttpURLConnection) url.openConnection();
+            }
+            conn.setConnectTimeout(mClient.connectTimeout);
+            conn.setReadTimeout(mClient.readTimeout);
+            conn.setInstanceFollowRedirects(mClient.followRedirects);
+            conn.setUseCaches(false);
             conn.setRequestMethod(request.method());
             return conn;
         } catch (Exception e) {
