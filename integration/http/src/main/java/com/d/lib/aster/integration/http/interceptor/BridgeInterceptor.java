@@ -33,14 +33,14 @@ public final class BridgeInterceptor implements IInterceptor<Chain, Response> {
                 requestBuilder.header("Content-Type", contentType.toString());
             }
 
-//            long contentLength = body.contentLength();
-//            if (contentLength != -1) {
-//                requestBuilder.header("Content-Length", Long.toString(contentLength));
-//                requestBuilder.removeHeader("Transfer-Encoding");
-//            } else {
-//                requestBuilder.header("Transfer-Encoding", "chunked");
-//                requestBuilder.removeHeader("Content-Length");
-//            }
+            long contentLength = body.contentLength();
+            if (contentLength != -1) {
+                requestBuilder.header("Content-Length", Long.toString(contentLength));
+                requestBuilder.removeHeader("Transfer-Encoding");
+            } else {
+                requestBuilder.header("Transfer-Encoding", "chunked");
+                requestBuilder.removeHeader("Content-Length");
+            }
         }
 
         if (userRequest.header("Connection") == null) {

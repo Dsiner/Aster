@@ -1,13 +1,11 @@
 package com.d.lib.aster.integration.http.body;
 
-import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.MediaType;
+import com.d.lib.aster.integration.http.sink.BufferedSink;
 import com.d.lib.aster.utils.Util;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,14 +30,7 @@ public abstract class RequestBody {
     /**
      * Writes the content of this request to {@code out}.
      */
-    public abstract void writeTo(DataOutputStream sink) throws IOException;
-
-    /**
-     * Writes the content of this request to {@code out}.
-     */
-    public void writeAll(ForwardingSink sink) throws IOException {
-
-    }
+    public abstract void writeTo(BufferedSink sink) throws IOException;
 
     /**
      * Returns a new request body that transmits {@code content}. If {@code contentType} is non-null
@@ -86,7 +77,7 @@ public abstract class RequestBody {
             }
 
             @Override
-            public void writeTo(DataOutputStream sink) throws IOException {
+            public void writeTo(BufferedSink sink) throws IOException {
                 sink.write(content, offset, byteCount);
             }
         };
@@ -111,18 +102,16 @@ public abstract class RequestBody {
             }
 
             @Override
-            public void writeAll(final ForwardingSink sink) throws IOException {
+            public void writeTo(final BufferedSink sink) throws IOException {
                 FileInputStream source = null;
                 try {
                     source = new FileInputStream(file);
-                    byte[] buffer = new byte[1024 * 2];
+                    byte[] buffer = new byte[1024 * 4];
                     int length;
-                    DataOutputStream outputStream = sink.getDataOutputStream();
                     while ((length = source.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, length);
-                        sink.write(outputStream, length);
+                        sink.write(buffer, 0, length);
                     }
-                    outputStream.flush();
+                    sink.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                     throw e;
@@ -130,29 +119,7 @@ public abstract class RequestBody {
                     Util.closeQuietly(source);
                 }
             }
-
-            @Override
-            public void writeTo(final DataOutputStream sink) throws IOException {
-                writeAll(new ForwardingSink() {
-                    @Override
-                    public DataOutputStream getDataOutputStream() {
-                        return sink;
-                    }
-
-                    @Override
-                    public void write(@NonNull DataOutputStream source, long byteCount) throws IOException {
-
-                    }
-                });
-            }
         };
-    }
-
-    public interface ForwardingSink {
-        DataOutputStream getDataOutputStream();
-
-        @SuppressLint("CheckResult")
-        void write(@NonNull DataOutputStream source, long byteCount) throws IOException;
     }
 }
 

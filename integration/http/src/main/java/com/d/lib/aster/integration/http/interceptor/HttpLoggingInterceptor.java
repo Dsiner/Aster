@@ -7,6 +7,7 @@ import com.d.lib.aster.integration.http.client.HttpURLClient;
 import com.d.lib.aster.integration.http.client.Request;
 import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.client.ResponseBody;
+import com.d.lib.aster.integration.http.sink.BufferedSink;
 import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.utils.ULog;
 
@@ -176,7 +177,7 @@ public final class HttpLoggingInterceptor implements IInterceptor<Chain, Respons
                 try {
                     byteArrayOutputStream = new ByteArrayOutputStream();
                     dataOutputStream = new DataOutputStream(byteArrayOutputStream);
-                    requestBody.writeTo(dataOutputStream);
+                    requestBody.writeTo(new BufferedSink(dataOutputStream));
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

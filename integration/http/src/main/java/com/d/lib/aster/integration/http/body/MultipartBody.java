@@ -4,9 +4,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.MediaType;
+import com.d.lib.aster.integration.http.sink.BufferedSink;
 import com.d.lib.aster.utils.Util;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -106,57 +106,89 @@ public final class MultipartBody extends RequestBody {
         if (result != -1L) {
             return result;
         }
-        for (int p = 0, partCount = parts.size(); p < partCount; p++) {
-            Part part = parts.get(p);
-            contentLength += part.body.contentLength();
-        }
-        return contentLength;
+        return contentLength = writeOrCountBytes(null, true);
     }
 
     @Override
-    public void writeTo(DataOutputStream sink) throws IOException {
+    public void writeTo(BufferedSink sink) throws IOException {
+        writeOrCountBytes(sink, false);
+    }
+
+    /**
+     * Either writes this request to {@code sink} or measures its content length. We have one method
+     * do double-duty to make sure the counting and content are consistent, particularly when it comes
+     * to awkward operations like measuring the encoded length of header strings, or the
+     * length-in-digits of an encoded integer.
+     */
+    private long writeOrCountBytes(
+            @Nullable BufferedSink sink, boolean countBytes) throws IOException {
+        long byteCount = 0L;
+
+        BufferedSink byteCountBuffer = null;
+        if (countBytes) {
+            sink = byteCountBuffer = new BufferedSink();
+        }
+
         for (int p = 0, partCount = parts.size(); p < partCount; p++) {
             Part part = parts.get(p);
             Headers headers = part.headers;
             RequestBody body = part.body;
 
             sink.write(DASHDASH);
-            sink.writeUTF(boundary);
+            sink.writeUtf8(boundary);
             sink.write(CRLF);
 
             if (headers != null) {
                 for (Map.Entry<String, String> entry : headers.entrySet()) {
-                    sink.writeUTF(entry.getKey());
+                    sink.writeUtf8(entry.getKey());
                     sink.write(COLONSPACE);
-                    sink.writeUTF(entry.getValue());
+                    sink.writeUtf8(entry.getValue());
                     sink.write(CRLF);
                 }
             }
 
             MediaType contentType = body.contentType();
             if (contentType != null) {
-                sink.writeUTF("Content-Type: ");
-                sink.writeUTF(contentType.toString());
+                sink.writeUtf8("Content-Type: ");
+                sink.writeUtf8(contentType.toString());
                 sink.write(CRLF);
             }
 
             long contentLength = body.contentLength();
             if (contentLength != -1) {
-                sink.writeUTF("Content-Length: ");
-                sink.writeLong(contentLength);
+                sink.writeUtf8("Content-Length: ");
+                sink.writeUtf8(String.valueOf(contentLength));
                 sink.write(CRLF);
+            } else if (countBytes) {
+                // We can't measure the body's size without the sizes of its components.
+                byteCountBuffer.flush();
+                byteCountBuffer.close();
+                return -1L;
             }
 
             sink.write(CRLF);
-            body.writeTo(sink);
+
+            if (countBytes) {
+                byteCount += contentLength;
+            } else {
+                body.writeTo(sink);
+            }
 
             sink.write(CRLF);
         }
 
         sink.write(DASHDASH);
-        sink.writeUTF(boundary);
+        sink.writeUtf8(boundary);
         sink.write(DASHDASH);
         sink.write(CRLF);
+
+        if (countBytes) {
+            byteCountBuffer.flush();
+            byteCount += byteCountBuffer.size();
+            byteCountBuffer.close();
+        }
+
+        return byteCount;
     }
 
     /**

@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.integration.volley.body.RequestBody;
+import com.d.lib.aster.integration.volley.sink.BufferedSink;
 import com.d.lib.aster.utils.Util;
 
 import java.io.ByteArrayOutputStream;
@@ -66,7 +67,7 @@ public class ResponseRequest extends GsonRequest<RealResponse> {
             try {
                 byteArrayOutputStream = new ByteArrayOutputStream();
                 dataOutputStream = new DataOutputStream(byteArrayOutputStream);
-                mRequestBody.writeTo(dataOutputStream);
+                mRequestBody.writeTo(new BufferedSink(dataOutputStream));
                 dataOutputStream.flush();
                 return byteArrayOutputStream.toByteArray();
             } catch (IOException e) {

@@ -1,8 +1,9 @@
 package com.d.lib.aster.integration.volley.body;
 
 import com.d.lib.aster.base.MediaType;
+import com.d.lib.aster.integration.volley.sink.BufferedSink;
+import com.d.lib.aster.utils.Util;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,7 +35,13 @@ public class InputStreamRequestBody extends RequestBody {
     }
 
     @Override
-    public void writeTo(DataOutputStream sink) throws IOException {
-        BodyWriter.writeInputStream(inputStream, sink, null);
+    public void writeTo(BufferedSink sink) throws IOException {
+        byte[] buffer = new byte[1024 * 4];
+        int length;
+        while ((length = inputStream.read(buffer)) != -1) {
+            sink.write(buffer, 0, length);
+        }
+        sink.flush();
+        Util.closeQuietly(inputStream);
     }
 }

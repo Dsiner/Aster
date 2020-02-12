@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.callback.ProgressCallback;
+import com.d.lib.aster.integration.http.sink.BufferedSink;
+import com.d.lib.aster.integration.http.sink.ForwardingSink;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.utils.ULog;
 
@@ -43,10 +45,10 @@ public class UploadProgressRequestBody extends RequestBody {
     }
 
     @Override
-    public void writeTo(@NonNull DataOutputStream sink) throws IOException {
+    public void writeTo(@NonNull BufferedSink sink) throws IOException {
         onStartImpl();
         try {
-            mRequestBody.writeAll(new CountingSink(sink));
+            mRequestBody.writeTo(new CountingSink(sink));
             onSuccessImpl();
         } catch (final Throwable e) {
             e.printStackTrace();
@@ -91,21 +93,14 @@ public class UploadProgressRequestBody extends RequestBody {
         });
     }
 
-    private final class CountingSink implements ForwardingSink {
+    private final class CountingSink extends ForwardingSink {
         // Current byte length
         private long currentLength = 0L;
         // Total byte length, avoid calling the contentLength() method multiple times
         private long totalLength = 0L;
 
-        private DataOutputStream sink;
-
-        CountingSink(DataOutputStream sink) {
-            this.sink = sink;
-        }
-
-        @Override
-        public DataOutputStream getDataOutputStream() {
-            return sink;
+        CountingSink(BufferedSink sink) {
+            super(sink);
         }
 
         @Override

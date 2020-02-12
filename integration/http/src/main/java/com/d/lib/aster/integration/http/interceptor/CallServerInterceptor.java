@@ -11,6 +11,7 @@ import com.d.lib.aster.integration.http.client.RealResponse;
 import com.d.lib.aster.integration.http.client.Request;
 import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.client.ResponseBody;
+import com.d.lib.aster.integration.http.sink.BufferedSink;
 import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.utils.Util;
 
@@ -76,7 +77,7 @@ public class CallServerInterceptor implements IInterceptor<Chain, Response> {
         DataOutputStream outputStream = null;
         try {
             outputStream = new DataOutputStream(conn.getOutputStream());
-            requestBody.writeTo(outputStream);
+            requestBody.writeTo(new BufferedSink(outputStream));
             outputStream.flush();
             return getRealResponse(conn, chain.request().isTransfer());
         } catch (Exception e) {
@@ -102,7 +103,7 @@ public class CallServerInterceptor implements IInterceptor<Chain, Response> {
             }
             RequestBody requestBody = builder.build();
             outputStream = new DataOutputStream(conn.getOutputStream());
-            requestBody.writeTo(outputStream);
+            requestBody.writeTo(new BufferedSink(outputStream));
             outputStream.flush();
             return getRealResponse(conn, false);
         } catch (Exception e) {

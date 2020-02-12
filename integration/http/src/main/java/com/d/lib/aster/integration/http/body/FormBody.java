@@ -1,9 +1,9 @@
 package com.d.lib.aster.integration.http.body;
 
 import com.d.lib.aster.base.MediaType;
+import com.d.lib.aster.integration.http.sink.BufferedSink;
 import com.d.lib.aster.utils.Util;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -38,15 +38,15 @@ public final class FormBody extends RequestBody {
     }
 
     @Override
-    public void writeTo(DataOutputStream sink) throws IOException {
+    public void writeTo(BufferedSink sink) throws IOException {
         int i = 0;
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (i > 0) {
-                sink.writeUTF("&");
+                sink.writeUtf8("&");
             }
-            sink.writeUTF(entry.getKey());
-            sink.writeUTF("=");
-            sink.writeUTF(entry.getValue());
+            sink.writeUtf8(entry.getKey());
+            sink.writeUtf8("=");
+            sink.writeUtf8(entry.getValue());
             i++;
         }
         sink.flush();

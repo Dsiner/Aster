@@ -1,5 +1,7 @@
 package com.d.lib.aster.integration.http.body;
 
+import com.d.lib.aster.integration.http.sink.BufferedSink;
+import com.d.lib.aster.integration.http.sink.ForwardingSink;
 import com.d.lib.aster.utils.Util;
 
 import java.io.DataOutputStream;
@@ -52,7 +54,7 @@ public class BodyWriter {
     @Deprecated
     public static void writeFile(final DataOutputStream outputStream,
                                  final File file, final String name, final String mimeType,
-                                 final RequestBody.ForwardingSink forwardingSink) throws IOException {
+                                 final ForwardingSink sink) throws IOException {
         outputStream.write(getFileParamsString(file, name, mimeType).getBytes());
         outputStream.flush();
 
@@ -61,8 +63,8 @@ public class BodyWriter {
         int length;
         while ((length = inputStream.read(buffer)) != -1) {
             outputStream.write(buffer, 0, length);
-            if (forwardingSink != null) {
-                forwardingSink.write(outputStream, length);
+            if (sink != null) {
+                sink.write(outputStream, length);
             }
         }
         outputStream.flush();
@@ -70,17 +72,17 @@ public class BodyWriter {
     }
 
     public static void writeInputStream(InputStream inputStream,
-                                        final DataOutputStream outputStream,
-                                        final RequestBody.ForwardingSink forwardingSink) throws IOException {
+                                        final BufferedSink outputSink,
+                                        final ForwardingSink sink) throws IOException {
         byte[] buffer = new byte[1024 * 4];
         int length;
         while ((length = inputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, length);
-            if (forwardingSink != null) {
-                forwardingSink.write(outputStream, length);
+            outputSink.getDataOutputStream().write(buffer, 0, length);
+            if (sink != null) {
+                sink.write(outputSink.getDataOutputStream(), length);
             }
         }
-        outputStream.flush();
+        outputSink.getDataOutputStream().flush();
         Util.closeQuietly(inputStream);
     }
 
