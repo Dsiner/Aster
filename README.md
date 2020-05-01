@@ -6,7 +6,7 @@
 [![Readme](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-brightgreen.svg)](https://github.com/Dsiner/Aster/blob/master/README-zh.md)
 [![Wiki-Guide](https://img.shields.io/badge/Wiki-Guide-brightgreen.svg)](https://github.com/Dsiner/Aster/wiki)
 
-> A network request library based on `HttpURLConnection` + `OkHttp3` + `Volley` + `Retrofit2` + `RxJava2`
+> Aster is a network request library for android, supporting `HttpURLConnection`, `Volley`, `OkHttp3`, `Retrofit2` as HTTP client.
 
 ## Set up
 Maven:
@@ -66,8 +66,6 @@ or Gradle(HttpURLConnection lite):
 
 ### How do I use Aster?
 
-See the [Wiki](https://github.com/Dsiner/Aster/wiki) [Wiki](https://github.com/Dsiner/Aster/wiki) [Wiki](https://github.com/Dsiner/Aster/wiki).
-
 Simple use cases will look something like this:
 ```java
         Params params = new Params("https://api.douban.com/v2/movie/top250");
@@ -87,7 +85,7 @@ Simple use cases will look something like this:
                 });
 ```
 
-More usage see [Demo](app/src/main/java/com/d/aster/MainActivity.java)
+More usage see [Wiki.](https://github.com/Dsiner/Aster/wiki)
 
 ## Latest Changes
 - [Changelog.md](CHANGELOG.md)
