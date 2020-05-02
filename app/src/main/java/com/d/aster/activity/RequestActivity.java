@@ -21,7 +21,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-public abstract class Request extends AppCompatActivity {
+public abstract class RequestActivity extends AppCompatActivity {
     public final static int TYPE_SINGLETON = 0;
     public final static int TYPE_NEW = 1;
     public final static int TYPE_OBSERVABLE = 2;

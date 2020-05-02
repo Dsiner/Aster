@@ -23,7 +23,7 @@ import java.io.InputStream;
  * Request --> Upload
  * Created by D on 2017/11/15.
  */
-public class Upload extends Request {
+public class UploadActivity extends RequestActivity {
     private ProgressDialog mDialog;
     private boolean mIsRunning;
 

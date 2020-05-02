@@ -19,16 +19,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.d.aster.activity.Get"
+            android:name="com.d.aster.activity.GetActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.d.aster.activity.Post"
+            android:name="com.d.aster.activity.PostActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.d.aster.activity.Download"
+            android:name="com.d.aster.activity.DownloadActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.d.aster.activity.Upload"
+            android:name="com.d.aster.activity.UploadActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 

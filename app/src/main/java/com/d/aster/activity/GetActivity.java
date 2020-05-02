@@ -10,19 +10,20 @@ import com.d.lib.aster.Aster;
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Params;
 import com.d.lib.aster.callback.AsyncCallback;
+import com.d.lib.aster.callback.SimpleCallback;
+import com.d.lib.aster.scheduler.callback.Function;
 import com.d.lib.aster.scheduler.callback.Observer;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
-import com.google.gson.Gson;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
 
 /**
- * Request --> Post
+ * Request --> Get
  * Created by D on 2017/10/26.
  */
-public class Post extends Request {
+public class GetActivity extends RequestActivity {
 
     @Override
     protected void init() {
@@ -41,18 +42,12 @@ public class Post extends Request {
         Params params = new Params(mUrl);
         params.addParam(API.MovieTop.start, "0");
         params.addParam(API.MovieTop.count, "10");
-        Aster.getDefault().post(API.MovieTop.rtpType, params)
-                .request(new AsyncCallback<String, String>() {
+        Aster.getDefault().get(API.MovieTop.rtpType, params)
+                .request(new SimpleCallback<MovieInfo>() {
                     @Override
-                    public String apply(@NonNull String info) throws Exception {
-                        Logger.d("dsiner_request--> apply");
-                        return "" + info;
-                    }
-
-                    @Override
-                    public void onSuccess(String response) {
+                    public void onSuccess(MovieInfo response) {
                         Logger.d("dsiner_request--> onSuccess: " + response);
-                        formatPrinting(response);
+                        formatPrinting(response.toString());
                     }
 
                     @Override
@@ -67,7 +62,7 @@ public class Post extends Request {
         Params params = new Params(mUrl);
         params.addParam(API.MovieTop.start, "1");
         params.addParam(API.MovieTop.count, "10");
-        Aster.post("top250", params)
+        Aster.get("top250", params)
                 .baseUrl("https://api.douban.com/v2/movie/")
                 .connectTimeout(5 * 1000)
                 .readTimeout(5 * 1000)
@@ -83,7 +78,6 @@ public class Post extends Request {
                     @Override
                     public void onSuccess(String response) {
                         Logger.d("dsiner_request--> onSuccess: " + response);
-                        formatPrinting(response);
                     }
 
                     @Override
@@ -96,22 +90,44 @@ public class Post extends Request {
     @SuppressWarnings("unchecked")
     @Override
     protected void requestObservable() {
-        Aster.getDefault().post(mUrl)
-                .observable(ResponseBody.class)
-                .observeOn(Schedulers.mainThread())
-                .subscribe(new Observer<ResponseBody>() {
+        Params params = new Params(mUrl);
+        params.addParam(API.MovieTop.start, "1");
+        params.addParam(API.MovieTop.count, "10");
+        Aster.getDefault().get(API.MovieTop.rtpType, params)
+                .observable(MovieInfo.class)
+                .map(new Function<MovieInfo, MovieInfo>() {
                     @Override
-                    public void onNext(@NonNull ResponseBody response) {
-                        try {
-                            formatPrinting(response.string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        Logger.d("dsiner_theard apply");
+                        return info;
+                    }
+                })
+                .observeOn(Schedulers.mainThread())
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        Logger.d("dsiner_theard apply");
+                        return info;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .map(new Function<MovieInfo, MovieInfo>() {
+                    @Override
+                    public MovieInfo apply(@NonNull MovieInfo info) throws Exception {
+                        Logger.d("dsiner_theard apply");
+                        return info;
+                    }
+                })
+                .observeOn(Schedulers.mainThread())
+                .subscribe(new Observer() {
+                    @Override
+                    public void onNext(@NonNull Object result) {
+                        Logger.d("dsiner_theard onNext");
                     }
 
                     @Override
-                    public void onError(@NonNull Throwable e) {
-
+                    public void onError(Throwable e) {
+                        Logger.d("dsiner_theard onError");
                     }
                 });
     }
@@ -128,23 +144,18 @@ public class Post extends Request {
         com.d.lib.aster.integration.retrofit.RetrofitModule retrofit
                 = (com.d.lib.aster.integration.retrofit.RetrofitModule) aster;
         retrofit.getRetrofit().create(com.d.lib.aster.integration.retrofit.RetrofitAPI.class)
-                .post(mUrl)
+                .get(mUrl)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
-                .map(new io.reactivex.functions.Function<ResponseBody, MovieInfo>() {
+                .map(new io.reactivex.functions.Function<ResponseBody, ArrayList<Boolean>>() {
                     @Override
-                    public MovieInfo apply(ResponseBody responseBody) throws Exception {
-                        return new Gson().fromJson(responseBody.string(), MovieInfo.class);
+                    public ArrayList<Boolean> apply(@NonNull ResponseBody info) throws Exception {
+                        return new ArrayList<>();
                     }
                 })
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new io.reactivex.Observer<MovieInfo>() {
+                .subscribe(new io.reactivex.observers.DisposableObserver<ArrayList<Boolean>>() {
                     @Override
-                    public void onSubscribe(io.reactivex.disposables.Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(MovieInfo movieInfo) {
+                    public void onNext(ArrayList<Boolean> booleans) {
 
                     }
 

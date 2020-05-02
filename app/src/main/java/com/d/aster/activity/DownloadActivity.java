@@ -12,7 +12,7 @@ import com.d.lib.aster.callback.ProgressCallback;
  * Request --> Download
  * Created by D on 2017/10/26.
  */
-public class Download extends Request {
+public class DownloadActivity extends RequestActivity {
     private final String mUrl1 = "http://imtt.dd.qq.com/16891/4EA3DBDFC3F34E43C1D76CEE67593D67.apk?fsname=com.d.music_1.0.1_2.apk&csr=1bbd";
     private final String mUrl2 = "http://imtt.dd.qq.com/16891/D44E78C914AA4D70CD4422401A7E7E5C.apk?fsname=com.tencent.mobileqq_7.2.5_744.apk&csr=1bbd";
 

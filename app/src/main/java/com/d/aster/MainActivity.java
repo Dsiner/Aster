@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.d.aster.activity.Download;
-import com.d.aster.activity.Get;
-import com.d.aster.activity.Post;
-import com.d.aster.activity.Upload;
+import com.d.aster.activity.DownloadActivity;
+import com.d.aster.activity.GetActivity;
+import com.d.aster.activity.PostActivity;
+import com.d.aster.activity.UploadActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -16,19 +16,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_get:
-                startActivity(new Intent(MainActivity.this, Get.class));
+                startActivity(new Intent(MainActivity.this, GetActivity.class));
                 break;
 
             case R.id.btn_post:
-                startActivity(new Intent(MainActivity.this, Post.class));
+                startActivity(new Intent(MainActivity.this, PostActivity.class));
                 break;
 
             case R.id.btn_download:
-                startActivity(new Intent(MainActivity.this, Download.class));
+                startActivity(new Intent(MainActivity.this, DownloadActivity.class));
                 break;
 
             case R.id.btn_upload:
-                startActivity(new Intent(MainActivity.this, Upload.class));
+                startActivity(new Intent(MainActivity.this, UploadActivity.class));
                 break;
         }
     }
