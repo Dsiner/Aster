@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 
 import com.d.aster.api.API;
 import com.d.lib.aster.base.Config;
-import com.d.lib.aster.integration.http.HttpModule;
 import com.d.lib.aster.integration.okhttp3.OkHttpModule;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.utils.SSLUtil;
@@ -17,7 +16,7 @@ import java.util.Map;
  * AppAsterModule
  * Created by D on 2018/12/18.
  **/
-public class AppAsterModule extends HttpModule {
+public class AppAsterModule extends OkHttpModule {
 
     @Override
     public void applyOptions(@NonNull Context context, @NonNull Config.Builder builder) {
