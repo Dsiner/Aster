@@ -3,9 +3,9 @@ package com.d.aster.activity;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.d.aster.Logger;
 import com.d.aster.api.API;
 import com.d.aster.model.MovieInfo;
+import com.d.aster.util.Logger;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.base.AsterModule;
 import com.d.lib.aster.base.Params;
@@ -28,8 +28,8 @@ public class GetActivity extends RequestActivity {
     @Override
     protected void init() {
         mUrl = API.MovieTop.rtpType;
-        etUrl.setText(mUrl);
-        etUrl.setSelection(etUrl.getText().toString().length());
+        et_url.setText(mUrl);
+        et_url.setSelection(et_url.getText().toString().length());
     }
 
     @Override
@@ -53,6 +53,7 @@ public class GetActivity extends RequestActivity {
                     @Override
                     public void onError(Throwable e) {
                         Logger.d("dsiner_request--> onError");
+                        formatPrinting(e.toString());
                     }
                 });
     }
@@ -83,6 +84,7 @@ public class GetActivity extends RequestActivity {
                     @Override
                     public void onError(Throwable e) {
                         Logger.d("dsiner_request--> onError");
+                        formatPrinting(e.toString());
                     }
                 });
     }
@@ -123,11 +125,17 @@ public class GetActivity extends RequestActivity {
                     @Override
                     public void onNext(@NonNull Object result) {
                         Logger.d("dsiner_theard onNext");
+                        try {
+                            formatPrinting(result.toString());
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.d("dsiner_theard onError");
+                        formatPrinting(e.toString());
                     }
                 });
     }

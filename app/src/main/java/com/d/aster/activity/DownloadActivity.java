@@ -1,18 +1,26 @@
 package com.d.aster.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.d.aster.App;
-import com.d.aster.Logger;
 import com.d.aster.R;
+import com.d.aster.util.Logger;
+import com.d.aster.util.PermissionChecker;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.ProgressCallback;
+
+import java.util.Collections;
 
 /**
  * Request --> Download
  * Created by D on 2017/10/26.
  */
 public class DownloadActivity extends RequestActivity {
+    public static final int REQUEST_CODE_PERMISSION = 1001;
+
     private final String mUrl1 = "http://imtt.dd.qq.com/16891/4EA3DBDFC3F34E43C1D76CEE67593D67.apk?fsname=com.d.music_1.0.1_2.apk&csr=1bbd";
     private final String mUrl2 = "http://imtt.dd.qq.com/16891/D44E78C914AA4D70CD4422401A7E7E5C.apk?fsname=com.tencent.mobileqq_7.2.5_744.apk&csr=1bbd";
 
@@ -22,8 +30,8 @@ public class DownloadActivity extends RequestActivity {
     @Override
     protected void init() {
         mUrl = mUrl1;
-        etUrl.setText(mUrl);
-        etUrl.setSelection(etUrl.getText().toString().length());
+        et_url.setText(mUrl);
+        et_url.setSelection(et_url.getText().toString().length());
 
         mDialog = new ProgressDialog(this);
         mDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -32,6 +40,18 @@ public class DownloadActivity extends RequestActivity {
 
     @Override
     protected void request() {
+        PermissionChecker.permissionsCheck(this,
+                Collections.singletonList(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                REQUEST_CODE_PERMISSION,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        nextRequest();
+                    }
+                });
+    }
+
+    private void nextRequest() {
         requestImpl(TYPE_SINGLETON);
     }
 
@@ -122,6 +142,20 @@ public class DownloadActivity extends RequestActivity {
         mDialog.setMessage(!finish ? getResources().getString(R.string.downloading)
                 : getResources().getString(R.string.downloaded));
         mDialog.setProgress((int) (currentLength * 100f / totalLength));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_PERMISSION) {
+            if (PermissionChecker.onRequestPermissionsResult(requestCode,
+                    permissions, grantResults)) {
+                nextRequest();
+            } else {
+                Toast.makeText(mContext, "Denied permission!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 
     @Override

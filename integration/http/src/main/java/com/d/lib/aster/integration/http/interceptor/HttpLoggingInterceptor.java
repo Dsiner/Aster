@@ -9,7 +9,7 @@ import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.integration.http.sink.BufferedSink;
 import com.d.lib.aster.interceptor.IInterceptor;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

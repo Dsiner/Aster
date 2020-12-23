@@ -3,7 +3,7 @@ package com.d.lib.aster.integration.http.client;
 import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.Headers;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 public final class RealResponse implements Response {
     final int code;
@@ -60,6 +60,6 @@ public final class RealResponse implements Response {
 
     @Override
     public void close() {
-        Util.closeQuietly(body);
+        Utils.closeQuietly(body);
     }
 }

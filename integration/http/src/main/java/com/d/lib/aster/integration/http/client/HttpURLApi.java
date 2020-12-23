@@ -11,7 +11,7 @@ import com.d.lib.aster.integration.http.body.FormBody;
 import com.d.lib.aster.integration.http.body.RequestBody;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.Task;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -285,7 +285,7 @@ public class HttpURLApi {
         @NonNull
         private RequestBody getRequestBody(@Nullable Params params) {
             if (params == null) {
-                return RequestBody.create(null, Util.EMPTY_BYTE_ARRAY);
+                return RequestBody.create(null, Utils.EMPTY_BYTE_ARRAY);
             }
             FormBody.Builder builder = new FormBody.Builder();
             for (Map.Entry<String, String> entry : params.entrySet()) {

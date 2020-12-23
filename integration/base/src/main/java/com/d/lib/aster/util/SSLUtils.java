@@ -1,4 +1,4 @@
-package com.d.lib.aster.utils;
+package com.d.lib.aster.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +26,7 @@ import javax.net.ssl.X509TrustManager;
  * SSL
  * Created by D on 2017/10/24.
  */
-public class SSLUtil {
+public class SSLUtils {
     public static SSLSocketFactory getSslSocketFactory(InputStream[] certificates, InputStream bksFile, String password) {
         try {
             TrustManager[] trustManagers = prepareTrustManager(certificates);

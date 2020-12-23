@@ -7,8 +7,8 @@ import com.d.lib.aster.retry.IRetry;
 import com.d.lib.aster.retry.RetryException;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
-import com.d.lib.aster.utils.ULog;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.ULog;
+import com.d.lib.aster.util.Utils;
 
 /**
  * Retry Func
@@ -42,7 +42,7 @@ public class ApiRetryFunc<T> extends DisposableObserver<T> implements IRetry {
         Observable.postMainDelayed(new Runnable() {
             @Override
             public void run() {
-                Util.printThread("Aster_thread retryApply");
+                Utils.printThread("Aster_thread retryApply");
                 mObserve.observe().subscribe(ApiRetryFunc.this);
             }
         }, mRetryDelayMillis);
@@ -51,7 +51,7 @@ public class ApiRetryFunc<T> extends DisposableObserver<T> implements IRetry {
     @Override
     public void onError(Throwable e) {
         if (mRetryCount < mMaxRetries && e instanceof RetryException) {
-            Util.printThread("Aster_thread retryInit");
+            Utils.printThread("Aster_thread retryInit");
             ((RetryException) e).run(this);
             return;
         }

@@ -25,12 +25,12 @@ public class VolleyClient extends IClient {
     private VolleyApi mVolleyApi;
 
     private static class Default {
-        private final static VolleyClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
+        private static final VolleyClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
     }
 
     private static class Transfer {
-        private final static VolleyClient DOWNLOAD = create(TYPE_DOWNLOAD, Config.getDefault().log(false));
-        private final static VolleyClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
+        private static final VolleyClient DOWNLOAD = create(TYPE_DOWNLOAD, Config.getDefault().log(false));
+        private static final VolleyClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
     }
 
     private VolleyClient(@State int type, @NonNull Config config) {

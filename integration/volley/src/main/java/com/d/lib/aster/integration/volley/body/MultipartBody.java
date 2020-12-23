@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.integration.volley.sink.BufferedSink;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public final class MultipartBody extends RequestBody {
         this.boundary = boundary;
         this.originalType = type;
         this.contentType = MediaType.parse(type + "; boundary=" + boundary);
-        this.parts = Util.immutableList(parts);
+        this.parts = Utils.immutableList(parts);
     }
 
     public MediaType type() {

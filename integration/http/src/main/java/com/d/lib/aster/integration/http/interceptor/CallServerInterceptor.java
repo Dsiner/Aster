@@ -13,7 +13,7 @@ import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.integration.http.sink.BufferedSink;
 import com.d.lib.aster.interceptor.IInterceptor;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -85,7 +85,7 @@ public class CallServerInterceptor implements IInterceptor<Chain, Response> {
             conn.disconnect();
             return getRealResponse(e);
         } finally {
-            Util.closeQuietly(outputStream);
+            Utils.closeQuietly(outputStream);
         }
     }
 
@@ -111,7 +111,7 @@ public class CallServerInterceptor implements IInterceptor<Chain, Response> {
             conn.disconnect();
             return getRealResponse(e);
         } finally {
-            Util.closeQuietly(outputStream);
+            Utils.closeQuietly(outputStream);
         }
     }
 

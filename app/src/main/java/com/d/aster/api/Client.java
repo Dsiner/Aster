@@ -15,7 +15,7 @@ import com.d.lib.aster.integration.okhttp3.request.PatchRequest;
 import com.d.lib.aster.integration.okhttp3.request.PostRequest;
 import com.d.lib.aster.integration.okhttp3.request.PutRequest;
 import com.d.lib.aster.integration.okhttp3.request.UploadRequest;
-import com.d.lib.aster.utils.SSLUtil;
+import com.d.lib.aster.util.SSLUtils;
 
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class Client {
     }
 
     private static class TypeA {
-        private final static AsterModule.Singleton INSTANCE = new AsterModule.Singleton() {
+        private static final AsterModule.Singleton INSTANCE = new AsterModule.Singleton() {
             private OkHttpClient clientDefault = OkHttpClient.create(IClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.microsoft.com/")
                             .headers(new HeadersInterceptor.OnHeadInterceptor() {
@@ -48,7 +48,7 @@ public class Client {
                             .writeTimeout(10 * 1000)
                             .retryCount(3)
                             .retryDelayMillis(3 * 1000)
-                            .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
+                            .sslSocketFactory(SSLUtils.getSslSocketFactory(null, null, null))
                             .log(true));
             private OkHttpClient clientTransfer = OkHttpClient.create(IClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.microsoft.com/")
@@ -57,7 +57,7 @@ public class Client {
                             .writeTimeout(10 * 1000)
                             .retryCount(0)
                             .retryDelayMillis(3 * 1000)
-                            .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
+                            .sslSocketFactory(SSLUtils.getSslSocketFactory(null, null, null))
                             .log(false));
 
             private OkHttpClient getClientDefault() {
@@ -231,7 +231,7 @@ public class Client {
     }
 
     private static class TypeB {
-        private final static AsterModule.Singleton INSTANCE = new AsterModule.Singleton() {
+        private static final AsterModule.Singleton INSTANCE = new AsterModule.Singleton() {
             private OkHttpClient clientDefault = OkHttpClient.create(IClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.baidu.com/")
                             .connectTimeout(10 * 1000)
@@ -239,7 +239,7 @@ public class Client {
                             .writeTimeout(10 * 1000)
                             .retryCount(3)
                             .retryDelayMillis(3 * 1000)
-                            .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
+                            .sslSocketFactory(SSLUtils.getSslSocketFactory(null, null, null))
                             .log(true));
             private OkHttpClient clientTransfer = OkHttpClient.create(IClient.TYPE_NORMAL,
                     new Config().baseUrl("https://www.baidu.com/")
@@ -248,7 +248,7 @@ public class Client {
                             .writeTimeout(10 * 1000)
                             .retryCount(0)
                             .retryDelayMillis(3 * 1000)
-                            .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
+                            .sslSocketFactory(SSLUtils.getSslSocketFactory(null, null, null))
                             .log(false));
 
             private OkHttpClient getClientDefault() {

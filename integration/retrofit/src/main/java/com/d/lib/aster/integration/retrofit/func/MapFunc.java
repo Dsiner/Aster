@@ -1,7 +1,7 @@
 package com.d.lib.aster.integration.retrofit.func;
 
 import com.d.lib.aster.callback.AsyncCallback;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import io.reactivex.functions.Function;
 
@@ -17,7 +17,7 @@ public class MapFunc<T, R> implements Function<T, R> {
 
     @Override
     public R apply(T t) throws Exception {
-        Util.printThread("Aster_thread map apply");
+        Utils.printThread("Aster_thread map apply");
         return mCallback.apply(t);
     }
 }

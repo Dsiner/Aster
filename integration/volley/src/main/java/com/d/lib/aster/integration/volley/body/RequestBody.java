@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.integration.volley.sink.BufferedSink;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,11 +37,11 @@ public abstract class RequestBody {
      * and lacks a charset, this will use UTF-8.
      */
     public static RequestBody create(@Nullable MediaType contentType, String content) {
-        Charset charset = Util.UTF_8;
+        Charset charset = Utils.UTF_8;
         if (contentType != null) {
             charset = contentType.charset();
             if (charset == null) {
-                charset = Util.UTF_8;
+                charset = Utils.UTF_8;
                 contentType = MediaType.parse(contentType + "; charset=utf-8");
             }
         }
@@ -116,7 +116,7 @@ public abstract class RequestBody {
                     e.printStackTrace();
                     throw e;
                 } finally {
-                    Util.closeQuietly(source);
+                    Utils.closeQuietly(source);
                 }
             }
         };

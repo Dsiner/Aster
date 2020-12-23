@@ -18,7 +18,7 @@ public class RequestManagerImpl implements IRequestManager<Observer> {
     private HashMap<Object, Observer> mHashMap;
 
     private static class Singleton {
-        private final static RequestManagerImpl INSTANCE = new RequestManagerImpl();
+        private static final RequestManagerImpl INSTANCE = new RequestManagerImpl();
     }
 
     public static RequestManagerImpl getIns() {

@@ -1,12 +1,15 @@
 package com.d.aster.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.d.aster.App;
-import com.d.aster.Logger;
 import com.d.aster.R;
+import com.d.aster.util.Logger;
+import com.d.aster.util.PermissionChecker;
 import com.d.lib.aster.Aster;
 import com.d.lib.aster.callback.UploadCallback;
 import com.d.lib.aster.scheduler.Observable;
@@ -18,20 +21,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 
 /**
  * Request --> Upload
  * Created by D on 2017/11/15.
  */
 public class UploadActivity extends RequestActivity {
+    public static final int REQUEST_CODE_PERMISSION = 1001;
+
     private ProgressDialog mDialog;
     private boolean mIsRunning;
 
     @Override
     protected void init() {
         mUrl = "http://www.qq.com/";
-        etUrl.setText(mUrl);
-        etUrl.setSelection(etUrl.getText().toString().length());
+        et_url.setText(mUrl);
+        et_url.setSelection(et_url.getText().toString().length());
 
         mDialog = new ProgressDialog(this);
         mDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -40,6 +46,18 @@ public class UploadActivity extends RequestActivity {
 
     @Override
     protected void request() {
+        PermissionChecker.permissionsCheck(this,
+                Collections.singletonList(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                REQUEST_CODE_PERMISSION,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        nextRequest();
+                    }
+                });
+    }
+
+    private void nextRequest() {
         doTask(App.PIC_NAME, new Runnable() {
             @Override
             public void run() {
@@ -222,6 +240,20 @@ public class UploadActivity extends RequestActivity {
         mDialog.setMessage(!finish ? getResources().getString(R.string.uploading)
                 : getResources().getString(R.string.uploaded));
         mDialog.setProgress((int) (currentLength * 100f / totalLength));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_PERMISSION) {
+            if (PermissionChecker.onRequestPermissionsResult(requestCode,
+                    permissions, grantResults)) {
+                nextRequest();
+            } else {
+                Toast.makeText(mContext, "Denied permission!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 
     @Override

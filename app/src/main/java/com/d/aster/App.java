@@ -3,6 +3,7 @@ package com.d.aster;
 import android.app.Application;
 import android.os.Environment;
 
+import com.d.aster.api.AppAsterModule;
 import com.d.lib.aster.Aster;
 
 /**
@@ -10,16 +11,17 @@ import com.d.lib.aster.Aster;
  * Created by D on 2017/10/27.
  */
 public class App extends Application {
-    public final static String PICTURE_PATH = Environment.getExternalStorageDirectory().getPath()
+    public static final String PICTURE_PATH = Environment.getExternalStorageDirectory().getPath()
             + "/Aster/pictures/";
-    public final static String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath()
+    public static final String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath()
             + "/Aster/download/";
-    public final static String PIC_NAME = "young.jpg";
+
+    public static final String PIC_NAME = "young.jpg";
 
     @Override
     public void onCreate() {
         super.onCreate();
-        // Init Aster
+        // Init
         Aster.init(getApplicationContext(), new AppAsterModule());
 
         // Or

@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.d.aster"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
@@ -26,14 +26,16 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':lib')
     implementation project(':integration:http')
     implementation project(':integration:okhttp3')
     implementation project(':integration:volley')
     implementation project(':integration:retrofit')
+
     implementation 'com.android.support:appcompat-v7:27.1.1'
 }

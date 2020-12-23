@@ -6,7 +6,7 @@ import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -25,12 +25,12 @@ public class OkHttpClient extends IClient {
     private OkHttpApi mOkHttpApi;
 
     private static class Default {
-        private final static OkHttpClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
+        private static final OkHttpClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
     }
 
     private static class Transfer {
-        private final static OkHttpClient DOWNLOAD = create(TYPE_DOWNLOAD, Config.getDefault().log(false));
-        private final static OkHttpClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
+        private static final OkHttpClient DOWNLOAD = create(TYPE_DOWNLOAD, Config.getDefault().log(false));
+        private static final OkHttpClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
     }
 
     private OkHttpClient(@State int type, @NonNull Config config) {

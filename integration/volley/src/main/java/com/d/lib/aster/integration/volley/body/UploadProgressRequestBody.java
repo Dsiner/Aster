@@ -7,7 +7,7 @@ import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.integration.volley.sink.BufferedSink;
 import com.d.lib.aster.integration.volley.sink.ForwardingSink;
 import com.d.lib.aster.scheduler.Observable;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

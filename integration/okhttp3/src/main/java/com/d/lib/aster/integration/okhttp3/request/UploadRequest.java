@@ -15,7 +15,7 @@ import com.d.lib.aster.integration.okhttp3.body.UploadProgressRequestBody;
 import com.d.lib.aster.integration.okhttp3.func.ApiTransformer;
 import com.d.lib.aster.request.IUploadRequest;
 import com.d.lib.aster.scheduler.Observable;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.File;
 import java.io.InputStream;
@@ -103,7 +103,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
 
     @Override
     public UploadRequest addFile(String name, String filename, File file, ProgressCallback callback) {
-        final RequestBody requestBody = RequestBody.create(MediaType.parse(Util.guessMimeType(file.getName())), file);
+        final RequestBody requestBody = RequestBody.create(MediaType.parse(Utils.guessMimeType(file.getName())), file);
         final MultipartBody.Part part = callback != null
                 ? MultipartBody.Part.createFormData(name, filename,
                 new UploadProgressRequestBody(requestBody, callback))
@@ -237,7 +237,7 @@ public class UploadRequest extends IUploadRequest<UploadRequest, OkHttpClient> {
 
         @Override
         public Singleton addFile(String name, String filename, File file, ProgressCallback callback) {
-            final RequestBody requestBody = RequestBody.create(MediaType.parse(Util.guessMimeType(file.getName())), file);
+            final RequestBody requestBody = RequestBody.create(MediaType.parse(Utils.guessMimeType(file.getName())), file);
             final MultipartBody.Part part = callback != null
                     ? MultipartBody.Part.createFormData(name, filename,
                     new UploadProgressRequestBody(requestBody, callback))

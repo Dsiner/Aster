@@ -15,7 +15,7 @@ import com.d.lib.aster.integration.okhttp3.observer.UploadObserver;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
 import com.d.lib.aster.scheduler.schedule.Schedulers;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -32,7 +32,7 @@ public class ApiTransformer {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
-                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                .map(new ApiFunc<T>(Utils.getFirstCls(callback)))
                 .observeOn(Schedulers.mainThread())
                 .subscribe(new ApiRetryFunc<T>(disposableObserver,
                         config.retryCount,
@@ -42,7 +42,7 @@ public class ApiTransformer {
                             @Override
                             public Observable.Observe<T> observe() {
                                 return observable.subscribeOn(Schedulers.io())
-                                        .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                                        .map(new ApiFunc<T>(Utils.getFirstCls(callback)))
                                         .observeOn(Schedulers.mainThread());
                             }
                         }));
@@ -58,7 +58,7 @@ public class ApiTransformer {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
-                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                .map(new ApiFunc<T>(Utils.getFirstCls(callback)))
                 .map(new MapFunc<T, R>(callback))
                 .observeOn(Schedulers.mainThread())
                 .subscribe(new ApiRetryFunc<R>(disposableObserver,
@@ -68,7 +68,7 @@ public class ApiTransformer {
                             @Override
                             public Observable.Observe<R> observe() {
                                 return observable.subscribeOn(Schedulers.io())
-                                        .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                                        .map(new ApiFunc<T>(Utils.getFirstCls(callback)))
                                         .map(new MapFunc<T, R>(callback))
                                         .observeOn(Schedulers.mainThread());
                             }
@@ -118,7 +118,7 @@ public class ApiTransformer {
             RequestManagerImpl.getIns().add(tag, disposableObserver);
         }
         observable.subscribeOn(Schedulers.io())
-                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                .map(new ApiFunc<T>(Utils.getFirstCls(callback)))
                 .observeOn(Schedulers.mainThread())
                 .subscribe(new ApiRetryFunc<T>(disposableObserver,
                         config.retryCount,
@@ -128,7 +128,7 @@ public class ApiTransformer {
                             @Override
                             public Observable.Observe<T> observe() {
                                 return observable.subscribeOn(Schedulers.io())
-                                        .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                                        .map(new ApiFunc<T>(Utils.getFirstCls(callback)))
                                         .observeOn(Schedulers.mainThread());
                             }
                         }));

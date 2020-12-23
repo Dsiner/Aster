@@ -2,7 +2,7 @@ package com.d.lib.aster.integration.http.body;
 
 import com.d.lib.aster.integration.http.sink.BufferedSink;
 import com.d.lib.aster.integration.http.sink.ForwardingSink;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -68,7 +68,7 @@ public class BodyWriter {
             }
         }
         outputStream.flush();
-        Util.closeQuietly(inputStream);
+        Utils.closeQuietly(inputStream);
     }
 
     public static void writeInputStream(InputStream inputStream,
@@ -83,7 +83,7 @@ public class BodyWriter {
             }
         }
         outputSink.getDataOutputStream().flush();
-        Util.closeQuietly(inputStream);
+        Utils.closeQuietly(inputStream);
     }
 
     @Deprecated

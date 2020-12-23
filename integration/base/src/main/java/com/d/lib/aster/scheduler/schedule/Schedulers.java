@@ -16,10 +16,10 @@ import java.lang.annotation.Target;
  * Created by D on 2018/5/15.
  */
 public class Schedulers {
-    final static int DEFAULT_THREAD = 0;
-    final static int NEW_THREAD = 1;
-    final static int IO = 2;
-    final static int MAIN_THREAD = 3;
+    static final int DEFAULT_THREAD = 0;
+    static final int NEW_THREAD = 1;
+    static final int IO = 2;
+    static final int MAIN_THREAD = 3;
 
     @IntDef({DEFAULT_THREAD, NEW_THREAD, IO, MAIN_THREAD})
     @Target({ElementType.METHOD, ElementType.PARAMETER})

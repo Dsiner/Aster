@@ -129,7 +129,7 @@ public class RetrofitModule extends AsterModule {
     }
 
     private static class Default {
-        private final static Singleton INSTANCE = new Singleton() {
+        private static final Singleton INSTANCE = new Singleton() {
 
             @Override
             public GetRequest.Singleton get(String url) {

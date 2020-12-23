@@ -1,7 +1,7 @@
 package com.d.lib.aster.integration.okhttp3.func;
 
 import com.d.lib.aster.scheduler.callback.Function;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
@@ -21,7 +21,7 @@ public class ApiFunc<T> implements Function<Response, T> {
 
     @Override
     public T apply(Response response) throws Exception {
-        Util.printThread("Aster_thread class conversion");
+        Utils.printThread("Aster_thread class conversion");
         try {
             if (mType.equals(Response.class)) {
                 return (T) response;

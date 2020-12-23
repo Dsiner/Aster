@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.scheduler.callback.DisposableObserver;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 /**
  * Abstract Observer

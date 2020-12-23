@@ -2,7 +2,7 @@ package com.d.lib.aster.integration.volley.client;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -83,7 +83,7 @@ public class ResponseBody implements Closeable {
             e.printStackTrace();
             return null;
         } finally {
-            Util.closeQuietly(source);
+            Utils.closeQuietly(source);
         }
     }
 
@@ -104,6 +104,6 @@ public class ResponseBody implements Closeable {
 
     @Override
     public void close() throws IOException {
-        Util.closeQuietly(source);
+        Utils.closeQuietly(source);
     }
 }

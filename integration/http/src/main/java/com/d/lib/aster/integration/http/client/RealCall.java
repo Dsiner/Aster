@@ -7,7 +7,7 @@ import com.d.lib.aster.integration.http.interceptor.Chain;
 import com.d.lib.aster.integration.http.interceptor.ConnectInterceptor;
 import com.d.lib.aster.integration.http.interceptor.RealInterceptorChain;
 import com.d.lib.aster.interceptor.IInterceptor;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 import java.io.IOException;
 import java.util.ArrayList;

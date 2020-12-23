@@ -10,7 +10,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.integration.volley.body.RequestBody;
 import com.d.lib.aster.integration.volley.sink.BufferedSink;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -74,8 +74,8 @@ public class ResponseRequest extends GsonRequest<RealResponse> {
                 e.printStackTrace();
                 return null;
             } finally {
-                Util.closeQuietly(dataOutputStream);
-                Util.closeQuietly(byteArrayOutputStream);
+                Utils.closeQuietly(dataOutputStream);
+                Utils.closeQuietly(byteArrayOutputStream);
             }
         }
         return super.getBody();

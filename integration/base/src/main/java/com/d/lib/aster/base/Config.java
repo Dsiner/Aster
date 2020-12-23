@@ -8,8 +8,8 @@ import android.text.TextUtils;
 
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
-import com.d.lib.aster.utils.SSLUtil;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.SSLUtils;
+import com.d.lib.aster.util.ULog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -124,7 +124,7 @@ public class Config extends IConfig<Config> {
                         .writeTimeout(Default.WRITE_TIMEOUT)
                         .retryCount(Default.RETRY_COUNT)
                         .retryDelayMillis(Default.RETRY_DELAY_MILLIS)
-                        .sslSocketFactory(SSLUtil.getSslSocketFactory(null, null, null));
+                        .sslSocketFactory(SSLUtils.getSslSocketFactory(null, null, null));
             }
             return DEFAULT_CONFIG;
         }
@@ -354,7 +354,7 @@ public class Config extends IConfig<Config> {
         }
 
         public Builder debug(boolean debug) {
-            ULog.setDebug(debug);
+            ULog.setDebug(debug, Default.TAG_LOG);
             return this;
         }
 

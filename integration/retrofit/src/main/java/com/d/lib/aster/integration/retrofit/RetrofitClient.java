@@ -7,7 +7,7 @@ import com.d.lib.aster.base.Config;
 import com.d.lib.aster.base.IClient;
 import com.d.lib.aster.integration.okhttp3.interceptor.HeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -29,12 +29,12 @@ public class RetrofitClient extends IClient {
     private Retrofit mClient;
 
     private static class Default {
-        private final static RetrofitClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
+        private static final RetrofitClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
     }
 
     private static class Transfer {
-        private final static RetrofitClient DOWNLOAD = create(TYPE_DOWNLOAD, Config.getDefault().log(false));
-        private final static RetrofitClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
+        private static final RetrofitClient DOWNLOAD = create(TYPE_DOWNLOAD, Config.getDefault().log(false));
+        private static final RetrofitClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
     }
 
     private RetrofitClient(@State int type, @NonNull Config config) {

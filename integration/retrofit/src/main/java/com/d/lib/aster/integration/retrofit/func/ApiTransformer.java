@@ -10,7 +10,7 @@ import com.d.lib.aster.integration.retrofit.observer.ApiObserver;
 import com.d.lib.aster.integration.retrofit.observer.AsyncApiObserver;
 import com.d.lib.aster.integration.retrofit.observer.DownloadObserver;
 import com.d.lib.aster.integration.retrofit.observer.UploadObserver;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class ApiTransformer {
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                .map(new ApiFunc<T>(Utils.getFirstCls(callback)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))
                 .subscribe(disposableObserver);
@@ -54,7 +54,7 @@ public class ApiTransformer {
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                .map(new ApiFunc<T>(Utils.getFirstCls(callback)))
                 .map(new MapFunc<T, R>(callback))
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))
@@ -97,7 +97,7 @@ public class ApiTransformer {
         }
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .map(new ApiFunc<T>(Util.getFirstCls(callback)))
+                .map(new ApiFunc<T>(Utils.getFirstCls(callback)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new ApiRetryFunc(config.retryCount, config.retryDelayMillis))
                 .subscribe(disposableObserver);

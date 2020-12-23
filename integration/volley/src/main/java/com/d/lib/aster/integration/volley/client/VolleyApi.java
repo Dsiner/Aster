@@ -14,7 +14,7 @@ import com.d.lib.aster.integration.volley.body.RequestBody;
 import com.d.lib.aster.interceptor.IInterceptor;
 import com.d.lib.aster.scheduler.Observable;
 import com.d.lib.aster.scheduler.callback.Task;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.IOException;
 import java.util.List;
@@ -438,7 +438,7 @@ public class VolleyApi {
         @NonNull
         private RequestBody getRequestBody(@Nullable Params params) {
             if (params == null) {
-                return RequestBody.create(null, Util.EMPTY_BYTE_ARRAY);
+                return RequestBody.create(null, Utils.EMPTY_BYTE_ARRAY);
             }
             FormBody.Builder builder = new FormBody.Builder();
             for (Map.Entry<String, String> entry : params.entrySet()) {

@@ -1,7 +1,7 @@
 package com.d.lib.aster.integration.retrofit.observer;
 
 import com.d.lib.aster.integration.retrofit.exception.ApiException;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;

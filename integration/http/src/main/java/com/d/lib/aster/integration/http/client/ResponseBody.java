@@ -2,7 +2,7 @@ package com.d.lib.aster.integration.http.client;
 
 import com.d.lib.aster.base.Headers;
 import com.d.lib.aster.base.MediaType;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -95,7 +95,7 @@ public class ResponseBody implements Closeable {
         try {
             bytes = toByteArray(inputStream);
         } finally {
-            Util.closeQuietly(mInputStream);
+            Utils.closeQuietly(mInputStream);
         }
         if (contentLength != -1 && contentLength != bytes.length) {
             throw new IOException("Content-Length ("
@@ -145,19 +145,19 @@ public class ResponseBody implements Closeable {
             e.printStackTrace();
             return null;
         } finally {
-            Util.closeQuietly(reader);
-            Util.closeQuietly(mInputStream);
+            Utils.closeQuietly(reader);
+            Utils.closeQuietly(mInputStream);
         }
     }
 
     private Charset charset() {
         MediaType contentType = contentType();
-        return contentType != null ? contentType.charset(Util.UTF_8) : Util.UTF_8;
+        return contentType != null ? contentType.charset(Utils.UTF_8) : Utils.UTF_8;
     }
 
     @Override
     public void close() throws IOException {
-        Util.closeQuietly(mInputStream);
+        Utils.closeQuietly(mInputStream);
         if (mConn != null) {
             mConn.disconnect();
         }

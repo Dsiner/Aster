@@ -2,7 +2,7 @@ package com.d.lib.aster.integration.volley.body;
 
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.integration.volley.sink.BufferedSink;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +42,6 @@ public class InputStreamRequestBody extends RequestBody {
             sink.write(buffer, 0, length);
         }
         sink.flush();
-        Util.closeQuietly(inputStream);
+        Utils.closeQuietly(inputStream);
     }
 }

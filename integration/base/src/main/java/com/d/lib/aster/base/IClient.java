@@ -3,7 +3,7 @@ package com.d.lib.aster.base;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,9 +21,9 @@ import javax.net.ssl.X509TrustManager;
  * Created by D on 2017/7/14.
  */
 public class IClient {
-    public final static int TYPE_NORMAL = 0;
-    public final static int TYPE_DOWNLOAD = 1;
-    public final static int TYPE_UPLOAD = 2;
+    public static final int TYPE_NORMAL = 0;
+    public static final int TYPE_DOWNLOAD = 1;
+    public static final int TYPE_UPLOAD = 2;
 
     @IntDef({TYPE_NORMAL, TYPE_DOWNLOAD, TYPE_UPLOAD})
     @Target({ElementType.PARAMETER})

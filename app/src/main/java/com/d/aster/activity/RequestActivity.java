@@ -22,10 +22,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 public abstract class RequestActivity extends AppCompatActivity {
-    public final static int TYPE_SINGLETON = 0;
-    public final static int TYPE_NEW = 1;
-    public final static int TYPE_OBSERVABLE = 2;
-    public final static int TYPE_RETROFIT = 3;
+    public static final int TYPE_SINGLETON = 0;
+    public static final int TYPE_NEW = 1;
+    public static final int TYPE_OBSERVABLE = 2;
+    public static final int TYPE_RETROFIT = 3;
 
     @IntDef({TYPE_SINGLETON, TYPE_NEW, TYPE_OBSERVABLE, TYPE_RETROFIT})
     @Target({ElementType.PARAMETER})
@@ -37,9 +37,9 @@ public abstract class RequestActivity extends AppCompatActivity {
     protected Context mContext;
     protected String mUrl, mParams;
 
-    protected EditText etUrl, etParams;
-    protected Button btnRequest;
-    protected TextView tvContent;
+    protected EditText et_url, et_params;
+    protected Button btn_request;
+    protected TextView tv_content;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,11 +52,11 @@ public abstract class RequestActivity extends AppCompatActivity {
     }
 
     protected void bindView() {
-        etUrl = (EditText) findViewById(R.id.et_url);
-        etParams = (EditText) findViewById(R.id.et_params);
-        btnRequest = (Button) findViewById(R.id.btn_request);
-        tvContent = (TextView) findViewById(R.id.tv_content);
-        btnRequest.setOnClickListener(new View.OnClickListener() {
+        et_url = (EditText) findViewById(R.id.et_url);
+        et_params = (EditText) findViewById(R.id.et_params);
+        btn_request = (Button) findViewById(R.id.btn_request);
+        tv_content = (TextView) findViewById(R.id.tv_content);
+        btn_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 request();
@@ -65,10 +65,17 @@ public abstract class RequestActivity extends AppCompatActivity {
     }
 
     protected void formatPrinting(String json) {
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        tvContent.setText(gson.toJson(jsonObject));
+        String text;
+        try {
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            text = gson.toJson(jsonObject);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            text = json;
+        }
+        tv_content.setText(text);
     }
 
     protected final void requestImpl(@State int type) {
@@ -76,12 +83,15 @@ public abstract class RequestActivity extends AppCompatActivity {
             case TYPE_SINGLETON:
                 requestSingleton();
                 break;
+
             case TYPE_NEW:
                 requestNew();
                 break;
+
             case TYPE_OBSERVABLE:
                 requestObservable();
                 break;
+
             case TYPE_RETROFIT:
                 requestRetrofit();
                 break;

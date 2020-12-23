@@ -1,6 +1,6 @@
 package com.d.lib.aster.integration.http.sink;
 
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -35,7 +35,7 @@ public class BufferedSink implements Sink {
     }
 
     public void writeUtf8(String string) throws IOException {
-        write(string.getBytes(Util.UTF_8));
+        write(string.getBytes(Utils.UTF_8));
     }
 
     public int size() {

@@ -1,4 +1,4 @@
-package com.d.lib.aster.utils;
+package com.d.lib.aster.util;
 
 import java.io.Closeable;
 import java.io.File;
@@ -15,7 +15,7 @@ import java.util.List;
  * Util
  * Created by D on 2017/10/25.
  */
-public class Util {
+public class Utils {
     public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     public static final Charset UTF_8 = Charset.forName("UTF-8");
@@ -24,7 +24,7 @@ public class Util {
     public static final Charset UTF_32_BE = Charset.forName("UTF-32BE");
     public static final Charset UTF_32_LE = Charset.forName("UTF-32LE");
 
-    private Util() {
+    private Utils() {
     }
 
     /**

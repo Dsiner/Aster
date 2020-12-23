@@ -1,6 +1,6 @@
 package com.d.lib.aster.integration.retrofit.func;
 
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
@@ -20,7 +20,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
 
     @Override
     public T apply(ResponseBody responseBody) throws Exception {
-        Util.printThread("Aster_thread class conversion");
+        Utils.printThread("Aster_thread class conversion");
         try {
             if (mType.equals(ResponseBody.class)) {
                 return (T) responseBody;

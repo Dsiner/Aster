@@ -2,8 +2,8 @@ package com.d.lib.aster.integration.retrofit.func;
 
 import com.d.lib.aster.base.Config;
 import com.d.lib.aster.retry.RetryException;
-import com.d.lib.aster.utils.ULog;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.ULog;
+import com.d.lib.aster.util.Utils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,11 +26,11 @@ public class ApiRetryFunc implements Function<Observable<? extends Throwable>, O
 
     @Override
     public Observable<?> apply(Observable<? extends Throwable> observable) throws Exception {
-        Util.printThread("Aster_thread retryInit");
+        Utils.printThread("Aster_thread retryInit");
         return observable.flatMap(new Function<Throwable, ObservableSource<?>>() {
             @Override
             public ObservableSource<?> apply(Throwable throwable) throws Exception {
-                Util.printThread("Aster_thread retryApply");
+                Utils.printThread("Aster_thread retryApply");
                 if (mRetryCount < mMaxRetries && throwable instanceof RetryException) {
                     mRetryCount++;
                     ULog.d("Get response data error, it will try after " + mRetryDelayMillis

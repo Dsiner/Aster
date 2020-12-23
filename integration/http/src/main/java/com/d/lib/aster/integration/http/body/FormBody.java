@@ -2,7 +2,7 @@ package com.d.lib.aster.integration.http.body;
 
 import com.d.lib.aster.base.MediaType;
 import com.d.lib.aster.integration.http.sink.BufferedSink;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -34,7 +34,7 @@ public final class FormBody extends RequestBody {
 
     @Override
     public long contentLength() {
-        return toString().getBytes(Util.UTF_8).length;
+        return toString().getBytes(Utils.UTF_8).length;
     }
 
     @Override

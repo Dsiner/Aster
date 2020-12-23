@@ -9,7 +9,7 @@ import com.d.lib.aster.integration.http.client.Call;
 import com.d.lib.aster.integration.http.client.Response;
 import com.d.lib.aster.integration.http.client.ResponseBody;
 import com.d.lib.aster.scheduler.Observable;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -108,9 +108,9 @@ public class DownloadObserver extends AbsObserver<Response> {
             e.printStackTrace();
             onErrorImpl(e);
         } finally {
-            Util.closeQuietly(inputStream);
-            Util.closeQuietly(outputStream);
-            Util.closeQuietly(resp);
+            Utils.closeQuietly(inputStream);
+            Utils.closeQuietly(outputStream);
+            Utils.closeQuietly(resp);
         }
     }
 

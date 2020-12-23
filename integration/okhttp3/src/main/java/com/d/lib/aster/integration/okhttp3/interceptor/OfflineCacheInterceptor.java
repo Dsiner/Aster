@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.d.lib.aster.interceptor.IInterceptor;
-import com.d.lib.aster.utils.Network;
+import com.d.lib.aster.util.NetworkUtils;
 
 import java.io.IOException;
 
@@ -33,7 +33,7 @@ public class OfflineCacheInterceptor implements Interceptor,
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
-        if (!Network.isConnected(mContext)) {
+        if (!NetworkUtils.isConnected(mContext)) {
             request = request.newBuilder()
                     .cacheControl(CacheControl.FORCE_CACHE)
                     .build();

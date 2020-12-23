@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import com.d.lib.aster.callback.UploadCallback;
 import com.d.lib.aster.integration.okhttp3.RequestManagerImpl;
 import com.d.lib.aster.scheduler.Observable;
-import com.d.lib.aster.utils.ULog;
-import com.d.lib.aster.utils.Util;
+import com.d.lib.aster.util.ULog;
+import com.d.lib.aster.util.Utils;
 
 import okhttp3.Call;
 
@@ -46,7 +46,7 @@ public class UploadObserver<R> extends AbsObserver<R> {
     @Override
     public void onNext(R r) {
         RequestManagerImpl.getIns().remove(mTag);
-        Util.printThread("Aster_thread uploadOnNext");
+        Utils.printThread("Aster_thread uploadOnNext");
         mData = r;
         mCallback.onSuccess(r);
     }

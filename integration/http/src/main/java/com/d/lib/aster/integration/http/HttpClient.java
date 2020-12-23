@@ -9,7 +9,7 @@ import com.d.lib.aster.integration.http.client.HttpURLClient;
 import com.d.lib.aster.integration.http.interceptor.HttpLoggingInterceptor;
 import com.d.lib.aster.interceptor.IHeadersInterceptor;
 import com.d.lib.aster.interceptor.IInterceptor;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,12 +26,12 @@ public class HttpClient extends IClient {
     private HttpURLApi mHttpURLApi;
 
     private static class Default {
-        private final static HttpClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
+        private static final HttpClient INSTANCE = create(TYPE_NORMAL, Config.getDefault().log(true));
     }
 
     private static class Transfer {
-        private final static HttpClient DOWNLOAD = create(TYPE_DOWNLOAD, Config.getDefault().log(false));
-        private final static HttpClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
+        private static final HttpClient DOWNLOAD = create(TYPE_DOWNLOAD, Config.getDefault().log(false));
+        private static final HttpClient UPLOAD = create(TYPE_UPLOAD, Config.getDefault().log(false));
     }
 
     private HttpClient(@State int type, @NonNull Config config) {

@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.d.lib.aster.callback.ProgressCallback;
 import com.d.lib.aster.scheduler.Observable;
-import com.d.lib.aster.utils.ULog;
+import com.d.lib.aster.util.ULog;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
