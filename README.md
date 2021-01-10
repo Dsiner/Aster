@@ -14,31 +14,31 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>aster</artifactId>
-  <version>2.0.9</version>
+  <version>2.1.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-    implementation 'com.dsiner.lib:aster:2.0.9'
-    implementation 'com.dsiner.lib:aster-adapter-http:2.0.9'
-    implementation 'com.dsiner.lib:aster-adapter-okhttp3:2.0.9'
-    implementation 'com.dsiner.lib:aster-adapter-retrofit:2.0.9'
+    implementation 'com.dsiner.lib:aster:2.1.0'
+    implementation 'com.dsiner.lib:aster-adapter-http:2.1.0'
+    implementation 'com.dsiner.lib:aster-adapter-okhttp3:2.1.0'
+    implementation 'com.dsiner.lib:aster-adapter-retrofit:2.1.0'
 ```
 or Gradle(OkHttp3 lite):
 ```groovy
-    implementation 'com.dsiner.lib:aster:2.0.9'
-    implementation 'com.dsiner.lib:aster-adapter-okhttp3:2.0.9'
+    implementation 'com.dsiner.lib:aster:2.1.0'
+    implementation 'com.dsiner.lib:aster-adapter-okhttp3:2.1.0'
 ```
 or Gradle(Retrofit2 lite):
 ```groovy
-    implementation 'com.dsiner.lib:aster:2.0.9'
-    implementation 'com.dsiner.lib:aster-adapter-okhttp3:2.0.9'
-    implementation 'com.dsiner.lib:aster-adapter-retrofit:2.0.9'
+    implementation 'com.dsiner.lib:aster:2.1.0'
+    implementation 'com.dsiner.lib:aster-adapter-okhttp3:2.1.0'
+    implementation 'com.dsiner.lib:aster-adapter-retrofit:2.1.0'
 ```
 or Gradle(HttpURLConnection lite):
 ```groovy
-    implementation 'com.dsiner.lib:aster:2.0.9'
-    implementation 'com.dsiner.lib:aster-adapter-http:2.0.9'
+    implementation 'com.dsiner.lib:aster:2.1.0'
+    implementation 'com.dsiner.lib:aster-adapter-http:2.1.0'
 ```
 
 ## Integration libraries
@@ -83,6 +83,64 @@ Simple use cases will look something like this:
                         ...do something in main thread
                     }
                 });
+```
+
+Download:
+```java
+        Aster.download(url)
+                .connectTimeout(60 * 1000)
+                .readTimeout(60 * 1000)
+                .writeTimeout(60 * 1000)
+                .retryCount(3)
+                .retryDelayMillis(1000)
+                .tag(url)
+                .request(path, name, new ProgressCallback() {
+                    @Override
+                    public void onStart() {}
+
+                    @Override
+                    public void onProgress(long currentLength, long totalLength) {}
+
+                    @Override
+                    public void onSuccess() {}
+
+                    @Override
+                    public void onError(Throwable e) {}
+
+                    @Override
+                    public void onCancel() {}
+                });
+```
+
+Upload:
+```java
+        Aster.upload(url)
+                .connectTimeout(60 * 1000)
+                .readTimeout(60 * 1000)
+                .writeTimeout(60 * 1000)
+                .retryCount(3)
+                .retryDelayMillis(1000)
+                .addImageFile("file", file.getName(), file)
+                .request(new UploadCallback<String>() {
+                             @Override
+                             public void onStart() {}
+
+                             @Override
+                             public void onProgress(long currentLength, long totalLength) {}
+
+                             @Override
+                             public void onSuccess() {}
+
+                             @Override
+                             public void onSuccess(String response) {}
+
+                             @Override
+                             public void onError(Throwable e) {}
+
+                             @Override
+                             public void onCancel() {}
+                         }
+                );
 ```
 
 More usage see [Wiki.](https://github.com/Dsiner/Aster/wiki)
